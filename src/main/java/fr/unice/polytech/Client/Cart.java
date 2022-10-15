@@ -1,6 +1,6 @@
 package fr.unice.polytech.Client;
 
-import Item;
+import fr.unice.polytech.Order.Item;
 
 import java.util.List;
 
