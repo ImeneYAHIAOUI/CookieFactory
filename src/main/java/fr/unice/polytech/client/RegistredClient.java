@@ -1,4 +1,4 @@
-package fr.unice.polytech.Client;
+package fr.unice.polytech.client;
 
 public class RegistredClient extends Client {
 }

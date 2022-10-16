@@ -1,6 +1,6 @@
-package fr.unice.polytech.Store;
+package fr.unice.polytech.store;
 
-import fr.unice.polytech.Order.Order;
+import fr.unice.polytech.order.Order;
 
 import java.util.Date;
 

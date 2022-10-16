@@ -1,22 +1,50 @@
 package fr.unice.polytech;
 
-import fr.unice.polytech.Client.RegistredClient;
-import fr.unice.polytech.Order.Order;
-import fr.unice.polytech.Order.OrderException;
-import fr.unice.polytech.Order.OrderStatus;
-import fr.unice.polytech.Recipe.Cookie;
-import fr.unice.polytech.Recipe.Ingredient;
-import fr.unice.polytech.Store.Store;
-import fr.unice.polytech.Store.TimeSlot;
+import fr.unice.polytech.client.RegistredClient;
+import fr.unice.polytech.order.Order;
+import fr.unice.polytech.order.OrderException;
+import fr.unice.polytech.order.OrderStatus;
+import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.store.Cook;
+import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.TimeSlot;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class COD {
     public List<Cookie> recipes;
     public List<RegistredClient> clients;
     public List<Store> stores;
     public List<Order> orders;
+
+    public COD(){
+        this.recipes = new ArrayList<>();
+        this.clients = new ArrayList<>();
+        this.stores = new ArrayList<>();
+        this.orders = new ArrayList<>();
+
+        //Initialisation with 1 store + 1 recipe
+        Cookie cookie = new Cookie(
+                "ChocoCookie",
+                10.0,
+                40.0,
+                Cooking.CHEWY,
+                Mix.MIXED,
+                new Dough("Chocolate", 2.0),
+                new Flavour("Cinnamon", 1.5),
+                List.of(new Topping("White chocolate", 0.5), new Topping("Milk Chocolate", 1.0))
+        );
+        Store store = new Store(
+                List.of(new Cook()),
+                List.of(cookie),
+                "30 Rte des Colles, 06410 Biot",
+                0.2,
+                new Date(),
+                new Date()
+        );
+        recipes.add(cookie);
+        stores.add(store);
+    }
     public List<Store> getNearbyStores(){
         return null;
     }

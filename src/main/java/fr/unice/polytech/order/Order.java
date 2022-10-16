@@ -1,7 +1,7 @@
-package fr.unice.polytech.Order;
+package fr.unice.polytech.order;
 
-import fr.unice.polytech.Client.Client;
-import fr.unice.polytech.Store.Cook;
+import fr.unice.polytech.client.Client;
+import fr.unice.polytech.store.Cook;
 
 import java.util.Date;
 import java.util.List;
