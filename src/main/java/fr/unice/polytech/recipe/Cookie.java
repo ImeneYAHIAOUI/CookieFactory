@@ -35,6 +35,13 @@ public class Cookie {
         Name = name;
     }
 
+    @Override
+    public String toString() {
+        return "Cookie{" +
+                "Name='" + Name + '\'' +
+                '}';
+    }
+
     public void setFlavour(Flavour flavour) {
         this.flavour = flavour;
     }

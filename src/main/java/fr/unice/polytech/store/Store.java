@@ -1,6 +1,7 @@
 package fr.unice.polytech.store;
 
 
+import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.recipe.Cookie;
 
 import java.util.Date;
@@ -30,5 +31,18 @@ public class Store {
         this.closingTime = closingTime;
     }
 
+    @Override
+    public String toString() {
+        return "Store{" +
+                "address='" + address + '\'' +
+                ", openingTime=" + openingTime +
+                ", closingTime=" + closingTime +
+                '}';
+    }
+
+    public Cook getFreeCook(Cart cart){
+        //On considère le cook toujours libre pour l'instant
+        return cooks.get(0);
+    }
 
 }

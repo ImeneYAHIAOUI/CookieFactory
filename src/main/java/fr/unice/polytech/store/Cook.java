@@ -23,7 +23,6 @@ public class Cook {
 
     }
     public void addOrder(Order order){
-
     }
     public void suggestRecipe(String cookieName, Double CookingTime, Cooking cooking, Mix mix, Dough dough , Flavour flavour, List<Topping> toppingList){
         Cookie newCookie=new Cookie(cookieName);

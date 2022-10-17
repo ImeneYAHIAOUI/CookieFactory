@@ -8,4 +8,8 @@ public class Client {
         this.phoneNumber = phoneNumber;
         this.cart = new Cart();
     }
+
+    public Cart getCart(){
+        return this.cart;
+    }
 }

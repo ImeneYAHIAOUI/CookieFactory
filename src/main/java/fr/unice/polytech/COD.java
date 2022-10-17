@@ -1,5 +1,8 @@
 package fr.unice.polytech;
 
+import fr.unice.polytech.client.Cart;
+import fr.unice.polytech.client.Client;
+import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderException;
 import fr.unice.polytech.order.OrderStatus;
@@ -35,6 +38,18 @@ public class COD {
         );
         recipes.add(cookie);
         stores.add(store);
+    }
+
+    public void chooseAmount(int i, Cookie cookie, Cart cart){
+        cart.addItem(new Item(i, cookie));
+    }
+
+    public String finalizeOrder(Client client, Store store){
+        Cook cook = store.getFreeCook(client.getCart());
+        Order order = new Order("order1", client, cook);
+        this.orders.add(order);
+        //cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
+        return order.getId();
     }
 
     public void setStatus(String orderId, OrderStatus status) throws OrderException

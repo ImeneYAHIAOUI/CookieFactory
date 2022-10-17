@@ -16,7 +16,9 @@ public class Order {
         this.id = id;
         this.client = client;
         this.cook = cook;
-        this.status = OrderStatus.NOT_STARTED;
+        this.status = OrderStatus.READY;
+        //Tant qu'on a pas l'interaction entre les cooks et le système,
+        //On met directement l'order en status READY
     }
 
     public Boolean SetStatus(OrderStatus status){
