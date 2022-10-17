@@ -12,4 +12,8 @@ public class Client {
     public Cart getCart(){
         return this.cart;
     }
+
+    public void emptyCart() {
+        cart.emptyItems();
+    }
 }
