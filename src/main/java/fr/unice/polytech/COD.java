@@ -86,6 +86,14 @@ public class COD {
         }
     }
 
+    public void cancelOrder(Order order) throws OrderException {
+        Order orderToCancel = orders.stream()
+                .filter(o -> o.getId().equals(order.getId()))
+                .findFirst()
+                .orElseThrow();
+        orderToCancel.setStatus(OrderStatus.CANCELLED);
+    }
+
     public void printStoresOpeningHours(){
         for(Store store : stores){
             System.out.println(store.openingTime + " - " + store.closingTime);
