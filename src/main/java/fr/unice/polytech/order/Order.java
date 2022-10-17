@@ -62,7 +62,7 @@ public class Order {
             throw new OrderException("this order hes been canceled");
         }
         if(! (this.status.equals(OrderStatus.NOT_STARTED) || this.status.equals(OrderStatus.PAYED)) && status.equals(OrderStatus.CANCELLED)) {
-            throw new OrderException("this order's status is"+status+"you cannot cancel it anymore");
+            throw new OrderException("this order's status is"+status+"it cannot be cancelled anymore");
         }
         if(this.status.equals((status))){
             switch (status){
