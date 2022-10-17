@@ -27,40 +27,43 @@ public class CookTest {
     {
         cook = new Cook(id);
     }
+    @And( "a cookie with name {string}")
+    public void AndGivenCookie(String name)
+    {
+        cookie= new Cookie(name);
+    }
     @And("a cod" )
     public void AndGiven()
     {
          cod=new COD();
     }
-    @When("cook create Cookie with name {string}")
-    public void WhenCookCreateCookieWithName( String name)  {
-        cookie= new Cookie(name);
+    @When("cook suggest recipe")
+    public void WhensuggestCookie()  {
+        cod.suggestRecipe(cookie);
     }
     @Then("suggested recipe is added to suggested recipe list")
     public void ThenAddToList(){
-        cod.suggestRecipe(cookie);
+        assertTrue(cod.suggestedRecipes.contains(cookie));
     }
-
     @When("COD accept recipe")
     public void WhenRecipeIsAccepted()  {
         cod.acceptRecipe(cookie,15.6);
+        cod.recipes.add(cookie);
     }
     @Then("suggested recipe is added to recipe list")
     public void ThenAddToRecipeList(){
+
         assertTrue(cod.recipes.contains(cookie));
     }
     @And("suggested recipe is removed from suggested recipe list")
-    public void ThenIsRemovedlList(){
+    public void ThenIsRemovedFomList(){
         assertTrue(!cod.suggestedRecipes.contains(cookie) );
     }
     @When("COD decline recipe")
     public void WhenRecipeIsDeclined( )  {
         cod.declineRecipe(cookie);
     }
-    @Then("suggested recipe is removed from suggested recipe list")
-    public void ThenIsRemovedFromlList(){
-        assertTrue(!cod.suggestedRecipes.contains(cookie) );
-    }
+
 
 
 

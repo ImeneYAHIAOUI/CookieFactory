@@ -66,7 +66,8 @@ public class COD {
         if(!suggestedRecipes.contains(cookie) && ! recipes.contains(cookie)){
             suggestedRecipes.add(cookie);
         }
-    }    public List<Cookie> getSuggestedRecipes(){
+    }
+    public List<Cookie> getSuggestedRecipes(){
         return suggestedRecipes;
     }
     public void acceptRecipe(Cookie cookie,Double price){//TODO rajouter Exception si le cookie n'existe pas ?
