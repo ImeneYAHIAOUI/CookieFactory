@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cook {
-
+    int id;
     public List<Order> assignedOrders;
 
-    public Cook(){
+    public Cook(int id)
+    {
+        this.id = id;
         this.assignedOrders = new ArrayList<>();
     }
 

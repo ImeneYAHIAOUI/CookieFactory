@@ -8,17 +8,15 @@ import java.util.List;
 
 public class Order {
     public String id;
-    public List<Item> items ;
     public Client client;
     public Cook cook;
     public OrderStatus status;
 
-    public  Order(String id, List<Item> items, Client client, Cook cook, OrderStatus status) {
+    public  Order(String id, Client client, Cook cook) {
         this.id = id;
-        this.items = items;
         this.client = client;
         this.cook = cook;
-        this.status = status;
+        this.status = OrderStatus.NOT_STARTED;
     }
 
     public Boolean SetStatus(OrderStatus status){
@@ -29,9 +27,7 @@ public class Order {
         return id;
     }
 
-    public List<Item> getItems() {
-        return items;
-    }
+
 
     public Client getClient() {
         return client;
@@ -54,37 +50,34 @@ public class Order {
         this.cook = cook;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
 
     public void setClient(Client client) {
         this.client = client;
     }
 
     public void setStatus(OrderStatus status) throws OrderException {
-        if(this.status.equals(OrderStatus.CANCELED)){
+        if(this.status.equals(OrderStatus.CANCELLED)){
             throw new OrderException("this order hes been canceled");
         }
-        if(this.status.equals(OrderStatus.IN_PROGRESS) && status.equals(OrderStatus.CANCELED)) {
-            throw new OrderException("This order is being prepared, you cannot cancel it anymore");
+        if(! (this.status.equals(OrderStatus.NOT_STARTED) || this.status.equals(OrderStatus.PAYED)) && status.equals(OrderStatus.CANCELLED)) {
+            throw new OrderException("this order's status is"+status+"you cannot cancel it anymore");
         }
         if(this.status.equals((status))){
             switch (status){
                 case NOT_STARTED:
-                    throw new OrderException("This order status is already \"not started\"");
-                case CANCELED:
-                    throw new OrderException("This order status is already \"canceled\"");
+                    throw new OrderException("This order's status is already \"not started\"");
+                case CANCELLED:
+                    throw new OrderException("This order's status is already \"cancelled\"");
                 case IN_PROGRESS:
-                    throw new OrderException("This order status is already \"in progress\"");
+                    throw new OrderException("This order's status is already \"in progress\"");
                 case READY:
-                    throw new OrderException("This order status is already \"ready\"");
+                    throw new OrderException("This order's status is already \"ready\"");
                 case COMPLETED:
-                    throw new OrderException("This order status is already \"completed\"");
+                    throw new OrderException("This order's status is already \"completed\"");
                 case  OBSOLETE :
-                    throw new OrderException("This order status is already \"obsolete\"");
+                    throw new OrderException("This order's status is already \"obsolete\"");
                 case PAYED:
-                    throw new OrderException("This order status is already \"payed\"");
+                    throw new OrderException("This order's status is already \"payed\"");
             }
         }
         this.status = status;

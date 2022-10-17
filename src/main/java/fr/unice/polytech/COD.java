@@ -27,7 +27,7 @@ public class COD {
                 "ChocoCookie"
                 );
         Store store = new Store(
-                List.of(new Cook()),
+                List.of(new Cook(1)),
                 List.of(cookie),
                 "30 Rte des Colles, 06410 Biot",
                 new Date(),
