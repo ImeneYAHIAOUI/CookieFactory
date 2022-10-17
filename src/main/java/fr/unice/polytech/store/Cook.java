@@ -1,20 +1,31 @@
 package fr.unice.polytech.store;
 
+import fr.unice.polytech.COD;
 import fr.unice.polytech.order.Order;
+import fr.unice.polytech.recipe.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cook {
 
-    public List<Order> assignedOrders;
-
-    public Cook(){
-        this.assignedOrders = new ArrayList<>();
+    public List<TimeSlot> avaibleTimeSlot;
+    public COD cod;
+    public List<TimeSlot> getTimeSlot(){
+        return avaibleTimeSlot;
     }
-
     public void addOrder(Order order){
-        this.assignedOrders.add(order);
+
+    }
+    public void suggestRecipe(String cookieName, Double CookingTime, Cooking cooking, Mix mix, Dough dough , Flavour flavour, List<Topping> toppingList){
+        Cookie newCookie=new Cookie(cookieName);
+        newCookie.setCookingTime(CookingTime);
+        newCookie.setCooking(cooking);
+        newCookie.setDough(dough);
+        newCookie.setMix(mix);
+        newCookie.setFlavour(flavour);
+        newCookie.setToppingList(toppingList);
+        cod.suggestRecipe(newCookie);
     }
 }
 

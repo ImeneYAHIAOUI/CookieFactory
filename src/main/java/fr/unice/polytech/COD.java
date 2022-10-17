@@ -47,21 +47,25 @@ public class COD {
     public void setHours(Store store, Date openingTime, Date closingTime){
         this.stores.get(this.stores.indexOf(store)).setHours(openingTime, closingTime);
     }
-    public  void suggestRecipe(Cookie cookie){
-        this.suggestedRecipes.add(cookie);
-    }
-    public List<Cookie> getSuggestedRecipes(){
+    public void suggestRecipe(Cookie cookie){
+        if(!suggestedRecipes.contains(cookie) && ! recipes.contains(cookie)){
+            suggestedRecipes.add(cookie);
+        }
+    }    public List<Cookie> getSuggestedRecipes(){
         return suggestedRecipes;
     }
-    public void acceptRecipe(Cookie cookie){//TODO rajouter Exception si le cookie n'existe pas ?
-        suggestedRecipes.remove(cookie);
-        recipes.add(cookie);
+    public void acceptRecipe(Cookie cookie,Double price){//TODO rajouter Exception si le cookie n'existe pas ?
+
+        if(suggestedRecipes.contains(cookie)){
+            recipes.add(cookie);
+            cookie.setPrice(price);
+            suggestedRecipes.remove(cookie);
+        }
     }
     public void declineRecipe(Cookie cookie) {
-        suggestedRecipes.remove(cookie);
-    }
-    public void deleteRecipe(Cookie cookie){ //TODO rajouter Exception si le cookie n'existe pas ?
-        recipes.remove(cookie);
+        if(suggestedRecipes.contains(cookie)){
+            suggestedRecipes.remove(cookie);
+        }
     }
 }
 
