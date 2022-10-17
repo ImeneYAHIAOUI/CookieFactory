@@ -6,17 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cook {
-    public List<TimeSlot> avaibleTimeSlot;
+
+    public List<Order> assignedOrders;
 
     public Cook(){
-        avaibleTimeSlot = new ArrayList<>();
+        this.assignedOrders = new ArrayList<>();
     }
 
-    public List<TimeSlot> getTimeSlot(){
-        return null;
-    }
     public void addOrder(Order order){
-
+        this.assignedOrders.add(order);
     }
 }
 

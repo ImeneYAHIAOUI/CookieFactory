@@ -8,19 +8,13 @@ import java.util.List;
 
 public class Order {
     public String id;
-    public Double price;
-    public Date pickupTime;
-    public Date  createdAt;
     public List<Item> items ;
     public Client client;
     public Cook cook;
     public OrderStatus status;
 
-    public  Order(String id, Double price, Date pickupTime, Date createdAt, List<Item> items, Client client, Cook cook, OrderStatus status) {
+    public  Order(String id, List<Item> items, Client client, Cook cook, OrderStatus status) {
         this.id = id;
-        this.price = price;
-        this.pickupTime = pickupTime;
-        this.createdAt = createdAt;
         this.items = items;
         this.client = client;
         this.cook = cook;
@@ -33,18 +27,6 @@ public class Order {
 
     public String getId() {
         return id;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public Date getPickupTime() {
-        return pickupTime;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
     }
 
     public List<Item> getItems() {
@@ -68,21 +50,8 @@ public class Order {
         this.id = id;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-
-    public void setPickupTime(Date pickupTime){
-        this.pickupTime = pickupTime;
-    }
-
     public void setCook(Cook cook){
         this.cook = cook;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     public void setItems(List<Item> items) {
@@ -116,8 +85,6 @@ public class Order {
                     throw new OrderException("This order status is already \"obsolete\"");
                 case PAYED:
                     throw new OrderException("This order status is already \"payed\"");
-
-
             }
         }
         this.status = status;
