@@ -3,7 +3,8 @@ package fr.unice.polytech.recipe;
 import java.util.List;
 
 public class Cookie {
-    public String Name;
+
+    public String name;
     public Double Price;
     public Double CookingTime;
     public Cooking cooking;
@@ -12,7 +13,7 @@ public class Cookie {
     public Flavour flavour;
     public List<Topping> toppingList;
     public Cookie(String name){
-        this.Name=name;
+        this.name =name;
     }
 
     public void setCooking(Cooking cooking) {
@@ -32,13 +33,13 @@ public class Cookie {
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "Cookie{" +
-                "Name='" + Name + '\'' +
+                "Name='" + name + '\'' +
                 '}';
     }
 
@@ -52,6 +53,10 @@ public class Cookie {
 
     public void setToppingList(List<Topping> toppingList) {
         this.toppingList = toppingList;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void addTopping(Topping topping){

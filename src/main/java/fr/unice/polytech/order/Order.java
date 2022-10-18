@@ -3,6 +3,7 @@ package fr.unice.polytech.order;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.store.Cook;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,12 +12,25 @@ public class Order {
     public Client client;
     public Cook cook;
     public OrderStatus status;
+    public List<Item> items;
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id='" + id + '\'' +
+                ", client=" + client +
+                ", cook=" + cook +
+                ", status=" + status +
+                ", items=" + items +
+                '}';
+    }
 
     public  Order(String id, Client client, Cook cook) {
         this.id = id;
         this.client = client;
         this.cook = cook;
-        this.status = OrderStatus.READY;
+        this.status = OrderStatus.NOT_STARTED;
+        this.items = List.copyOf(client.getCart().getItems());
         //Tant qu'on a pas l'interaction entre les cooks et le système,
         //On met directement l'order en status READY
     }
@@ -29,7 +43,9 @@ public class Order {
         return id;
     }
 
-
+    public List<Item> getItems() {
+        return items;
+    }
 
     public Client getClient() {
         return client;

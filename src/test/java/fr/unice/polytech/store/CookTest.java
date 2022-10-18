@@ -1,4 +1,4 @@
-package fr.unice.polytech.biblio.Store;
+package fr.unice.polytech.store;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;

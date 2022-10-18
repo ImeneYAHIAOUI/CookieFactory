@@ -48,6 +48,7 @@ public class COD {
     public String finalizeOrder(Client client, Store store){
         Cook cook = store.getFreeCook(client.getCart());
         Order order = new Order("order1", client, cook);
+        client.emptyCart();
         this.orders.add(order);
         //cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
         return order.getId();
