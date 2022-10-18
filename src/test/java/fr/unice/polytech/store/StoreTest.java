@@ -1,4 +1,4 @@
-package store;
+package fr.unice.polytech.store;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.recipe.Cookie;
@@ -16,8 +16,10 @@ import java.util.List;
 public class StoreTest {
     public List<Cook> cooks = new ArrayList<>();
     public List<Cookie> recipes = new ArrayList<>();
-    public LocalTime openingTime = LocalTime.parse("08:00");
-    public LocalTime closingTime = LocalTime.parse("20:00");
+    public LocalTime openingTime;
+    public LocalTime closingTime;
+    public String openingTimeStr;
+    public String closingTimeStr;
     Store store;
     COD cod;
     int id ;
@@ -27,7 +29,7 @@ public class StoreTest {
     @Given("a store with address {string}")
     public void givenAStore(String address)
     {
-        this.store = new Store(cooks,recipes,address,openingTime,closingTime,id);
+        this.store = new Store(cooks,recipes,address,LocalTime.parse("08:00"),LocalTime.parse("20:00"),id);
     }
     @And("a cod with the store")
     public void AndGivenCODStore()
@@ -43,7 +45,7 @@ public class StoreTest {
     @And("NewClosingTime with time {string}")
     public void AndGivenNewClosingTime(String newClosingTime)
     {
-        this.openingTime = LocalTime.parse(newClosingTime);
+        this.closingTime = LocalTime.parse(newClosingTime);
     }
 
 
@@ -55,8 +57,9 @@ public class StoreTest {
 
     @Then("The store hours are changed to the new ones")
     public void thenTheStoreHasTheGivenHoursOnCOD() {
-        assert this.cod.stores.get(store.id).openingTime == this.openingTime;
-        assert this.cod.stores.get(store.id).closingTime ==this.closingTime;
+        int storeIndex = this.cod.stores.indexOf(this.store);
+        assert this.cod.stores.get(storeIndex).openingTime == this.openingTime;
+        assert this.cod.stores.get(storeIndex).closingTime == this.closingTime;
     }
 
 
