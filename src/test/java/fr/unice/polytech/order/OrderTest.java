@@ -1,33 +1,30 @@
-package order;
+package fr.unice.polytech.order;
 
 
 
-import fr.unice.polytech.biblio.Etudiant;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderException;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.store.Cook;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class OrderTests {
+public class OrderTest {
 
     Client client = new Client(0606060606);
     Cook cook = new Cook(1234);
     Order order;
 
-    public OrderTests()  {}
+    public OrderTest()  {}
 
     @Given("an order with id {string}")
     public void givenAnOrder(String id)
     {
         order = new Order(id, client, cook);
-
     }
 
     @When("order status is {string}")
