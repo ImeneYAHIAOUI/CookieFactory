@@ -2,7 +2,7 @@
 name: User Story
 about: Describe the User Story
 title: "[US]"
-labels: bug, US
+labels: US
 assignees: ''
 
 ---

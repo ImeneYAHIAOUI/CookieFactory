@@ -1,7 +1,7 @@
 ---
 name: Task
 about: Template for a Task in a User Story
-title: New task
+title: "[Task] New task"
 labels: task
 assignees: ''
 
