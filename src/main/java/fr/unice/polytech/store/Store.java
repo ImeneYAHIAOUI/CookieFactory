@@ -16,12 +16,18 @@ public class Store {
     public LocalTime closingTime;
     public int id;
 
-    public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openningTime, LocalTime closingTime,int id) {
+    public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime,int id) {
         this.cooks = cooks;
         this.recipes = recipes;
         this.address = address;
-        this.openingTime = openningTime;
-        this.closingTime = closingTime;
+        if (openingTime.isBefore(closingTime)) {
+            this.openingTime = openingTime;
+            this.closingTime = closingTime;
+        } else {
+            System.out.println("Error, given closingTime is before openingTime, openingTime get closedTime value and closingTime get openingTime value");
+            this.openingTime = closingTime;
+            this.closingTime = openingTime;
+        }
         this.id = id;
     }
 

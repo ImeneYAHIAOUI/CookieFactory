@@ -58,8 +58,15 @@ public class StoreTest {
     @Then("The store hours are changed to the new ones")
     public void thenTheStoreHasTheGivenHoursOnCOD() {
         int storeIndex = this.cod.stores.indexOf(this.store);
-        assert this.cod.stores.get(storeIndex).openingTime == this.openingTime;
-        assert this.cod.stores.get(storeIndex).closingTime == this.closingTime;
+        if (this.openingTime.isBefore(this.closingTime)){
+            assert this.cod.stores.get(storeIndex).openingTime == this.openingTime;
+            assert this.cod.stores.get(storeIndex).closingTime == this.closingTime;
+        }
+        else{
+            assert this.cod.stores.get(storeIndex).openingTime == this.closingTime;
+            assert this.cod.stores.get(storeIndex).closingTime == this.openingTime;
+        }
+
     }
 
 

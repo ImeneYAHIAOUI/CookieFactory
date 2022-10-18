@@ -62,7 +62,12 @@ public class COD {
 
     }
     public void setHours(Store store, LocalTime openingTime, LocalTime closingTime){
-        this.stores.get(this.stores.indexOf(store)).setHours(openingTime, closingTime);
+        if (openingTime.isBefore(closingTime)) {
+            this.stores.get(this.stores.indexOf(store)).setHours(openingTime, closingTime);
+        } else {
+            System.out.println("Error, given closingTime is before openingTime, openingTime get closedTime value and closingTime get openingTime value");
+            this.stores.get(this.stores.indexOf(store)).setHours(closingTime, openingTime);
+        }
     }
     public void suggestRecipe(Cookie cookie){
         if(!suggestedRecipes.contains(cookie) && ! recipes.contains(cookie)){

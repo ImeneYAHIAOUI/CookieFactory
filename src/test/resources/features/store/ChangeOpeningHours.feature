@@ -5,9 +5,15 @@ Feature: Change Opening Hours
 
     Given a store with address "1 rue de la Paix"
     And a cod with the store
-    And NewOpeningTime with time "10:00"
-    And NewClosingTime with time "21:00"
 
-  Scenario: Change Opening Hours to "10:00" to "21:00"
+  Scenario Outline: Change Opening Hours to <NewOpeningTime> and <NewClosingTime>
+    Given NewOpeningTime with time <NewOpeningTime>
+    And NewClosingTime with time <NewClosingTime>
     When The manager set on COD the store hours to the new ones
     Then The store hours are changed to the new ones
+    Examples:
+      | NewOpeningTime   | NewClosingTime  |
+      | "10:00"          | "21:00"         |
+      | "12:00"          | "23:00"         |
+      | "20:00"          | "01:00"         |
+      | "00:00"          | "23:59"         |

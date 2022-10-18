@@ -13,6 +13,7 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @SelectClasspathResource("features/cookie")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "fr.unice.polytech.cookie")
+@ConfigurationParameter(key = "cucumber.publish.quiet", value = "true")
 
 public class RunCucumberTest {
     // will run all features found on the classpath
