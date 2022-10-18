@@ -9,8 +9,8 @@ import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
-import fr.unice.polytech.store.TimeSlot;
 
+import java.time.LocalTime;
 import java.util.*;
 
 public class COD {
@@ -33,8 +33,9 @@ public class COD {
                 List.of(new Cook(1)),
                 List.of(cookie),
                 "30 Rte des Colles, 06410 Biot",
-                new Date(),
-                new Date()
+                LocalTime.parse("08:00"),
+                LocalTime.parse("20:00"),
+                1
         );
         recipes.add(cookie);
         stores.add(store);
@@ -59,7 +60,7 @@ public class COD {
         order.setStatus(status);
 
     }
-    public void setHours(Store store, Date openingTime, Date closingTime){
+    public void setHours(Store store, LocalTime openingTime, LocalTime closingTime){
         this.stores.get(this.stores.indexOf(store)).setHours(openingTime, closingTime);
     }
     public void suggestRecipe(Cookie cookie){
@@ -81,6 +82,12 @@ public class COD {
     public void declineRecipe(Cookie cookie) {
         if(suggestedRecipes.contains(cookie)){
             suggestedRecipes.remove(cookie);
+        }
+    }
+
+    public void printStoresOpeningHours(){
+        for(Store store : stores){
+            System.out.println(store.openingTime + " - " + store.closingTime);
         }
     }
 }
