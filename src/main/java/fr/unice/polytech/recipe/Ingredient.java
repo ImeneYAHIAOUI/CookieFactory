@@ -1,7 +1,7 @@
 package fr.unice.polytech.recipe;
 
 public class Ingredient {
-    public String name;
+    private String name;
     private double price;
 
     public Ingredient(String name,double price) {

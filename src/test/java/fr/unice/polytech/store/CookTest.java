@@ -43,21 +43,21 @@ public class CookTest {
     }
     @Then("suggested recipe is added to suggested recipe list")
     public void ThenAddToList(){
-        assertTrue(cod.suggestedRecipes.contains(cookie));
+        assertTrue(cod.getSuggestedRecipes().contains(cookie));
     }
     @When("COD accept recipe")
     public void WhenRecipeIsAccepted()  {
         cod.acceptRecipe(cookie,15.6);
-        cod.recipes.add(cookie);
+        cod.getRecipes().add(cookie);
     }
     @Then("suggested recipe is added to recipe list")
     public void ThenAddToRecipeList(){
 
-        assertTrue(cod.recipes.contains(cookie));
+        assertTrue(cod.getRecipes().contains(cookie));
     }
     @And("suggested recipe is removed from suggested recipe list")
     public void ThenIsRemovedFomList(){
-        assertTrue(!cod.suggestedRecipes.contains(cookie) );
+        assertTrue(!cod.getSuggestedRecipes().contains(cookie) );
     }
     @When("COD decline recipe")
     public void WhenRecipeIsDeclined( )  {

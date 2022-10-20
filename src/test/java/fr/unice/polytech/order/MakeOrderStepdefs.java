@@ -18,21 +18,21 @@ public class MakeOrderStepdefs {
 
     @And("an order from this client")
     public void andAnOrderFromThisClient() {
-        cod.orders.add(new Order("1", client, null));
+        cod.getOrders().add(new Order("1", client, null));
     }
 
     @Then("the order has status {string}")
     public void thenTheOrderHasStatus(String status) {
-        assert cod.orders.get(0).getStatus().toString().equals(status);
+        assert cod.getOrders().get(0).getStatus().toString().equals(status);
     }
 
     @When("the client cancels the order")
     public void whenTheClientCancelsTheOrder() throws OrderException {
-        cod.cancelOrder(cod.orders.get(0));
+        cod.cancelOrder(cod.getOrders().get(0));
     }
 
     @And("The order status is {string}")
     public void andTheOrderStatusIs(String status) {
-        assert cod.orders.get(0).getStatus().toString().equals(status);
+        assert cod.getOrders().get(0).getStatus().toString().equals(status);
     }
 }

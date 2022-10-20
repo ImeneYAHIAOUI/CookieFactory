@@ -20,12 +20,12 @@ public class CODTest {
     Cookie cookie;
 
 
-    @Given("A client with phone number {int}")
+    @Given("A new client with an empty cart and with phone number {int}")
     public void givenAClient(Integer number){
         client = new Client(number);
     }
 
-    @And("a cod to stock data" )
+    @And("an empty cod to stock data" )
     public void AndGiven()
     {
         cod=new COD();
@@ -61,24 +61,24 @@ public class CODTest {
 
     @And("Client finalize order")
     public void WhenFinalizeOrder(){
-        cod.finalizeOrder(client, cod.stores.get(0));
+        cod.finalizeOrder(client, cod.getStores().get(0));
     }
 
     @Then("Cod orders is not empty")
     public void ThenCodOrdersNotEmpty(){
-        assertFalse(cod.orders.isEmpty());
+        assertFalse(cod.getOrders().isEmpty());
     }
 
     @And("Order with right client is added to Cod")
     public void ThenOrderAddedToCodCheckClient(){
-        assertTrue(cod.orders.stream().
+        assertTrue(cod.getOrders().stream().
                 anyMatch(order -> order.getClient().equals(client)));
     }
 
     @And("Order with right item is added to Cod")
     public void ThenOrderAddedToCodCheckItems(){
-        System.out.println(cod.orders);
-        assertTrue(cod.orders.stream().
+        //System.out.println(cod.getOrders());
+        assertTrue(cod.getOrders().stream().
                 anyMatch(order -> order.getItems().stream().
                         anyMatch(item -> item.getCookie().getName().equals(cookie.getName()))));
     }

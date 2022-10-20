@@ -15,11 +15,10 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class COD {
-    public List<Cookie> recipes;
-    public List<Cookie> suggestedRecipes;
-    public List<Store> stores;
-    public List<Order> orders;
-    public Inventory inventory = new Inventory(new ArrayList<>());
+    private final List<Cookie> recipes;
+    private final List<Cookie> suggestedRecipes;
+    private final List<Store> stores;
+    private final List<Order> orders;
 
     public COD(){
         this.recipes = new ArrayList<>();
@@ -31,6 +30,7 @@ public class COD {
         Cookie cookie = new Cookie(
                 "ChocoCookie"
                 );
+        Inventory inventory = new Inventory(new ArrayList<>());
         Store store = new Store(
                 List.of(new Cook(1)),
                 List.of(cookie),
@@ -78,9 +78,22 @@ public class COD {
         }
     }
     public List<Cookie> getSuggestedRecipes(){
-        return suggestedRecipes;
+        return List.copyOf(suggestedRecipes);
     }
-    public void acceptRecipe(Cookie cookie,Double price){//TODO rajouter Exception si le cookie n'existe pas ?
+
+    public List<Cookie> getRecipes() {
+        return recipes;
+    }
+
+    public List<Store> getStores() {
+        return stores;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void acceptRecipe(Cookie cookie, Double price){//TODO rajouter Exception si le cookie n'existe pas ?
 
         if(suggestedRecipes.contains(cookie)){
             recipes.add(cookie);

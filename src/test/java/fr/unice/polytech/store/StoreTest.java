@@ -38,7 +38,7 @@ public class StoreTest {
     public void AndGivenCODStore()
     {
         this.cod = new COD();
-        this.cod.stores.add(store);
+        this.cod.getStores().add(store);
     }
     @And("NewOpeningTime with time {string}")
     public void AndGivenNewOpeningTime(String newOpeningTime)
@@ -60,14 +60,14 @@ public class StoreTest {
 
     @Then("The store hours are changed to the new ones")
     public void thenTheStoreHasTheGivenHoursOnCOD() {
-        int storeIndex = this.cod.stores.indexOf(this.store);
+        int storeIndex = this.cod.getStores().indexOf(this.store);
         if (this.openingTime.isBefore(this.closingTime)){
-            assert this.cod.stores.get(storeIndex).openingTime == this.openingTime;
-            assert this.cod.stores.get(storeIndex).closingTime == this.closingTime;
+            assert this.cod.getStores().get(storeIndex).openingTime == this.openingTime;
+            assert this.cod.getStores().get(storeIndex).closingTime == this.closingTime;
         }
         else{
-            assert this.cod.stores.get(storeIndex).openingTime == this.closingTime;
-            assert this.cod.stores.get(storeIndex).closingTime == this.openingTime;
+            assert this.cod.getStores().get(storeIndex).openingTime == this.closingTime;
+            assert this.cod.getStores().get(storeIndex).closingTime == this.openingTime;
         }
 
     }
@@ -90,14 +90,14 @@ public class StoreTest {
     @When("As a Store Manager I can add the new product in the store")
     public void thenAsAStoreManagerICanAddTheNewProductInTheStore()
     {
-        int storeIndex = this.cod.stores.indexOf(this.store);
-        this.cod.stores.get(storeIndex).addIngredients(ingredient,quantity);
+        int storeIndex = this.cod.getStores().indexOf(this.store);
+        this.cod.getStores().get(storeIndex).addIngredients(ingredient,quantity);
     }
     @Then("The new product is in the inventory's store")
     public void thenTheNewProductIsInTheInventoryStore()
     {
-        int storeIndex = this.cod.stores.indexOf(this.store);
-        assert this.cod.stores.get(storeIndex).getInventory().hasIngredient(ingredient);
+        int storeIndex = this.cod.getStores().indexOf(this.store);
+        assert this.cod.getStores().get(storeIndex).getInventory().hasIngredient(ingredient);
     }
 
 }

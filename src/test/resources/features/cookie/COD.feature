@@ -1,8 +1,8 @@
 Feature: Order a cookie
 
   Background:
-    Given A client with phone number 12345678
-    And a cod to stock data
+    Given A new client with an empty cart and with phone number 12345678
+    And an empty cod to stock data
     And a Cookie "Chocolala"
 
   Scenario: Choose amount

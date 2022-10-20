@@ -4,14 +4,14 @@ import java.util.List;
 
 public class Cookie {
 
-    public String name;
-    public Double Price;
-    public Double CookingTime;
-    public Cooking cooking;
-    public Mix mix;
-    public Dough dough;
-    public Flavour flavour;
-    public List<Topping> toppingList;
+    private String name;
+    private Double Price;
+    private Double CookingTime;
+    private Cooking cooking;
+    private Mix mix;
+    private Dough dough;
+    private Flavour flavour;
+    private List<Topping> toppingList;
     public Cookie(String name){
         this.name =name;
     }

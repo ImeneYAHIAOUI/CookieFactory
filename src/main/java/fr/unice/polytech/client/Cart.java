@@ -15,7 +15,7 @@ public class Cart {
         items.add(item);
     }
     public List<Item> getItems() {
-        return items;
+        return List.copyOf(items);
     }
     public void emptyItems(){
         items.clear();

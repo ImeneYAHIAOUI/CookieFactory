@@ -8,11 +8,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Order {
-    public String id;
-    public Client client;
-    public Cook cook;
-    public OrderStatus status;
-    public List<Item> items;
+    private String id;
+    private Client client;
+    private Cook cook;
+    private OrderStatus status;
+    private List<Item> items;
 
     @Override
     public String toString() {
@@ -44,7 +44,7 @@ public class Order {
     }
 
     public List<Item> getItems() {
-        return items;
+        return List.copyOf(items);
     }
 
     public Client getClient() {
