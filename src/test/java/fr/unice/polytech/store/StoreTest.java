@@ -2,6 +2,7 @@ package fr.unice.polytech.store;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.recipe.Cookie;
+import fr.unice.polytech.recipe.Ingredient;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
 import io.cucumber.java.en.And;
@@ -18,18 +19,20 @@ public class StoreTest {
     public List<Cookie> recipes = new ArrayList<>();
     public LocalTime openingTime;
     public LocalTime closingTime;
-    public String openingTimeStr;
-    public String closingTimeStr;
+    public Inventory inventory = new Inventory(new ArrayList<>());
     Store store;
     COD cod;
     int id ;
+    Ingredient ingredient;
+    int quantity;
+    String tmp;
 
     public StoreTest()  {}
 
     @Given("a store with address {string}")
     public void givenAStore(String address)
     {
-        this.store = new Store(cooks,recipes,address,LocalTime.parse("08:00"),LocalTime.parse("20:00"),id);
+        this.store = new Store(cooks,recipes,address,LocalTime.parse("08:00"),LocalTime.parse("20:00"),id,inventory);
     }
     @And("a cod with the store")
     public void AndGivenCODStore()
@@ -69,7 +72,32 @@ public class StoreTest {
 
     }
 
-
-
+    @Given("A new Ingredient with name {string}")
+    public void givenANewIngredient(String name)
+    {
+        tmp = name;
+    }
+    @And("A price of {double}")
+    public void AndGivenPrice(double price)
+    {
+        ingredient = new Ingredient(tmp,price);
+    }
+    @And("a quantity of {int}")
+    public void AndGivenAQuantity(int quantity)
+    {
+        this.quantity = quantity;
+    }
+    @When("As a Store Manager I can add the new product in the store")
+    public void thenAsAStoreManagerICanAddTheNewProductInTheStore()
+    {
+        int storeIndex = this.cod.stores.indexOf(this.store);
+        this.cod.stores.get(storeIndex).addIngredients(ingredient,quantity);
+    }
+    @Then("The new product is in the inventory's store")
+    public void thenTheNewProductIsInTheInventoryStore()
+    {
+        int storeIndex = this.cod.stores.indexOf(this.store);
+        assert this.cod.stores.get(storeIndex).getInventory().hasIngredient(ingredient);
+    }
 
 }

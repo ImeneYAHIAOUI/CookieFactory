@@ -8,6 +8,7 @@ import fr.unice.polytech.order.OrderException;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
+import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
 
 import java.time.LocalTime;
@@ -18,6 +19,7 @@ public class COD {
     public List<Cookie> suggestedRecipes;
     public List<Store> stores;
     public List<Order> orders;
+    public Inventory inventory = new Inventory(new ArrayList<>());
 
     public COD(){
         this.recipes = new ArrayList<>();
@@ -35,7 +37,8 @@ public class COD {
                 "30 Rte des Colles, 06410 Biot",
                 LocalTime.parse("08:00"),
                 LocalTime.parse("20:00"),
-                1
+                1,
+                inventory
         );
         recipes.add(cookie);
         stores.add(store);
