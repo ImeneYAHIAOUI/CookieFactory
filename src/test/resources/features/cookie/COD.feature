@@ -2,7 +2,7 @@ Feature: Order a cookie
 
   Background:
     Given A client with phone number 12345678
-    And a cod
+    And a cod to stock data
     And a Cookie "Chocolala"
 
   Scenario: Choose amount

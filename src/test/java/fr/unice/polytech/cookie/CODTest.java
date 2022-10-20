@@ -25,7 +25,7 @@ public class CODTest {
         client = new Client(number);
     }
 
-    @And("a cod" )
+    @And("a cod to stock data" )
     public void AndGiven()
     {
         cod=new COD();

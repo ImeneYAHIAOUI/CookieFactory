@@ -1,4 +1,4 @@
-package fr.unice.polytech.store;
+package fr.unice.polytech;
 
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
@@ -10,9 +10,9 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features/store")
+@SelectClasspathResource("features")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "fr.unice.polytech.store")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "fr.unice.polytech")
 @ConfigurationParameter(key = "cucumber.publish.quiet", value = "true")
 
 public class RunCucumberTest {
