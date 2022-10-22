@@ -3,9 +3,7 @@ package fr.unice.polytech.order;
 
 
 import fr.unice.polytech.client.Client;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderException;
-import fr.unice.polytech.order.OrderStatus;
+import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.store.Cook;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -15,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderTest {
 
-    Client client = new Client(0606060606);
+    Client client = new UnregisteredClient(0606060606);
     Cook cook = new Cook(1234);
     Order order;
 

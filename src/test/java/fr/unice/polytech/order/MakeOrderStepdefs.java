@@ -2,6 +2,7 @@ package fr.unice.polytech.order;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.UnregisteredClient;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -13,7 +14,7 @@ public class MakeOrderStepdefs {
 
     @Given("a client")
     public void givenAClient() {
-        client = new Client(1);
+        client = new UnregisteredClient(1);
     }
 
     @And("an order from this client")

@@ -2,6 +2,7 @@ package fr.unice.polytech;
 
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderException;
@@ -19,6 +20,7 @@ public class COD {
     private final List<Cookie> suggestedRecipes;
     private final List<Store> stores;
     private final List<Order> orders;
+    private final List<Client> clients;
 
 
     public COD(){
@@ -26,6 +28,7 @@ public class COD {
         this.stores = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.suggestedRecipes = new ArrayList<>();
+        this.clients = new ArrayList<>();
 
         //Initialisation with 1 store + 1 recipe
         Cookie cookie = new Cookie(
@@ -52,10 +55,14 @@ public class COD {
     public String finalizeOrder(Client client, Store store){
         Cook cook = store.getFreeCook(client.getCart());
         Order order = new Order("order1", client, cook);
-        client.emptyCart();
+        client.emptyCart(order);
         this.orders.add(order);
         //cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
         return order.getId();
+    }
+
+    public void register(String id, String password, int phoneNumber){
+        clients.add(new RegisteredClient(id, password, phoneNumber));
     }
 
     public void setStatus(String orderId, OrderStatus status) throws OrderException
@@ -111,6 +118,10 @@ public class COD {
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public List<Client> getClients() {
+        return List.copyOf(clients);
     }
 
     public void acceptRecipe(Cookie cookie,Double price){//TODO rajouter Exception si le cookie n'existe pas ? (tu peux utiliser cookieException (imene))

@@ -2,6 +2,7 @@ package fr.unice.polytech.cookie;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.recipe.Cookie;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -22,7 +23,7 @@ public class CODTest {
 
     @Given("A new client with an empty cart and with phone number {int}")
     public void givenAClient(Integer number){
-        client = new Client(number);
+        client = new UnregisteredClient(number);
     }
 
     @And("an empty cod to stock data" )

@@ -3,8 +3,8 @@ package fr.unice.polytech.cookie;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.CookieException;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
 import io.cucumber.datatable.DataTable;
@@ -44,7 +44,7 @@ public class ChooseCookieTest {
     @And("A client with phone number {int}")
     public void givenAClient(Integer number)
     {
-        client = new Client(number);
+        client = new UnregisteredClient(number);
     }
 
     @Given("a cod to store data")

@@ -1,8 +1,10 @@
 package fr.unice.polytech.client;
 
-public class Client {
-    private int phoneNumber;
-    private Cart cart;
+import fr.unice.polytech.order.Order;
+
+public abstract class Client {
+    private final int phoneNumber;
+    private final Cart cart;
 
     public Client(int phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -13,7 +15,7 @@ public class Client {
         return this.cart;
     }
 
-    public void emptyCart() {
+    public void emptyCart(Order order) {
         cart.emptyItems();
     }
 }
