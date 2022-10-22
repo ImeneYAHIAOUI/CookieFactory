@@ -4,9 +4,11 @@ package fr.unice.polytech.store;
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.recipe.Cookie;
 import fr.unice.polytech.recipe.Ingredient;
+import fr.unice.polytech.recipe.Topping;
 
 import java.time.LocalTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Store {
@@ -69,4 +71,23 @@ public class Store {
         return inventory;
     }
 
+    public int getMaxCookieAmount(Cookie cookie) {
+        List<Integer> ingredientAmounts = new ArrayList<>();
+        ingredientAmounts.add(inventory.get(cookie.getDough()));
+        ingredientAmounts.add(inventory.get(cookie.getFlavor()));
+        List<Topping> toppingList = cookie.getToppings();
+
+        for (Topping topping : toppingList) {
+            ingredientAmounts.add(inventory.get(topping));
+        }
+        return Collections.min(ingredientAmounts);
+
+    }
+
+    public void addCookies(List<Cookie> cookieList)
+    {
+        for (Cookie cookie : cookieList) {
+            this.recipes.add(cookie);
+        }
+    }
 }

@@ -36,5 +36,9 @@ public class Inventory extends HashMap<Ingredient, Integer> {
                 System.out.println("Retrait supérieur à la quantité existante");
             }
         }
+
+
+
+
 }
 

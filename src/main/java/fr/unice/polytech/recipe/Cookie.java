@@ -12,8 +12,21 @@ public class Cookie {
     private Dough dough;
     private Flavour flavour;
     private List<Topping> toppingList;
+
     public Cookie(String name){
+        this.name = name;
+    }
+    public Cookie(String name, Double price, Double cookingTime, Cooking cooking, Mix mix, Dough dough, Flavour flavour, List<Topping> toppingList) {
+
         this.name =name;
+        this.Price = price;
+        this.CookingTime = cookingTime;
+        this.cooking = cooking;
+        this.mix = mix;
+        this.dough = dough;
+        this.flavour = flavour;
+        this.toppingList = toppingList;
+
     }
 
     public void setCooking(Cooking cooking) {
@@ -61,6 +74,22 @@ public class Cookie {
 
     public void addTopping(Topping topping){
         toppingList.add(topping);
+    }
+
+
+    public Ingredient getDough()
+    {
+        return dough;
+    }
+
+    public Ingredient getFlavor()
+    {
+        return flavour;
+    }
+
+    public List<Topping> getToppings()
+    {
+        return toppingList;
     }
 
 

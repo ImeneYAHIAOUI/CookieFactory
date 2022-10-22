@@ -78,6 +78,7 @@ public class CODTest {
     @And("Order with right item is added to Cod")
     public void ThenOrderAddedToCodCheckItems(){
         //System.out.println(cod.getOrders());
+
         assertTrue(cod.getOrders().stream().
                 anyMatch(order -> order.getItems().stream().
                         anyMatch(item -> item.getCookie().getName().equals(cookie.getName()))));

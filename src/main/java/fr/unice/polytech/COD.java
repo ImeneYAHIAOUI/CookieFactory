@@ -20,6 +20,7 @@ public class COD {
     private final List<Store> stores;
     private final List<Order> orders;
 
+
     public COD(){
         this.recipes = new ArrayList<>();
         this.stores = new ArrayList<>();
@@ -72,6 +73,25 @@ public class COD {
             this.stores.get(this.stores.indexOf(store)).setHours(closingTime, openingTime);
         }
     }
+
+    public void chooseCookie(Client client, Store store, Cookie cookie, int amount ) throws CookieException
+    {
+        if (! store.getRecipes().contains(cookie))
+        {
+            throw new CookieException("this cookie is not available in this store");
+        }
+         int maxCookieAmount = store.getMaxCookieAmount(cookie);
+        if (maxCookieAmount < amount)
+        {
+            throw new CookieException("this store can't make this amount of cookies");
+        }
+
+        client.getCart().addItem(new Item(amount, cookie));
+
+    }
+
+
+
     public void suggestRecipe(Cookie cookie){
         if(!suggestedRecipes.contains(cookie) && ! recipes.contains(cookie)){
             suggestedRecipes.add(cookie);
@@ -93,7 +113,7 @@ public class COD {
         return orders;
     }
 
-    public void acceptRecipe(Cookie cookie, Double price){//TODO rajouter Exception si le cookie n'existe pas ?
+    public void acceptRecipe(Cookie cookie,Double price){//TODO rajouter Exception si le cookie n'existe pas ? (tu peux utiliser cookieException (imene))
 
         if(suggestedRecipes.contains(cookie)){
             recipes.add(cookie);

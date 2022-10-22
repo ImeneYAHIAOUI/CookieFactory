@@ -12,7 +12,13 @@ public class Cart {
         this.items = new ArrayList<>();
     }
     public void addItem(Item item) {
-        items.add(item);
+        if ( items.stream().anyMatch(item1 -> item1.getCookie() == item.getCookie()) ) {
+            Item existingItem = items.stream().filter(item1 -> item1.getCookie() == item.getCookie()).findFirst().orElse(null);
+            existingItem.incrementQuantity(item.getQuantity());
+
+        } else {
+            items.add(item);
+        }
     }
     public List<Item> getItems() {
         return List.copyOf(items);
