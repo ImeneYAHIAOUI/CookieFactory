@@ -60,8 +60,15 @@ public class Store {
         return cooks.get(0);
     }
 
-    public void addIngredients(Ingredient ingredient, int quantity){
-        this.inventory.addIngredient(ingredient,quantity);
+    public void addIngredients(Ingredient ingredient, int quantity) throws AlreadyExist, BadQuantity {
+        if (quantity < 0) {
+            throw new BadQuantity("Quantity cannot be under 0");
+        }
+        if (!this.inventory.hasIngredient(ingredient))
+            this.inventory.addIngredient(ingredient,quantity);
+        else{
+            throw new AlreadyExist();
+        }
     }
 
     public void removeIngredient(Ingredient ingredient){

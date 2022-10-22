@@ -3,8 +3,6 @@ package fr.unice.polytech.store;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.recipe.Cookie;
 import fr.unice.polytech.recipe.Ingredient;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Store;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -13,6 +11,8 @@ import io.cucumber.java.en.When;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 public class StoreTest {
     public List<Cook> cooks = new ArrayList<>();
@@ -88,8 +88,7 @@ public class StoreTest {
         this.quantity = quantity;
     }
     @When("As a Store Manager I can add the new product in the store")
-    public void thenAsAStoreManagerICanAddTheNewProductInTheStore()
-    {
+    public void thenAsAStoreManagerICanAddTheNewProductInTheStore() throws AlreadyExist, BadQuantity {
         int storeIndex = this.cod.getStores().indexOf(this.store);
         this.cod.getStores().get(storeIndex).addIngredients(ingredient,quantity);
     }
@@ -99,5 +98,24 @@ public class StoreTest {
         int storeIndex = this.cod.getStores().indexOf(this.store);
         assert this.cod.getStores().get(storeIndex).getInventory().hasIngredient(ingredient);
     }
+
+    @When("As a Store Manager I add a product that already exist in the store")
+    public void addProductAlreadyInInventory() throws AlreadyExist, BadQuantity {
+        int storeIndex = this.cod.getStores().indexOf(this.store);
+        this.cod.getStores().get(storeIndex).addIngredients(ingredient,quantity);
+    }
+    @Then("An Error appears because it's already in the inventory")
+    public void thenAnAlreadyExistExceptionIsCaught() throws BadQuantity {
+        boolean result = false;
+        int storeIndex = this.cod.getStores().indexOf(this.store);
+        try {
+            this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
+        }
+        catch (AlreadyExist e) {
+            result = true;
+        }
+        assertTrue(result);
+    }
+
 
 }
