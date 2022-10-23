@@ -2,9 +2,7 @@ package fr.unice.polytech.store;
 
 
 import fr.unice.polytech.client.Cart;
-import fr.unice.polytech.recipe.Cookie;
-import fr.unice.polytech.recipe.Ingredient;
-import fr.unice.polytech.recipe.Topping;
+import fr.unice.polytech.recipe.*;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -93,8 +91,27 @@ public class Store {
 
     public void addCookies(List<Cookie> cookieList)
     {
-        for (Cookie cookie : cookieList) {
-            this.recipes.add(cookie);
-        }
+        this.recipes.addAll(cookieList);
     }
+
+    public void removeCookies(Ingredient ingredient)
+    {
+        if (ingredient instanceof Dough)
+        {
+            recipes.removeIf(cookie -> cookie.getDough().equals(ingredient));
+        }
+
+        if (ingredient instanceof Flavour)
+        {
+            recipes.removeIf(cookie -> cookie.getFlavor().equals(ingredient));
+        }
+
+        if (ingredient instanceof Topping)
+        {
+            recipes.removeIf(cookie -> cookie.getToppings().contains(ingredient));
+        }
+
+
+    }
+
 }

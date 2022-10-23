@@ -28,13 +28,18 @@ public class Inventory extends HashMap<Ingredient, Integer> {
         public void addAmountQuantity(Ingredient ingredient,int quantity){
             this.replace(ingredient, this.get(ingredient) + quantity);
         }
-        public void suppressAmountQuantity(Ingredient ingredient, int quantity){
+        public void decreaseIngredientQuantity(Ingredient ingredient, int quantity){
             if (this.get(ingredient) - quantity >=0){
                 this.replace(ingredient, this.get(ingredient) - quantity);
+            }
+            else if (this.get(ingredient) - quantity ==0){
+
             }
             else{
                 System.out.println("Retrait supérieur à la quantité existante");
             }
+
+
         }
 
 

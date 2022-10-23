@@ -14,11 +14,13 @@ public class Cart {
     public void addItem(Item item) {
         if ( items.stream().anyMatch(item1 -> item1.getCookie() == item.getCookie()) ) {
             Item existingItem = items.stream().filter(item1 -> item1.getCookie() == item.getCookie()).findFirst().orElse(null);
-            existingItem.incrementQuantity(item.getQuantity());
+            assert existingItem != null;
+            existingItem.increaseQuantity(item.getQuantity());
 
         } else {
             items.add(item);
         }
+
     }
     public List<Item> getItems() {
         return List.copyOf(items);

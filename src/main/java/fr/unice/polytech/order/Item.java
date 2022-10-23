@@ -27,7 +27,7 @@ public class Item {
         return cookie;
     }
 
-    public void incrementQuantity(int quantity) {
+    public void increaseQuantity(int quantity) {
         this.quantity += quantity;
     }
 }

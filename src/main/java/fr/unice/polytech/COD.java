@@ -94,6 +94,30 @@ public class COD {
         }
 
         client.getCart().addItem(new Item(amount, cookie));
+        Inventory inventory = store.getInventory();
+
+        inventory.decreaseIngredientQuantity(cookie.getDough(), amount);
+
+        if (inventory.get(cookie.getDough()) == 0)
+        {
+            store.removeCookies(cookie.getDough());
+        }
+
+        inventory.decreaseIngredientQuantity(cookie.getFlavor(), amount);
+
+        if (inventory.get(cookie.getFlavor()) == 0)
+        {
+            store.removeCookies(cookie.getFlavor());
+        }
+
+        for( Topping topping : cookie.getToppings())
+        {
+            inventory.decreaseIngredientQuantity(topping, amount);
+            if (inventory.get(topping) == 0)
+            {
+                store.removeCookies(topping);
+            }
+        }
 
     }
 
