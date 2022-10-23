@@ -26,6 +26,7 @@ public class StoreTest {
     Ingredient ingredient;
     int quantity;
     String tmp;
+    int quantityToSubtract;
 
     public StoreTest()  {}
 
@@ -87,6 +88,10 @@ public class StoreTest {
     {
         this.quantity = quantity;
     }
+    @And("a quantity to subtract of {int}")
+    public void AndGivenAQuantityToSubtract(int quantityToSubtract){
+        this.quantityToSubtract = quantityToSubtract;
+    }
     @When("As a Store Manager I can add the new product in the store")
     public void thenAsAStoreManagerICanAddTheNewProductInTheStore() throws AlreadyExist, BadQuantity {
         int storeIndex = this.cod.getStores().indexOf(this.store);
@@ -118,4 +123,22 @@ public class StoreTest {
     }
 
 
+    @When("As a Store Manager I subtract that quantity to the product")
+    public void asAStoreManagerISubtractThatQuantityToTheProduct() throws AlreadyExist, BadQuantity {
+        int storeIndex = this.cod.getStores().indexOf(this.store);
+        this.cod.getStores().get(storeIndex).addIngredients(ingredient,quantity);
+    }
+
+    @Then("An Error appears because I can't have negative quantity")
+    public void anErrorAppearsBecauseICanTHaveNegativeQuantity() {
+        boolean result = false;
+        int storeIndex = this.cod.getStores().indexOf(this.store);
+        try {
+            this.cod.getStores().get(storeIndex).getInventory().decreaseIngredientQuantity(ingredient,quantityToSubtract);
+        }
+        catch (BadQuantity e) {
+            result = true;
+        }
+        assertTrue(result);
+    }
 }

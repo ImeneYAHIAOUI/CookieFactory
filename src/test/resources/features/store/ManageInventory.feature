@@ -30,3 +30,17 @@ Feature: Manage Inventory in a store
       | "Chocolate" | 2.5   | 10       |
       | "Milk"      | 1.5   | 20       |
       | "Vanilla"   | 4     | 5        |
+
+  Scenario Outline: Subtract quantity under 0
+    Given A new Ingredient with name <name>
+    And A price of <price>
+    And a quantity of <quantity>
+    And a quantity to subtract of <quantityToSubtract>
+    When As a Store Manager I subtract that quantity to the product
+    Then An Error appears because I can't have negative quantity
+
+  Examples:
+    | name        | price | quantity | quantityToSubtract |
+    | "Chocolate" | 2.5   | 10       |  20                |
+    | "Milk"      | 1.5   | 20       |  21                |
+    | "Vanilla"   | 4     | 5        |   6                |

@@ -8,6 +8,7 @@ import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderException;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.store.BadQuantity;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
@@ -81,8 +82,7 @@ public class COD {
         }
     }
 
-    public void chooseCookie(Client client, Store store, Cookie cookie, int amount ) throws CookieException
-    {
+    public void chooseCookie(Client client, Store store, Cookie cookie, int amount ) throws CookieException, BadQuantity {
         if (! store.getRecipes().contains(cookie))
         {
             throw new CookieException("this cookie is not available in this store");
