@@ -52,7 +52,14 @@ public class Cookie {
     @Override
     public String toString() {
         return "Cookie{" +
-                "Name='" + name + '\'' +
+                "name='" + name + '\'' +
+                ", Price=" + Price +
+                ", CookingTime=" + CookingTime +
+                ", cooking=" + cooking +
+                ", mix=" + mix +
+                ", dough=" + dough +
+                ", flavour=" + flavour +
+                ", toppingList=" + toppingList +
                 '}';
     }
 

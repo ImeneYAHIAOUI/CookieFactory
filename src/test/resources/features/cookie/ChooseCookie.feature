@@ -47,8 +47,8 @@ Feature: choose a cookie and an amount
 
     And the store has cookies
       | chocolala |
-      | vanilla   |
-      | m&ms      |
+    #  | vanilla   |
+      #  | m&ms      |
 
     When Client chooses cookies of type "chocolala"
     And amount 4
