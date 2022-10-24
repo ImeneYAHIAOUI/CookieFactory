@@ -1,5 +1,6 @@
 package fr.unice.polytech.order;
 
+import fr.unice.polytech.SMSService;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Cook;
@@ -91,11 +92,14 @@ public class Order {
                     throw new OrderException("This order's status is already \"ready\"");
                 case COMPLETED:
                     throw new OrderException("This order's status is already \"completed\"");
-                case  OBSOLETE :
+                case OBSOLETE:
                     throw new OrderException("This order's status is already \"obsolete\"");
                 case PAYED:
                     throw new OrderException("This order's status is already \"payed\"");
             }
+        }
+        if (status.equals(OrderStatus.READY)) {
+            SMSService.getInstance().notifyClient(this.client.getPhoneNumber());
         }
         this.status = status;
     }
