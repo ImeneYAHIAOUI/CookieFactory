@@ -20,17 +20,12 @@ Feature: choose a cookie and an amount
     And a store with id 1
 
     And the store has cookies
-      | chocolala |
-      | vanilla   |
-      | m&ms      |
+      | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+      | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
+      | strawbary | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
 
     When Client chooses cookies of type "chocolala"
     And amount 1
-    And recipe
-      | chocolate dough         |
-      | chocolateFlavour        |
-      | white chocolate chips   |
-      | chocolate chips         |
 
     Then this order can be purchased
 
@@ -46,17 +41,13 @@ Feature: choose a cookie and an amount
     And a store with id 1
 
     And the store has cookies
-      | chocolala |
-    #  | vanilla   |
-      #  | m&ms      |
+      | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+      | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
+      | strawbary | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
 
     When Client chooses cookies of type "chocolala"
     And amount 4
-    And recipe
-      | chocolate dough         |
-      | chocolateFlavour        |
-      | white chocolate chips   |
-      | chocolate chips         |
+
 
     Then this order can be purchased
 
@@ -72,17 +63,13 @@ Feature: choose a cookie and an amount
     And a store with id 1
 
     And the store has cookies
-      | chocolala |
-      | vanilla   |
-      | m&ms      |
+      | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+      | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
+      | strawbary | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
 
     When Client chooses cookies of type "chocolala"
     And amount 5
-    And recipe
-      | chocolate dough         |
-      | chocolateFlavour        |
-      | white chocolate chips   |
-      | chocolate chips         |
+
 
     Then this order cannot be purchased
 
@@ -98,18 +85,13 @@ Feature: choose a cookie and an amount
     And a store with id 1
 
     And the store has cookies
-      | chocolala |
-      | vanilla   |
-      | m&ms      |
+      | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+      | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
+      | strawbary | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
 
     When Client chooses cookies of type "triple chocolate"
     And amount 4
-    And recipe
-      | chocolate dough         |
-      | chocolateFlavour        |
-      | white chocolate chips   |
-      | chocolate chips         |
-
+      
     Then this order cannot be purchased
 
 

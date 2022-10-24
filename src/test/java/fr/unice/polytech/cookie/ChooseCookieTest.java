@@ -92,15 +92,29 @@ public class ChooseCookieTest {
 
 
     @And("^the store has cookies$")
-    public void AndGiven(List<String> cookies)
+    public void AndGiven(DataTable table)
     {
+        List<List<String>> rows = table.asLists(String.class);
+
+            for (List<String> row : rows)
+            {
+                Cookie cookie = new Cookie(row.get(0));
+                List<Topping> toppings = new ArrayList<>();
 
 
+                cookie.setDough((Dough) CODIngredients.stream().filter(i -> i.getName().equals(row.get(1))).findFirst().orElse(null));
 
-        for (String cookie : cookies)
-        {
-            cookieList.add(new Cookie(cookie));
-        }
+                cookie.setFlavour( (Flavour) CODIngredients.stream().filter(i -> i.getName().equals(row.get(2))).findFirst().orElse(null));
+
+                for (int j = 3; j < row.size(); j++)
+                {
+                    int finalJ = j;
+                    toppings.add(((Topping) CODIngredients.stream().filter(i -> i.getName().equals(row.get(finalJ))).findFirst().orElse(null)));
+                }
+                cookie.setToppingList(toppings);
+                cookieList.add(cookie);
+            }
+
         store.addCookies(cookieList);
 
     }
@@ -118,30 +132,6 @@ public class ChooseCookieTest {
     public void WhenChooseAmount(int i)
     {
         amount = i;
-    }
-    @And("^recipe$")
-    public void WhenChooseAmountAndCookie(List<String> ingredients)
-    {
-
-        List<Topping> toppings = new ArrayList<>();
-
-
-
-
-        cookie.setDough((Dough) CODIngredients.stream().filter(i -> i.getName().equals(ingredients.get(0))).findFirst().orElse(null));
-
-        cookie.setFlavour( (Flavour) CODIngredients.stream().filter(i -> i.getName().equals(ingredients.get(1))).findFirst().orElse(null));
-
-        for (int j = 2; j < ingredients.size(); j++)
-        {
-            int finalJ = j;
-            toppings.add(((Topping) CODIngredients.stream().filter(i -> i.getName().equals(ingredients.get(finalJ))).findFirst().orElse(null)));
-        }
-
-        cookie.setToppingList(toppings);
-
-
-
     }
 
     @Then("this order cannot be purchased")
