@@ -1,10 +1,9 @@
 package fr.unice.polytech.order;
 
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Cook;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Order {

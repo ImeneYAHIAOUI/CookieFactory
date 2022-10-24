@@ -1,4 +1,4 @@
-package fr.unice.polytech.store;
+package fr.unice.polytech.exception;
 
 public class AlreadyExist extends Exception {
     public AlreadyExist() {

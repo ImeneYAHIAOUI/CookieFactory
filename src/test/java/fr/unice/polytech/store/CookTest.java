@@ -1,12 +1,7 @@
 package fr.unice.polytech.store;
 
 import fr.unice.polytech.COD;
-import fr.unice.polytech.client.Client;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderException;
-import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.Cookie;
-import fr.unice.polytech.store.Cook;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

@@ -4,6 +4,7 @@ package fr.unice.polytech.order;
 
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Cook;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

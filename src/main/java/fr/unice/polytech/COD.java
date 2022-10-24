@@ -3,12 +3,14 @@ package fr.unice.polytech;
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.exception.CookieException;
+import fr.unice.polytech.exception.RegistrationException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderException;
+import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.BadQuantity;
+import fr.unice.polytech.exception.BadQuantity;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
@@ -62,7 +64,9 @@ public class COD {
         return order.getId();
     }
 
-    public void register(String id, String password, int phoneNumber){
+    public void register(String id, String password, int phoneNumber) throws RegistrationException {
+        if(clients.stream().anyMatch(client -> client.getId().equals(id)))
+            throw new RegistrationException("User "+id+" is already registered.");
         clients.add(new RegisteredClient(id, password, phoneNumber));
     }
 

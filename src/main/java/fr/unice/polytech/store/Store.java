@@ -2,6 +2,8 @@ package fr.unice.polytech.store;
 
 
 import fr.unice.polytech.client.Cart;
+import fr.unice.polytech.exception.AlreadyExist;
+import fr.unice.polytech.exception.BadQuantity;
 import fr.unice.polytech.recipe.*;
 
 import java.time.LocalTime;

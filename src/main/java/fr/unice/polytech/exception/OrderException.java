@@ -1,4 +1,4 @@
-package fr.unice.polytech.order;
+package fr.unice.polytech.exception;
 
 public class OrderException extends Exception {
     public OrderException(String message) {

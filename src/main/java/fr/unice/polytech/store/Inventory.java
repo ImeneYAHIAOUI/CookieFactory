@@ -1,5 +1,6 @@
 package fr.unice.polytech.store;
 
+import fr.unice.polytech.exception.BadQuantity;
 import fr.unice.polytech.recipe.Ingredient;
 
 import java.util.HashMap;

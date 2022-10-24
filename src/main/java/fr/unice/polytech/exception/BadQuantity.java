@@ -1,4 +1,4 @@
-package fr.unice.polytech.store;
+package fr.unice.polytech.exception;
 
 public class BadQuantity extends Exception {
     public BadQuantity(String message) {

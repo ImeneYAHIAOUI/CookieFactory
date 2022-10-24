@@ -1,7 +1,7 @@
 package fr.unice.polytech.cookie;
 
 import fr.unice.polytech.COD;
-import fr.unice.polytech.CookieException;
+import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.recipe.*;

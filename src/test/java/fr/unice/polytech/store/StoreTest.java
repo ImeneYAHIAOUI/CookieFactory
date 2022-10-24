@@ -1,6 +1,8 @@
 package fr.unice.polytech.store;
 
 import fr.unice.polytech.COD;
+import fr.unice.polytech.exception.AlreadyExist;
+import fr.unice.polytech.exception.BadQuantity;
 import fr.unice.polytech.recipe.Cookie;
 import fr.unice.polytech.recipe.Ingredient;
 import io.cucumber.java.en.And;
