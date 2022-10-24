@@ -21,7 +21,7 @@ public class COD {
     private final List<Cookie> suggestedRecipes;
     private final List<Store> stores;
     private final List<Order> orders;
-    private final List<Client> clients;
+    private final List<RegisteredClient> clients;
 
 
     public COD(){
@@ -144,7 +144,7 @@ public class COD {
         return orders;
     }
 
-    public List<Client> getClients() {
+    public List<RegisteredClient> getClients() {
         return List.copyOf(clients);
     }
 
