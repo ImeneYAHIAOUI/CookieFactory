@@ -3,6 +3,7 @@ package fr.unice.polytech.cookie;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.BadQuantity;
 import fr.unice.polytech.recipe.Cookie;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -61,7 +62,7 @@ public class CODTest {
     }
 
     @And("Client finalize order")
-    public void WhenFinalizeOrder(){
+    public void WhenFinalizeOrder() throws BadQuantity {
         cod.finalizeOrder(client, cod.getStores().get(0));
     }
 
