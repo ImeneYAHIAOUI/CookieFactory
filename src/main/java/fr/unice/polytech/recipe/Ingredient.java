@@ -3,7 +3,7 @@ package fr.unice.polytech.recipe;
 public class Ingredient {
     private String name;
     private double price;
-
+    private int quantity;
     public Ingredient(String name,double price) {
         this.name = name;
         this.price = price;
@@ -20,6 +20,8 @@ public class Ingredient {
     public String toString() {
         return "Ingredient{" +
                 "name='" + name + '\'' +
-                '}';
+                '}';}
+    public int getQuantity(){
+        return quantity;
     }
 }

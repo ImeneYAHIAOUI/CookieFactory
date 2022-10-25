@@ -2,6 +2,7 @@ package fr.unice.polytech;
 
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.BadQuantity;
 
 import java.util.Scanner;
 
@@ -20,8 +21,12 @@ public class App {
         System.out.println("Enter the number of cookie you want :");
         String amount = scanner.nextLine();
         cod.chooseAmount(Integer.parseInt(amount), cod.getRecipes().get(0), client.getCart());
-
-        System.out.println("Congrats ! Here is the id to pick up your order : "+cod.finalizeOrder(client, cod.getStores().get(0)));
+        try {
+            String orderId= cod.finalizeOrder(client, cod.getStores().get(0));
+            System.out.println("Congrats ! Here is the id to pick up your order : " +orderId);
+        }catch(BadQuantity exception){
+            System.out.println(exception.getMessage());
+        }
 
     }
 }

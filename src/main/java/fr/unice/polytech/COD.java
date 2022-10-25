@@ -55,27 +55,39 @@ public class COD {
         cart.addItem(new Item(i, cookie));
     }
 
-    public String finalizeOrder(Client client, Store store){
+    public String finalizeOrder(Client client, Store store) throws BadQuantity {
         Cook cook = store.getFreeCook(client.getCart());
         Order order = new Order("order1", client, cook);
-        client.emptyCart(order);
-        this.orders.add(order);
+        // remove ingredients from inventory
+        for (Item item :order.getItems()) {
+            Cookie cookie=item.getCookie();
+            int numberOfCookie=item.getQuantity();
+            Ingredient dough=cookie.getDough();
+            int doughQuantity=dough.getQuantity();
+            order.store.getInventory().decreaseIngredientQuantity(dough,doughQuantity*numberOfCookie);
+            Ingredient flavour=cookie.getFlavor();
+            int flavourQuantity=flavour.getQuantity();
+            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavor(), numberOfCookie*flavourQuantity);
+            // topping
+            for (Topping topping :cookie.getToppings()) {
+                store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie* topping.getQuantity());
+            }
+            client.emptyCart(order);
+            this.orders.add(order);
+        }
         //cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
         return order.getId();
     }
 
     public void register(String id, String password, int phoneNumber) throws RegistrationException {
-        if(clients.stream().anyMatch(client -> client.getId().equals(id)))
-            throw new RegistrationException("User "+id+" is already registered.");
-        clients.add(new RegisteredClient(id, password, phoneNumber));
+        if (clients.stream().anyMatch(client -> client.getId().equals(id)))
+            throw new RegistrationException("User " + id + " is already registered.");
     }
-
     public void setStatus(String orderId, OrderStatus status) throws OrderException
     {
         Order order = orders.stream().filter(ord -> ord.getId().equals(orderId)).findFirst().orElse(null);
         assert order != null;
         order.setStatus(status);
-
     }
     public void setHours(Store store, LocalTime openingTime, LocalTime closingTime){
         if (openingTime.isBefore(closingTime)) {
@@ -96,36 +108,8 @@ public class COD {
         {
             throw new CookieException("this store can't make this amount of cookies");
         }
-
         client.getCart().addItem(new Item(amount, cookie));
-        Inventory inventory = store.getInventory();
-
-        inventory.decreaseIngredientQuantity(cookie.getDough(), amount);
-
-        if (inventory.get(cookie.getDough()) == 0)
-        {
-            store.removeCookies(cookie.getDough());
-        }
-
-        inventory.decreaseIngredientQuantity(cookie.getFlavor(), amount);
-
-        if (inventory.get(cookie.getFlavor()) == 0)
-        {
-            store.removeCookies(cookie.getFlavor());
-        }
-
-        for( Topping topping : cookie.getToppings())
-        {
-            inventory.decreaseIngredientQuantity(topping, amount);
-            if (inventory.get(topping) == 0)
-            {
-                store.removeCookies(topping);
-            }
-        }
-
     }
-
-
 
     public void suggestRecipe(Cookie cookie){
         if(!suggestedRecipes.contains(cookie) && ! recipes.contains(cookie)){
@@ -139,7 +123,6 @@ public class COD {
     public List<Cookie> getRecipes() {
         return recipes;
     }
-
     public List<Store> getStores() {
         return stores;
     }
@@ -166,14 +149,22 @@ public class COD {
         }
     }
 
-    public void cancelOrder(Order order) throws OrderException {
-        Order orderToCancel = orders.stream()
-                .filter(o -> o.getId().equals(order.getId()))
-                .findFirst()
-                .orElseThrow();
-        orderToCancel.setStatus(OrderStatus.CANCELLED);
+    public void cancelOrder(Order order)throws OrderException  {
+        order.setStatus(OrderStatus.CANCELLED);
+        Store store =order.store;
+        for ( Item item : order.getItems()) {
+            Cookie cookie=item.getCookie();
+            int numberOfCookie=item.getQuantity();
+            Ingredient dough=cookie.getDough();
+            int doughQuantity=dough.getQuantity();
+            store.getInventory().addIngredient(dough,doughQuantity*numberOfCookie);
+            Ingredient flavour=cookie.getFlavor();
+            int flavourQuantity=flavour.getQuantity();
+            store.getInventory().addIngredient(item.getCookie().getFlavor(), numberOfCookie*flavourQuantity);
+            //topping
+            cookie.getToppings().stream().forEach(topping ->store.getInventory().addIngredient(topping, numberOfCookie* topping.getQuantity()));
+        }
     }
-
     public void printStoresOpeningHours(){
         for(Store store : stores){
             System.out.println(store.openingTime + " - " + store.closingTime);

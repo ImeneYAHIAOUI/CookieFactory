@@ -3,6 +3,7 @@ package fr.unice.polytech.order;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Cook;
+import fr.unice.polytech.store.Store;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class Order {
     private String id;
     private Client client;
     private Cook cook;
+    public Store store;
     private OrderStatus status;
     private List<Item> items;
 
@@ -32,10 +34,6 @@ public class Order {
         this.items = List.copyOf(client.getCart().getItems());
         //Tant qu'on a pas l'interaction entre les cooks et le système,
         //On met directement l'order en status READY
-    }
-
-    public Boolean SetStatus(OrderStatus status){
-        return true;
     }
 
     public String getId() {

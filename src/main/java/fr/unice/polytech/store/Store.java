@@ -20,7 +20,6 @@ public class Store {
     private int id;
     private final Inventory inventory;
 
-
     public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime,int id,Inventory inventory) {
         this.cooks = cooks;
         this.recipes = recipes;
