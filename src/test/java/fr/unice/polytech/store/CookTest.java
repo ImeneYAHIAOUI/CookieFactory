@@ -25,7 +25,7 @@ public class CookTest {
     @And( "a cookie with name {string}")
     public void AndGivenCookie(String name)
     {
-        cookie= new Cookie(name);
+        cookie= new Cookie(name, 0.0, 0.0, null, null, null, null, null);
     }
     @And("a cod" )
     public void AndGiven()

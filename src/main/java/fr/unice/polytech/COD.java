@@ -34,20 +34,16 @@ public class COD {
         this.clients = new ArrayList<>();
 
         //Initialisation with 1 store + 1 recipe
-        Cookie cookie = new Cookie(
-                "ChocoCookie"
-                );
         Inventory inventory = new Inventory(new ArrayList<>());
         Store store = new Store(
                 List.of(new Cook(1)),
-                List.of(cookie),
+                recipes,
                 "30 Rte des Colles, 06410 Biot",
                 LocalTime.parse("08:00"),
                 LocalTime.parse("20:00"),
                 1,
                 inventory
         );
-        recipes.add(cookie);
         stores.add(store);
     }
 

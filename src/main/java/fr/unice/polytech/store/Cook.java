@@ -29,13 +29,7 @@ public class Cook {
         assignedOrders.add(order);
     }
     public void suggestRecipe(String cookieName, Double CookingTime, Cooking cooking, Mix mix, Dough dough , Flavour flavour, List<Topping> toppingList){
-        Cookie newCookie=new Cookie(cookieName);
-        newCookie.setCookingTime(CookingTime);
-        newCookie.setCooking(cooking);
-        newCookie.setDough(dough);
-        newCookie.setMix(mix);
-        newCookie.setFlavour(flavour);
-        newCookie.setToppingList(toppingList);
+        Cookie newCookie = new Cookie(cookieName, 0.0, CookingTime, cooking, mix, dough, flavour, toppingList);
         cod.suggestRecipe(newCookie);
     }
 }

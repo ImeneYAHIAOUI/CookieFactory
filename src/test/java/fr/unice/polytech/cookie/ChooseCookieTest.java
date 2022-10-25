@@ -98,20 +98,19 @@ public class ChooseCookieTest {
 
             for (List<String> row : rows)
             {
-                Cookie cookie = new Cookie(row.get(0));
                 List<Topping> toppings = new ArrayList<>();
 
 
-                cookie.setDough((Dough) CODIngredients.stream().filter(i -> i.getName().equals(row.get(1))).findFirst().orElse(null));
+                Dough dough = (Dough) CODIngredients.stream().filter(i -> i.getName().equals(row.get(1))).findFirst().orElse(null);
 
-                cookie.setFlavour( (Flavour) CODIngredients.stream().filter(i -> i.getName().equals(row.get(2))).findFirst().orElse(null));
+                Flavour flavor =  (Flavour) CODIngredients.stream().filter(i -> i.getName().equals(row.get(2))).findFirst().orElse(null);
 
                 for (int j = 3; j < row.size(); j++)
                 {
                     int finalJ = j;
                     toppings.add(((Topping) CODIngredients.stream().filter(i -> i.getName().equals(row.get(finalJ))).findFirst().orElse(null)));
                 }
-                cookie.setToppingList(toppings);
+                Cookie cookie = new Cookie(row.get(0), 1., 30., Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
                 cookieList.add(cookie);
             }
 
@@ -125,7 +124,7 @@ public class ChooseCookieTest {
     @When("Client chooses cookies of type {string}")
     public void WhenChooseCookie(String name)
     {
-        cookie = cookieList.stream().filter(c -> c.getName().equals(name)).findFirst().orElse(new Cookie("unavailable"));
+        cookie = cookieList.stream().filter(c -> c.getName().equals(name)).findFirst().orElse(null);
     }
 
     @And("amount {int}")

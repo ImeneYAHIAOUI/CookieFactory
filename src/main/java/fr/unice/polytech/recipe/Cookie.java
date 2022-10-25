@@ -13,9 +13,8 @@ public class Cookie {
     private Flavour flavour;
     private List<Topping> toppingList;
 
-    public Cookie(String name){
-        this.name = name;
-    }
+
+
     public Cookie(String name, Double price, Double cookingTime, Cooking cooking, Mix mix, Dough dough, Flavour flavour, List<Topping> toppingList) {
 
         this.name =name;
