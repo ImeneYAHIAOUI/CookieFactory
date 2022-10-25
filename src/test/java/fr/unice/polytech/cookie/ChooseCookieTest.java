@@ -145,7 +145,18 @@ public class ChooseCookieTest {
     {
         assertDoesNotThrow( () -> cod.chooseCookie(client,store, cookie, amount));
     }
+    @And("the clients card contains {int} cookie\\(s) of type {string}")
+    public void ThenClientCardContains(int amount, String name)
+    {
+        Cookie cookie = cookieList.stream().filter(c -> c.getName().equals(name)).findFirst().orElse(null);
+        assertTrue(client.getCart().getItems().stream().filter(i -> i.getCookie().equals(cookie)).anyMatch(i -> i.getQuantity() == amount));
 
+    }
+
+
+
+
+    /*
     @And("^the inventory has the ingredients and amounts$")
     public void AndThen(DataTable data)
     {
@@ -157,7 +168,7 @@ public class ChooseCookieTest {
             Ingredient ingredient = CODIngredients.stream().filter(i -> i.getName().equals(row.get(0))).findFirst().orElse(null);
             Integer newAmount = inventory.get(ingredient);
             Integer expectedAmount = Integer.parseInt(row.get(1));
-            //assertEquals( expectedAmount,newAmount);
+            assertEquals( expectedAmount,newAmount);
         }
 
     }
@@ -169,10 +180,10 @@ public class ChooseCookieTest {
         {
             Cookie cookie = this.cookieList.stream().filter(c2 -> c2.getName().equals(c)).findFirst().orElse(null);
             assert cookie != null;
-            //assertFalse(store.getRecipes().contains(cookie));
+            assertFalse(store.getRecipes().contains(cookie));
         }
 
-    }
+    }*/
 
 
 
