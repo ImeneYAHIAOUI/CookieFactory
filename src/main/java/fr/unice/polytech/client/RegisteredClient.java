@@ -10,14 +10,14 @@ public class RegisteredClient extends Client {
 
     private final String id;
     private final String password;
-    private int nb_cookie;
+    private int nbCookie;
     private final List<Order> pastOrders;
 
     public RegisteredClient(String id, String password, int phoneNumber) {
         super(phoneNumber);
         this.id = id;
         this.password = password;
-        nb_cookie = 0;
+        nbCookie = 0;
         this.pastOrders = new ArrayList<>();
     }
 
@@ -29,17 +29,17 @@ public class RegisteredClient extends Client {
         return password;
     }
 
-    public int getNb_cookie() {
-        return nb_cookie;
+    public int getNbCookie() {
+        return nbCookie;
     }
 
     @Override
     public void emptyCart(Order order) {
         int nb = 0;
-        for (Item item: this.getCart().getItems()) {
+        for (Item item : this.getCart().getItems()) {
             nb += item.getQuantity();
         }
-        nb_cookie +=nb;
+        nbCookie += nb;
         pastOrders.add(order);
         getCart().emptyItems();
     }

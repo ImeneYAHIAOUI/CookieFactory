@@ -10,27 +10,26 @@ import io.cucumber.java.en.When;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class RegisterTest {
+public class RegisterStepDefs {
     COD cod;
     String id;
     String mdp;
     int phoneNumber;
 
-    @Given("an empty cod without data" )
-    public void AndGiven()
-    {
-        cod=new COD();
+    @Given("an empty cod without data")
+    public void andGivenAnEmptyCOD() {
+        cod = new COD();
     }
 
     @When("Client register with id {string}, mdp {string}, phone number {int}")
-    public void registerClient(String id, String mdp, int phoneNumber){
+    public void registerClient(String id, String mdp, int phoneNumber) {
         this.id = id;
         this.mdp = mdp;
         this.phoneNumber = phoneNumber;
     }
 
     @Then("Cod clients is not empty")
-    public void ThenCodClientsNotEmpty(){
+    public void thenCodClientsNotEmpty() {
         assertFalse(cod.getClients().isEmpty());
     }
 
@@ -45,14 +44,12 @@ public class RegisterTest {
     }
 
     @Then("this client can't register")
-    public void ThenCookiesNotAvailable()
-    {
+    public void thenCookiesNotAvailable() {
         assertThrows(RegistrationException.class, () -> cod.register(id, mdp, phoneNumber));
     }
 
     @Then("this client can register")
-    public void ThenCookiesAvailable()
-    {
-        assertDoesNotThrow( () -> cod.register(id, mdp, phoneNumber));
+    public void thenCookiesAvailable() {
+        assertDoesNotThrow(() -> cod.register(id, mdp, phoneNumber));
     }
 }

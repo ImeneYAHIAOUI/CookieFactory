@@ -1,8 +1,8 @@
 package fr.unice.polytech.store;
 
 import fr.unice.polytech.COD;
-import fr.unice.polytech.exception.AlreadyExist;
-import fr.unice.polytech.exception.BadQuantity;
+import fr.unice.polytech.exception.AlreadyExistException;
+import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.recipe.Cookie;
 import fr.unice.polytech.recipe.Ingredient;
 import io.cucumber.java.en.And;
@@ -16,41 +16,41 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class StoreTest {
-    public List<Cook> cooks = new ArrayList<>();
-    public List<Cookie> recipes = new ArrayList<>();
+public class StoreStepDefs {
+    public final List<Cook> cooks = new ArrayList<>();
+    public final List<Cookie> recipes = new ArrayList<>();
     public LocalTime openingTime;
     public LocalTime closingTime;
-    public Inventory inventory = new Inventory(new ArrayList<>());
+    public final Inventory inventory = new Inventory(new ArrayList<>());
     Store store;
     COD cod;
-    int id ;
+    int id;
     Ingredient ingredient;
     int quantity;
     String tmp;
     int quantityToSubtract;
 
-    public StoreTest()  {}
+    public StoreStepDefs() {
+    }
 
     @Given("a store with address {string}")
-    public void givenAStore(String address)
-    {
-        this.store = new Store(cooks,recipes,address,LocalTime.parse("08:00"),LocalTime.parse("20:00"),id,inventory);
+    public void givenAStore(String address) {
+        this.store = new Store(cooks, recipes, address, LocalTime.parse("08:00"), LocalTime.parse("20:00"), id, inventory);
     }
+
     @And("a cod with the store")
-    public void AndGivenCODStore()
-    {
+    public void andGivenCODStore() {
         this.cod = new COD();
         this.cod.getStores().add(store);
     }
+
     @And("NewOpeningTime with time {string}")
-    public void AndGivenNewOpeningTime(String newOpeningTime)
-    {
+    public void andGivenNewOpeningTime(String newOpeningTime) {
         this.openingTime = LocalTime.parse(newOpeningTime);
     }
+
     @And("NewClosingTime with time {string}")
-    public void AndGivenNewClosingTime(String newClosingTime)
-    {
+    public void andGivenNewClosingTime(String newClosingTime) {
         this.closingTime = LocalTime.parse(newClosingTime);
     }
 
@@ -76,49 +76,50 @@ public class StoreTest {
     }
 
     @Given("A new Ingredient with name {string}")
-    public void givenANewIngredient(String name)
-    {
+    public void givenANewIngredient(String name) {
         tmp = name;
     }
+
     @And("A price of {double}")
-    public void AndGivenPrice(double price)
-    {
-        ingredient = new Ingredient(tmp,price);
+    public void andGivenPrice(double price) {
+        ingredient = new Ingredient(tmp, price);
     }
+
     @And("a quantity of {int}")
-    public void AndGivenAQuantity(int quantity)
-    {
+    public void andGivenAQuantity(int quantity) {
         this.quantity = quantity;
     }
+
     @And("a quantity to subtract of {int}")
-    public void AndGivenAQuantityToSubtract(int quantityToSubtract){
+    public void andGivenAQuantityToSubtract(int quantityToSubtract) {
         this.quantityToSubtract = quantityToSubtract;
     }
+
     @When("As a Store Manager I can add the new product in the store")
-    public void thenAsAStoreManagerICanAddTheNewProductInTheStore() throws AlreadyExist, BadQuantity {
+    public void thenAsAStoreManagerICanAddTheNewProductInTheStore() throws AlreadyExistException, BadQuantityException {
         int storeIndex = this.cod.getStores().indexOf(this.store);
-        this.cod.getStores().get(storeIndex).addIngredients(ingredient,quantity);
+        this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
     }
+
     @Then("The new product is in the inventory's store")
-    public void thenTheNewProductIsInTheInventoryStore()
-    {
+    public void thenTheNewProductIsInTheInventoryStore() {
         int storeIndex = this.cod.getStores().indexOf(this.store);
         assert this.cod.getStores().get(storeIndex).getInventory().hasIngredient(ingredient);
     }
 
     @When("As a Store Manager I add a product that already exist in the store")
-    public void addProductAlreadyInInventory() throws AlreadyExist, BadQuantity {
+    public void addProductAlreadyInInventory() throws AlreadyExistException, BadQuantityException {
         int storeIndex = this.cod.getStores().indexOf(this.store);
-        this.cod.getStores().get(storeIndex).addIngredients(ingredient,quantity);
+        this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
     }
+
     @Then("An Error appears because it's already in the inventory")
-    public void thenAnAlreadyExistExceptionIsCaught() throws BadQuantity {
+    public void thenAnAlreadyExistExceptionIsCaught() throws BadQuantityException {
         boolean result = false;
         int storeIndex = this.cod.getStores().indexOf(this.store);
         try {
             this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
-        }
-        catch (AlreadyExist e) {
+        } catch (AlreadyExistException e) {
             result = true;
         }
         assertTrue(result);
@@ -126,9 +127,9 @@ public class StoreTest {
 
 
     @When("As a Store Manager I subtract that quantity to the product")
-    public void asAStoreManagerISubtractThatQuantityToTheProduct() throws AlreadyExist, BadQuantity {
+    public void asAStoreManagerISubtractThatQuantityToTheProduct() throws AlreadyExistException, BadQuantityException {
         int storeIndex = this.cod.getStores().indexOf(this.store);
-        this.cod.getStores().get(storeIndex).addIngredients(ingredient,quantity);
+        this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
     }
 
     @Then("An Error appears because I can't have negative quantity")
@@ -136,9 +137,8 @@ public class StoreTest {
         boolean result = false;
         int storeIndex = this.cod.getStores().indexOf(this.store);
         try {
-            this.cod.getStores().get(storeIndex).getInventory().decreaseIngredientQuantity(ingredient,quantityToSubtract);
-        }
-        catch (BadQuantity e) {
+            this.cod.getStores().get(storeIndex).getInventory().decreaseIngredientQuantity(ingredient, quantityToSubtract);
+        } catch (BadQuantityException e) {
             result = true;
         }
         assertTrue(result);

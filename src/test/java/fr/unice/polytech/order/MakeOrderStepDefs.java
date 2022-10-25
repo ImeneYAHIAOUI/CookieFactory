@@ -4,8 +4,8 @@ import fr.unice.polytech.COD;
 import fr.unice.polytech.SMSService;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
-import io.cucumber.java.Before;
 import fr.unice.polytech.exception.OrderException;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
 
 import static org.mockito.Mockito.*;
 
-public class MakeOrderStepdefs {
+public class MakeOrderStepDefs {
 
     Client client;
     SMSService smsService;

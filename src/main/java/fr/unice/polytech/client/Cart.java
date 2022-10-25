@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart {
-    private List<Item> items;
+    private final List<Item> items;
 
     Cart() {
         this.items = new ArrayList<>();

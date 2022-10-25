@@ -4,7 +4,7 @@ import fr.unice.polytech.recipe.Cookie;
 
 public class Item {
     private int quantity;
-    private Cookie cookie;
+    private final Cookie cookie;
 
     public Item(int quantity, Cookie cookie) {
         this.quantity = quantity;

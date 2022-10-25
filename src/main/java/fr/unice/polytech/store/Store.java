@@ -2,8 +2,8 @@ package fr.unice.polytech.store;
 
 
 import fr.unice.polytech.client.Cart;
-import fr.unice.polytech.exception.AlreadyExist;
-import fr.unice.polytech.exception.BadQuantity;
+import fr.unice.polytech.exception.AlreadyExistException;
+import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.recipe.*;
 
 import java.time.LocalTime;
@@ -14,10 +14,10 @@ import java.util.List;
 public class Store {
     private final List<Cook> cooks;
     private final List<Cookie> recipes;
-    public String address;
+    public final String address;
     public LocalTime openingTime;
     public LocalTime closingTime;
-    private int id;
+    private final int id;
     private final Inventory inventory;
 
     public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime,int id,Inventory inventory) {
@@ -59,14 +59,14 @@ public class Store {
         return cooks.get(0);
     }
 
-    public void addIngredients(Ingredient ingredient, int quantity) throws AlreadyExist, BadQuantity {
+    public void addIngredients(Ingredient ingredient, int quantity) throws AlreadyExistException, BadQuantityException {
         if (quantity < 0) {
-            throw new BadQuantity("Quantity cannot be under 0");
+            throw new BadQuantityException("Quantity cannot be under 0");
         }
         if (!this.inventory.hasIngredient(ingredient))
-            this.inventory.addIngredient(ingredient,quantity);
-        else{
-            throw new AlreadyExist();
+            this.inventory.addIngredient(ingredient, quantity);
+        else {
+            throw new AlreadyExistException();
         }
     }
 
