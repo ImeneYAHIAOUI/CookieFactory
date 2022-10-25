@@ -12,7 +12,9 @@ public abstract class Client {
     }
 
 
-    public Cart getCart(){
+
+
+    public Cart getCart() {
         return this.cart;
     }
 
