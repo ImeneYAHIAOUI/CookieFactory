@@ -5,7 +5,7 @@ import lombok.Getter;
 
 public abstract class Client {
     @Getter
-    private final int phoneNumber;
+    private final int  phoneNumber;
     @Getter
     private final Cart cart;
 

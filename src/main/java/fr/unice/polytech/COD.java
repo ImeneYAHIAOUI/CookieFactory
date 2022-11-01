@@ -3,10 +3,7 @@ package fr.unice.polytech;
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
-import fr.unice.polytech.exception.BadQuantityException;
-import fr.unice.polytech.exception.CookieException;
-import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.exception.RegistrationException;
+import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
@@ -19,12 +16,16 @@ import lombok.Getter;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class COD {
     @Getter
     private final List<Cookie> recipes;
     @Getter
     private final List<Cookie> suggestedRecipes;
+
+    private  List<RegisteredClient> ConnectedClient;
+
     @Getter
     private final List<Store> stores;
     @Getter
@@ -39,6 +40,7 @@ public class COD {
         this.orders = new ArrayList<>();
         this.suggestedRecipes = new ArrayList<>();
         this.clients = new ArrayList<>();
+        this.ConnectedClient = new ArrayList<>();
 
         //Initialisation with 1 store + 1 recipe
         Inventory inventory = new Inventory(new ArrayList<>());
@@ -97,6 +99,26 @@ public class COD {
         if (clients.stream().anyMatch(client -> client.getId().equals(id)))
             throw new RegistrationException("User " + id + " is already registered.");
         clients.add(new RegisteredClient(id, password, phoneNumber));
+    }
+    public void logIn(String id, String password) throws InvalidInputException {
+
+        if(ConnectedClient.stream().noneMatch(client -> client.getId().equals(id))){
+            Optional<RegisteredClient> registeredClient= ( clients.stream().filter(client -> client.getId().equals(id)).findFirst());
+            if (registeredClient.isPresent()){
+                RegisteredClient client=registeredClient.get();
+                if (client.getPassword().equals(password))
+                    ConnectedClient.add(client) ;
+                else
+                    throw new InvalidInputException("The password you entered is not valid. ");
+
+            }
+            else
+                throw new InvalidInputException("ID not found. Please log in with another ID");
+        }else{
+            throw new InvalidInputException("Your are already connected ");
+        }
+
+
     }
 
     public void setStatus(Order order, OrderStatus status) throws OrderException {
@@ -163,6 +185,9 @@ public class COD {
             //topping
             cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie * topping.getQuantity()));
         }
+    }
+    public List<RegisteredClient> getConnectedClients(){
+        return ConnectedClient;
     }
 
 

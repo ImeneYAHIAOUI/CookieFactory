@@ -1,0 +1,8 @@
+package fr.unice.polytech.exception;
+
+public class InvalidInputException extends Exception {
+    public InvalidInputException(String message) {
+        super(message);
+    }
+
+}

@@ -2,8 +2,11 @@ package unitTests;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.InvalidInputException;
 import fr.unice.polytech.exception.OrderException;
+import fr.unice.polytech.exception.RegistrationException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
@@ -36,7 +39,12 @@ public class CODUnitTests {
     public void setUp() {
         cod = new COD();
         client = new UnregisteredClient(0606060606);
+        try{
 
+            cod.register("15","^mldp",0707060106);
+        }catch(RegistrationException exp){
+
+        }
         cook = new Cook(1);
         order = new Order("1",client,cook);
 
@@ -72,9 +80,17 @@ public class CODUnitTests {
         assertEquals(order.getStatus(), OrderStatus.CANCELLED);
         assertThrows(OrderException.class,() ->cod.setStatus(order, OrderStatus.PAYED));
     }
-
-
-
-
+    @Test
+    public void testLogIn() throws InvalidInputException {
+        cod.logIn("15" ,"^mldp");
+        assertEquals("15", cod.getConnectedClients().get(0).getId());
+        assertEquals("^mldp", cod.getConnectedClients().get(0).getPassword());
+        assertThrows(InvalidInputException.class, ()-> cod.logIn("15" ,"^mldp"),
+               "Your are already connected ");
+        assertThrows(InvalidInputException.class, ()-> cod.logIn("10" ,"^mldp"),
+                "ID not found. Please log in with another ID");
+        assertThrows(InvalidInputException.class, ()-> cod.logIn("15" ,"^mdp"),
+                "The password you entered is not valid. ");
+    }
 
 }
