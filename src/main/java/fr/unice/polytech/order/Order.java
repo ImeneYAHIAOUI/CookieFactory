@@ -8,7 +8,10 @@ import fr.unice.polytech.store.Store;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Order {
     @Getter
@@ -27,6 +30,8 @@ public class Order {
     @Getter
     private OrderStatus status;
 
+    private Map<OrderStatus, Date> history;
+
     @Override
     public String toString() {
         return "Order{" +
@@ -44,6 +49,8 @@ public class Order {
         this.cook = cook;
         this.status = OrderStatus.NOT_STARTED;
         this.items = List.copyOf(client.getCart().getItems());
+        this.history = new HashMap<>();
+        this.history.put(OrderStatus.NOT_STARTED, new Date());
         //Tant qu'on a pas l'interaction entre les cooks et le système,
         //On met directement l'order en status READY
     }
@@ -58,7 +65,6 @@ public class Order {
         if (this.status.equals((status))) {
             switch (status) {
                 case NOT_STARTED -> throw new OrderException("This order's status is already \"not started\"");
-                case CANCELLED -> throw new OrderException("This order's status is already \"cancelled\"");
                 case IN_PROGRESS -> throw new OrderException("This order's status is already \"in progress\"");
                 case READY -> throw new OrderException("This order's status is already \"ready\"");
                 case COMPLETED -> throw new OrderException("This order's status is already \"completed\"");
@@ -70,6 +76,12 @@ public class Order {
             SMSService.getInstance().notifyClient(this.client.getPhoneNumber());
         }
         this.status = status;
+        this.history.put(status, new Date());
+    }
+
+
+    public Map<OrderStatus, Date> getHistory() {
+        return history;
     }
 
 }

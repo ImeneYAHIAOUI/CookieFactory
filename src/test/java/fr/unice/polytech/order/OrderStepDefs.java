@@ -1,6 +1,7 @@
 package fr.unice.polytech.order;
 
 
+import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.OrderException;
@@ -17,6 +18,7 @@ public class OrderStepDefs {
     final Client client = new UnregisteredClient(0606060606);
     final Cook cook = new Cook(1234);
     Order order;
+    COD cod;
 
     public OrderStepDefs() {
     }

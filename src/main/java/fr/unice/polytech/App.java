@@ -10,6 +10,7 @@ public class App {
 
     public static void main(String[] args) {
         COD cod = new COD();
+
         System.out.println("Store :"+ cod.getStores().get(0));
         System.out.println("Recipe : "+cod.getRecipes().get(0));
         Scanner scanner = new Scanner(System.in);

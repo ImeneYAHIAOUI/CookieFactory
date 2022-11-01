@@ -1,9 +1,14 @@
 package fr.unice.polytech.cookie;
 
 import fr.unice.polytech.COD;
+import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.CookieException;
+import fr.unice.polytech.exception.OrderException;
+import fr.unice.polytech.order.Order;
+import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
@@ -15,11 +20,15 @@ import io.cucumber.java.en.When;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.*;
+
 
 public class ChooseCookieStepDefs {
 
@@ -40,7 +49,11 @@ public class ChooseCookieStepDefs {
 
     final List<Cookie> cookieList = new ArrayList<>();
 
+    RegisteredClient registeredClient = new RegisteredClient("1","****",0606060606);;
 
+    Order mockOrder1;
+
+    Order mockOrder2  ;
 
     @And("A client with phone number {int}")
     public void givenAClient(Integer number)
@@ -144,14 +157,135 @@ public class ChooseCookieStepDefs {
 
 
 
+    @And("A registered client has canceled two orders in the last 10 minutes")
+    public void AndRegisteredClientCancelOrder() {
+
+        mockOrder1 = mock(Order.class);
+        mockOrder2 = mock(Order.class);
+        Map history1 = mock(Map.class);
+        Map history2 = mock(Map.class);
+        List OrderList = List.of(mockOrder2,mockOrder1);
+
+        when(history1.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis()- 5*1000*60));
+        when(history2.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis()- 9*1000*60));
+
+        when(mockOrder1.getStatus()).thenReturn(OrderStatus.CANCELLED);
+        when(mockOrder2.getStatus()).thenReturn(OrderStatus.CANCELLED);
+
+        when(mockOrder1.getHistory()).thenReturn(history1);
+        when(mockOrder2.getHistory()).thenReturn(history2);
 
 
+        registeredClient.setPastOrders(OrderList);
+
+    }
+
+    @And("A registered client has canceled two orders in more than 10 minutes")
+    public void AndRegisteredClientCancel2Ordermore10() {
+
+        mockOrder1 = mock(Order.class);
+        mockOrder2 = mock(Order.class);
+        Map history1 = mock(Map.class);
+        Map history2 = mock(Map.class);
+        List OrderList = List.of(mockOrder2,mockOrder1);
+
+        when(history1.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis()- 15*1000*60));
+        when(history2.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis()- 16*1000*60));
+
+        when(mockOrder1.getStatus()).thenReturn(OrderStatus.CANCELLED);
+        when(mockOrder2.getStatus()).thenReturn(OrderStatus.CANCELLED);
+
+        when(mockOrder1.getHistory()).thenReturn(history1);
+        when(mockOrder2.getHistory()).thenReturn(history2);
 
 
+        registeredClient.setPastOrders(OrderList);
+
+    }
+
+    @Then("the client is not banned")
+    public void thenClientNotBanned() {
+        assertDoesNotThrow(() -> cod.chooseCookie(registeredClient, store, store.getRecipes().get(0), 1));
+    }
+
+    @And("A registered client has canceled one order in the last 10 minutes")
+    public void AndRegisteredClientCancel2Order()
+    {
+        mockOrder1 = mock(Order.class);
+        Map history = mock(Map.class);
+        List OrderList = List.of(mockOrder1);
+        when(mockOrder1.getStatus()).thenReturn(OrderStatus.CANCELLED);
+        when(history.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis()- 5*1000*60));
+        when(mockOrder1.getHistory()).thenReturn(history);
+        registeredClient.setPastOrders(OrderList);
+    }
+
+    @Then("the client is banned")
+    public void thenClientBanned() {
+        assertThrows(OrderException.class, () -> cod.chooseCookie(registeredClient, store, store.getRecipes().get(0), 1));
+    }
+
+    @And("A registered client has canceled two orders in within more than 8 minutes")
+    public void AndRegisteredClientCancel2Ordermore8() {
+
+        mockOrder1 = mock(Order.class);
+        mockOrder2 = mock(Order.class);
+        Map history1 = mock(Map.class);
+        Map history2 = mock(Map.class);
+        List OrderList = List.of(mockOrder2,mockOrder1);
+
+        when(history1.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis()));
+        when(history2.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis() - 9*1000*60));
+
+        when(mockOrder1.getStatus()).thenReturn(OrderStatus.CANCELLED);
+        when(mockOrder2.getStatus()).thenReturn(OrderStatus.CANCELLED);
+
+        when(mockOrder1.getHistory()).thenReturn(history1);
+        when(mockOrder2.getHistory()).thenReturn(history2);
 
 
+        registeredClient.setPastOrders(OrderList);
+    }
+
+    @And("A registered client hasn't canceled any orders in the last 10 minutes")
+    public void AndRegisteredClienthasntcanceledOrders() {
 
 
+        mockOrder1 = mock(Order.class);
+        mockOrder2 = mock(Order.class);
+        Map history1 = mock(Map.class);
+        Map history2 = mock(Map.class);
+        List OrderList = List.of(mockOrder2,mockOrder1);
+
+        when(history1.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis()));
+        when(history2.get(OrderStatus.CANCELLED)).thenReturn(new Date(System.currentTimeMillis() - 9*1000*60));
+
+        when(mockOrder1.getStatus()).thenReturn(OrderStatus.IN_PROGRESS);
+        when(mockOrder2.getStatus()).thenReturn(OrderStatus.PAYED);
+
+        when(mockOrder1.getHistory()).thenReturn(history1);
+        when(mockOrder2.getHistory()).thenReturn(history2);
 
 
+        registeredClient.setPastOrders(OrderList);
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

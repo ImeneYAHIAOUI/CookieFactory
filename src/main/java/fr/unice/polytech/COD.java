@@ -10,9 +10,7 @@ import fr.unice.polytech.exception.RegistrationException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.recipe.Cookie;
-import fr.unice.polytech.recipe.Ingredient;
-import fr.unice.polytech.recipe.Topping;
+import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
@@ -54,6 +52,17 @@ public class COD {
                 inventory
         );
         stores.add(store);
+        recipes.add(new Cookie(
+                "chocolala",
+                1.,
+                15.,
+                Cooking.CHEWY,
+                Mix.MIXED,
+                new Dough("chocolate",1),
+                new Flavour("chocolate",1),
+                List.of(new Topping("chocolate chips",1))
+        ));
+
     }
 
     public void chooseAmount(int i, Cookie cookie, Cart cart){
@@ -90,9 +99,7 @@ public class COD {
         clients.add(new RegisteredClient(id, password, phoneNumber));
     }
 
-    public void setStatus(String orderId, OrderStatus status) throws OrderException {
-        Order order = orders.stream().filter(ord -> ord.getId().equals(orderId)).findFirst().orElse(null);
-        assert order != null;
+    public void setStatus(Order order, OrderStatus status) throws OrderException {
         order.setStatus(status);
     }
 
@@ -105,7 +112,14 @@ public class COD {
         }
     }
 
-    public void chooseCookie(Client client, Store store, Cookie cookie, int amount) throws CookieException {
+    public void chooseCookie(Client client, Store store, Cookie cookie, int amount) throws CookieException, OrderException {
+
+        if (client instanceof RegisteredClient)
+        {
+            if (((RegisteredClient) client).isBanned())
+                throw new OrderException("You have cancelled two orders in 8 minutes or less, you are banned for 10 minutes.\n Remaining time : " + ((RegisteredClient) client).getRemainingBanTime());
+        }
+
         if (!store.getRecipes().contains(cookie)) {
             throw new CookieException("this cookie is not available in this store");
         }
@@ -150,10 +164,18 @@ public class COD {
             cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie * topping.getQuantity()));
         }
     }
+
+
     public void printStoresOpeningHours(){
         for(Store store : stores){
             System.out.println(store.openingTime + " - " + store.closingTime);
         }
     }
+
+
+
+
+
+
 }
 

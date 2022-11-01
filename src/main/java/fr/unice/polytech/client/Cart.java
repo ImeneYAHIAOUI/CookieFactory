@@ -9,7 +9,9 @@ import java.util.List;
 public class Cart {
     @Getter
     private final List<Item> items;
-    Cart() {
+
+
+    public Cart() {
         this.items = new ArrayList<>();
     }
     public void addItem(Item item) {
