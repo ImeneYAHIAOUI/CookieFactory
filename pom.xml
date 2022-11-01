@@ -13,7 +13,7 @@
         <java.version>17</java.version>
         <junit.jupiter.version>5.8.0</junit.jupiter.version>
         <cucumber.version>7.6.0</cucumber.version>
-   </properties>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -80,6 +80,12 @@
             <version>4.8.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

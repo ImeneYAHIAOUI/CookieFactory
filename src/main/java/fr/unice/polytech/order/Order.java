@@ -5,16 +5,27 @@ import fr.unice.polytech.client.Client;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 public class Order {
-    private String id;
-    private Client client;
-    private Cook cook;
-    public Store store;
-    private OrderStatus status;
+    @Getter
     private final List<Item> items;
+    @Getter
+    public Store store;
+    @Getter
+    @Setter
+    private String id;
+    @Getter
+    @Setter
+    private Client client;
+    @Getter
+    @Setter
+    private Cook cook;
+    @Getter
+    private OrderStatus status;
 
     @Override
     public String toString() {
@@ -35,40 +46,6 @@ public class Order {
         this.items = List.copyOf(client.getCart().getItems());
         //Tant qu'on a pas l'interaction entre les cooks et le système,
         //On met directement l'order en status READY
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public List<Item> getItems() {
-        return List.copyOf(items);
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public Cook getCook() {
-        return cook;
-    }
-
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setId(String  id) {
-        this.id = id;
-    }
-
-    public void setCook(Cook cook){
-        this.cook = cook;
-    }
-
-
-    public void setClient(Client client) {
-        this.client = client;
     }
 
     public void setStatus(OrderStatus status) throws OrderException {
@@ -94,10 +71,6 @@ public class Order {
         }
         this.status = status;
     }
-
-
-
-
 
 }
 

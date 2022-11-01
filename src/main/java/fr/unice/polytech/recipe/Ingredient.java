@@ -1,31 +1,16 @@
 package fr.unice.polytech.recipe;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+@ToString
+@RequiredArgsConstructor
 public class Ingredient {
+    @Getter
     private final String name;
+    @Getter
     private final double price;
+    @Getter
     private int quantity;
-
-    public Ingredient(String name, double price) {
-        this.name = name;
-        this.price = price;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    @Override
-    public String toString() {
-        return "Ingredient{" +
-                "name='" + name + '\'' +
-                '}';
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
 }

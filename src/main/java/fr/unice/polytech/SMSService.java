@@ -6,13 +6,13 @@ package fr.unice.polytech;
  */
 public class SMSService {
 
-    private static SMSService instance = null;
+    private static SMSService INSTANCE = null;
 
     public static SMSService getInstance() {
-        if (instance == null) {
-            instance = new SMSService();
+        if (INSTANCE == null) {
+            INSTANCE = new SMSService();
         }
-        return instance;
+        return INSTANCE;
     }
 
     public void notifyClient(int clientPhoneNumber) {

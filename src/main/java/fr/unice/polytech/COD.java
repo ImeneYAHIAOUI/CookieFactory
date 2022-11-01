@@ -16,16 +16,22 @@ import fr.unice.polytech.recipe.Topping;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
+import lombok.Getter;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class COD {
+    @Getter
     private final List<Cookie> recipes;
+    @Getter
     private final List<Cookie> suggestedRecipes;
+    @Getter
     private final List<Store> stores;
+    @Getter
     private final List<Order> orders;
+    @Getter
     private final List<RegisteredClient> clients;
 
 
@@ -64,9 +70,9 @@ public class COD {
             Ingredient dough = cookie.getDough();
             int doughQuantity = dough.getQuantity();
             order.store.getInventory().decreaseIngredientQuantity(dough, doughQuantity * numberOfCookie);
-            Ingredient flavour = cookie.getFlavor();
+            Ingredient flavour = cookie.getFlavour();
             int flavourQuantity = flavour.getQuantity();
-            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavor(), numberOfCookie * flavourQuantity);
+            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie * flavourQuantity);
             // topping
             for (Topping topping : cookie.getToppings()) {
                 store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * topping.getQuantity());
@@ -116,26 +122,6 @@ public class COD {
         }
     }
 
-    public List<Cookie> getSuggestedRecipes() {
-        return List.copyOf(suggestedRecipes);
-    }
-
-    public List<Cookie> getRecipes() {
-        return recipes;
-    }
-
-    public List<Store> getStores() {
-        return stores;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public List<RegisteredClient> getClients() {
-        return List.copyOf(clients);
-    }
-
     public void acceptRecipe(Cookie cookie,Double price){//TODO rajouter Exception si le cookie n'existe pas ? (tu peux utiliser cookieException (imene))
 
         if(suggestedRecipes.contains(cookie)){
@@ -157,9 +143,9 @@ public class COD {
             Ingredient dough=cookie.getDough();
             int doughQuantity=dough.getQuantity();
             store.getInventory().addIngredient(dough,doughQuantity*numberOfCookie);
-            Ingredient flavour=cookie.getFlavor();
-            int flavourQuantity=flavour.getQuantity();
-            store.getInventory().addIngredient(item.getCookie().getFlavor(), numberOfCookie*flavourQuantity);
+            Ingredient flavour = cookie.getFlavour();
+            int flavourQuantity = flavour.getQuantity();
+            store.getInventory().addIngredient(item.getCookie().getFlavour(), numberOfCookie * flavourQuantity);
             //topping
             cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie * topping.getQuantity()));
         }

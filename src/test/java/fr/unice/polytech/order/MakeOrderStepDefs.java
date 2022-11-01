@@ -26,7 +26,7 @@ public class MakeOrderStepDefs {
         smsService = mock(SMSService.class);
         cod = new COD();
         // Mock the sms service singleton
-        Field instance = SMSService.class.getDeclaredField("instance");
+        Field instance = SMSService.class.getDeclaredField("INSTANCE");
         instance.setAccessible(true);
         instance.set(instance, smsService);
     }

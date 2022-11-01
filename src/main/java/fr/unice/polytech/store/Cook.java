@@ -3,27 +3,28 @@ package fr.unice.polytech.store;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cook {
     public final List<Order> assignedOrders;
-    public List<TimeSlot> avaibleTimeSlot;
+    @Getter
+    private final List<TimeSlot> availableTimeSlots;
+    @Getter
+    @Setter
     public COD cod;
     final int id;
 
     public Cook(int id) {
         this.id = id;
+        this.availableTimeSlots = new ArrayList<>();
         this.assignedOrders = new ArrayList<>();
     }
 
-    public List<TimeSlot> getTimeSlot() {
-        return avaibleTimeSlot;
-    }
-
     public void addOrder(Order order) {
-
         assignedOrders.add(order);
     }
 

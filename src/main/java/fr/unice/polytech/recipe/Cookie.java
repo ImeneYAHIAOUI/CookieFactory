@@ -1,102 +1,41 @@
 package fr.unice.polytech.recipe;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.List;
 
+@ToString
+@AllArgsConstructor
 public class Cookie {
-
+    @Getter
+    @Setter
     private String name;
-    private Double Price;
-    private Double CookingTime;
+    @Getter
+    @Setter
+    private Double price;
+    @Getter
+    @Setter
+    private Double cookingTime;
+    @Getter
+    @Setter
     private Cooking cooking;
+    @Getter
+    @Setter
     private Mix mix;
+    @Getter
+    @Setter
     private Dough dough;
+    @Getter
+    @Setter
     private Flavour flavour;
-    private List<Topping> toppingList;
+    @Getter
+    @Setter
+    private List<Topping> toppings;
 
-
-
-    public Cookie(String name, Double price, Double cookingTime, Cooking cooking, Mix mix, Dough dough, Flavour flavour, List<Topping> toppingList) {
-
-        this.name =name;
-        this.Price = price;
-        this.CookingTime = cookingTime;
-        this.cooking = cooking;
-        this.mix = mix;
-        this.dough = dough;
-        this.flavour = flavour;
-        this.toppingList = toppingList;
-
+    public void addTopping(Topping topping) {
+        toppings.add(topping);
     }
-
-    public void setCooking(Cooking cooking) {
-        this.cooking = cooking;
-    }
-
-    public void setCookingTime(Double cookingTime) {
-        CookingTime = cookingTime;
-    }
-
-    public void setMix(Mix mix) {
-        this.mix = mix;
-    }
-
-    public void setDough(Dough dough) {
-        this.dough = dough;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Cookie{" +
-                "name='" + name + '\'' +
-                ", Price=" + Price +
-                ", CookingTime=" + CookingTime +
-                ", cooking=" + cooking +
-                ", mix=" + mix +
-                ", dough=" + dough +
-                ", flavour=" + flavour +
-                ", toppingList=" + toppingList +
-                '}';
-    }
-
-    public void setFlavour(Flavour flavour) {
-        this.flavour = flavour;
-    }
-
-    public void setPrice(Double price) {
-        Price = price;
-    }
-
-    public void setToppingList(List<Topping> toppingList) {
-        this.toppingList = toppingList;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void addTopping(Topping topping){
-        toppingList.add(topping);
-    }
-
-
-    public Ingredient getDough()
-    {
-        return dough;
-    }
-
-    public Ingredient getFlavor()
-    {
-        return flavour;
-    }
-
-    public List<Topping> getToppings()
-    {
-        return toppingList;
-    }
-
-
 }

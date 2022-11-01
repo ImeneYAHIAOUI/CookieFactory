@@ -1,10 +1,13 @@
 package fr.unice.polytech.order;
 
 import fr.unice.polytech.recipe.Cookie;
+import lombok.Getter;
 
 public class Item {
-    private int quantity;
+    @Getter
     private final Cookie cookie;
+    @Getter
+    private int quantity;
 
     public Item(int quantity, Cookie cookie) {
         this.quantity = quantity;
@@ -17,14 +20,6 @@ public class Item {
                 "Quantity=" + quantity +
                 ", cookie=" + cookie +
                 '}';
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public Cookie getCookie() {
-        return cookie;
     }
 
     public void increaseQuantity(int quantity) {

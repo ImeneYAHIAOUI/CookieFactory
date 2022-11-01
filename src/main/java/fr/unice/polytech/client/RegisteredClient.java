@@ -2,16 +2,21 @@ package fr.unice.polytech.client;
 
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegisteredClient extends Client {
 
+    @Getter
     private final String id;
+    @Getter
     private final String password;
-    private int nbCookie;
+    @Getter
     private final List<Order> pastOrders;
+    @Getter
+    private int nbCookie;
 
     public RegisteredClient(String id, String password, int phoneNumber) {
         super(phoneNumber);
@@ -19,18 +24,6 @@ public class RegisteredClient extends Client {
         this.password = password;
         nbCookie = 0;
         this.pastOrders = new ArrayList<>();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public int getNbCookie() {
-        return nbCookie;
     }
 
     @Override
@@ -42,9 +35,5 @@ public class RegisteredClient extends Client {
         nbCookie += nb;
         pastOrders.add(order);
         getCart().emptyItems();
-    }
-
-    public List<Order> getPastOrders() {
-        return List.copyOf(pastOrders);
     }
 }
