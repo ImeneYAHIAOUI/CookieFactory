@@ -25,7 +25,6 @@ public class Order {
     @Setter
     private Client client;
     @Getter
-    @Setter
     private Cook cook;
     @Getter
     private OrderStatus status;
@@ -46,7 +45,7 @@ public class Order {
                 '}';
     }
 
-    public  Order(String id, Client client, Cook cook,Store store) {
+    public Order(String id, Client client, Cook cook, Store store) {
         this.id = id;
         this.client = client;
         this.cook = cook;
@@ -62,20 +61,13 @@ public class Order {
 
     public void setStatus(OrderStatus status) throws OrderException {
         if (this.status.equals(OrderStatus.CANCELLED)) {
-            throw new OrderException("this order hes been canceled");
+            throw new OrderException("This order has been canceled");
         }
         if (!(this.status.equals(OrderStatus.NOT_STARTED) || this.status.equals(OrderStatus.PAYED)) && status.equals(OrderStatus.CANCELLED)) {
-            throw new OrderException("this order's status is" + status + "it cannot be cancelled anymore");
+            throw new OrderException("This order's status is" + status + "it cannot be cancelled anymore");
         }
         if (this.status.equals((status))) {
-            switch (status) {
-                case NOT_STARTED -> throw new OrderException("This order's status is already \"not started\"");
-                case IN_PROGRESS -> throw new OrderException("This order's status is already \"in progress\"");
-                case READY -> throw new OrderException("This order's status is already \"ready\"");
-                case COMPLETED -> throw new OrderException("This order's status is already \"completed\"");
-                case OBSOLETE -> throw new OrderException("This order's status is already \"obsolete\"");
-                case PAYED -> throw new OrderException("This order's status is already \"payed\"");
-            }
+            throw new OrderException("This order's status is already "+status);
         }
         if (status.equals(OrderStatus.READY)) {
             SMSService.getInstance().notifyClient(this.client.getPhoneNumber());

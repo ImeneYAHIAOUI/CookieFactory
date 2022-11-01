@@ -2,7 +2,6 @@ package unitTests;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
-import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.InvalidInputException;
 import fr.unice.polytech.exception.OrderException;
@@ -13,7 +12,6 @@ import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
-import io.cucumber.java.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,17 +37,17 @@ public class CODUnitTests {
     public void setUp() {
         cod = new COD();
         client = new UnregisteredClient(0606060606);
-        try{
+        try {
 
-            cod.register("15","^mldp",0707060106);
-        }catch(RegistrationException exp){
+            cod.register("15", "^mldp", 0707060106);
+        } catch (RegistrationException ignored) {
 
         }
         cook = new Cook(1);
 
         store = new Store(
                 List.of(cook),
-                List.of(new Cookie("chocolala",1.,15., Cooking.CHEWY,Mix.MIXED,new Dough("chocolate",1),new Flavour("chocolate",1),List.of(new Topping("chocolate chips",1)))),
+                List.of(new Cookie("chocolala", 1., 15, Cooking.CHEWY, Mix.MIXED, new Dough("chocolate", 1), new Flavour("chocolate", 1), List.of(new Topping("chocolate chips", 1)))),
                 "30 Rte des Colles, 06410 Biot",
                 LocalTime.parse("08:00"),
                 LocalTime.parse("20:00"),

@@ -25,7 +25,7 @@ public class CookStepDefs {
 
     @And("a cookie with name {string}")
     public void andGivenCookie(String name) {
-        cookie = new Cookie(name, 0.0, 0.0, null, null, null, null, null);
+        cookie = new Cookie(name, 0.0, 0, null, null, null, null, null);
     }
 
     @And("a cod")

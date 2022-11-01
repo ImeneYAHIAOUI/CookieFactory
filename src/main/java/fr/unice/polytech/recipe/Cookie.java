@@ -18,7 +18,7 @@ public class Cookie {
     private Double price;
     @Getter
     @Setter
-    private Double cookingTime;
+    private int cookingTime;
     @Getter
     @Setter
     private Cooking cooking;

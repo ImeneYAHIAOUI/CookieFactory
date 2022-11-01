@@ -1,10 +1,7 @@
 package fr.unice.polytech.client;
 
 import fr.unice.polytech.COD;
-import fr.unice.polytech.exception.AlreadyExistException;
-import fr.unice.polytech.exception.BadQuantityException;
-import fr.unice.polytech.exception.CookieException;
-import fr.unice.polytech.exception.OrderException;
+import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
@@ -50,7 +47,7 @@ public class PayOrderStepDefs {
         Flavour flavour = new Flavour("Chocolate",2);
         Topping topping = new Topping("Something", 1);
         toppings.add(topping);
-        Cookie cookie = new Cookie(cookieName, 1., 30., Cooking.CHEWY, Mix.TOPPED, dough ,flavour, toppings);
+        Cookie cookie = new Cookie(cookieName, 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavour, toppings);
         cookieList.add(cookie);
         store.addCookies(cookieList);
         store.addIngredients(dough, 10);
@@ -60,9 +57,10 @@ public class PayOrderStepDefs {
     }
 
     @When("I confirm my cart and pay my order")
-    public void iConfirmMyCartAndPayMyOrder() throws BadQuantityException {
+    public void iConfirmMyCartAndPayMyOrder() throws BadQuantityException, CookException, StoreException {
         orderID = cod.payOrder(client, store);
     }
+
     @Then("I should see a confirm message and my orderID is 0")
     public void iShouldSeeAConfirmMessageAndOrderIdIs0() {
         assertEquals(orderID, "0");

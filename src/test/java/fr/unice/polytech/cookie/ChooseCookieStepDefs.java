@@ -119,7 +119,7 @@ public class ChooseCookieStepDefs {
                 int finalJ = j;
                 toppings.add(((Topping) codIngredients.stream().filter(i -> i.getName().equals(row.get(finalJ))).findFirst().orElse(null)));
             }
-            Cookie cookie = new Cookie(row.get(0), 1., 30., Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
+            Cookie cookie = new Cookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
             cookieList.add(cookie);
         }
 

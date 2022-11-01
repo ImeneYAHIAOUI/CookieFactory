@@ -6,6 +6,7 @@ import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.Cook;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -40,7 +41,7 @@ public class MakeOrderStepDefs {
 
     @And("an order from this client")
     public void andAnOrderFromThisClient() {
-        cod.getOrders().add(new Order("1", client, null,store));
+        cod.getOrders().add(new Order("1", client, new Cook(1), store));
     }
 
     @Then("the order has status {string}")

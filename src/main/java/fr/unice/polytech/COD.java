@@ -24,7 +24,7 @@ public class COD {
     @Getter
     private final List<Cookie> suggestedRecipes;
 
-    private  List<RegisteredClient> ConnectedClient;
+    private final List<RegisteredClient> connectedClient;
 
     @Getter
     private final List<Store> stores;
@@ -32,6 +32,9 @@ public class COD {
     private final List<Order> orders;
     @Getter
     private final List<RegisteredClient> clients;
+    private int idCook = 0;
+    private int idOrder = 0;
+    private int idStore = 0;
 
 
     public COD(){
@@ -40,29 +43,29 @@ public class COD {
         this.orders = new ArrayList<>();
         this.suggestedRecipes = new ArrayList<>();
         this.clients = new ArrayList<>();
-        this.ConnectedClient = new ArrayList<>();
+        this.connectedClient = new ArrayList<>();
 
         //Initialisation with 1 store + 1 recipe
         Inventory inventory = new Inventory(new ArrayList<>());
         Store store = new Store(
-                List.of(new Cook(1)),
-                recipes,
+                List.of(new Cook(idCook++)),
+                new ArrayList<>(),
                 "30 Rte des Colles, 06410 Biot",
                 LocalTime.parse("08:00"),
                 LocalTime.parse("20:00"),
-                1,
+                idStore++,
                 inventory
         );
         stores.add(store);
         recipes.add(new Cookie(
                 "chocolala",
                 1.,
-                15.,
+                15,
                 Cooking.CHEWY,
                 Mix.MIXED,
-                new Dough("chocolate",1),
-                new Flavour("chocolate",1),
-                List.of(new Topping("chocolate chips",1))
+                new Dough("chocolate", 1),
+                new Flavour("chocolate", 1),
+                List.of(new Topping("chocolate chips", 1))
         ));
 
     }
@@ -71,11 +74,11 @@ public class COD {
         cart.addItem(new Item(i, cookie));
     }
 
-    public String finalizeOrder(Client client, Store store) throws BadQuantityException {
+    public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException, StoreException {
         Cook cook = store.getFreeCook(client.getCart());
         Order order;
         if (orders.isEmpty())
-            order = new Order("0", client, cook,store);
+            order = new Order(String.valueOf(idOrder++), client, cook, store);
         else
         {
             String id = String.valueOf(Integer.parseInt(orders.get(orders.size()-1).getId())+1);
@@ -84,7 +87,7 @@ public class COD {
         createOrderItem(client.getCart(), order);
         client.emptyCart(order);
         this.orders.add(order);
-        //cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
+        cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
         return order.getId();
     }
 
@@ -93,26 +96,25 @@ public class COD {
             throw new RegistrationException("User " + id + " is already registered.");
         clients.add(new RegisteredClient(id, password, phoneNumber));
     }
+
     public void logIn(String id, String password) throws InvalidInputException {
 
-        if(ConnectedClient.stream().noneMatch(client -> client.getId().equals(id))){
-            Optional<RegisteredClient> registeredClient= ( clients.stream().filter(client -> client.getId().equals(id)).findFirst());
-            if (registeredClient.isPresent()){
-                RegisteredClient client=registeredClient.get();
+        if (connectedClient.stream().noneMatch(client -> client.getId().equals(id))) {
+            Optional<RegisteredClient> registeredClient = (clients.stream().filter(client -> client.getId().equals(id)).findFirst());
+            if (registeredClient.isPresent()) {
+                RegisteredClient client = registeredClient.get();
                 if (client.getPassword().equals(password))
-                    ConnectedClient.add(client) ;
+                    connectedClient.add(client);
                 else
                     throw new InvalidInputException("The password you entered is not valid. ");
 
-            }
-            else
+            } else
                 throw new InvalidInputException("ID not found. Please log in with another ID");
-        }else{
+        } else {
             throw new InvalidInputException("Your are already connected ");
         }
-
-
     }
+
 
     public void setStatus(Order order, OrderStatus status) throws OrderException {
         order.setStatus(status);
@@ -165,6 +167,7 @@ public class COD {
 
     public void cancelOrder(Order order)throws OrderException  {
         order.setStatus(OrderStatus.CANCELLED);
+        order.getCook().cancelOrder(order);
         Store store =order.store;
         for ( Item item : order.getItems()) {
             Cookie cookie=item.getCookie();
@@ -179,21 +182,23 @@ public class COD {
             cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie * topping.getQuantity()));
         }
     }
-    public List<RegisteredClient> getConnectedClients(){
-        return ConnectedClient;
+
+    public List<RegisteredClient> getConnectedClients() {
+        return connectedClient;
     }
 
 
-    public void printStoresOpeningHours(){
-        for(Store store : stores){
+    public void printStoresOpeningHours() {
+        for (Store store : stores) {
             System.out.println(store.openingTime + " - " + store.closingTime);
         }
     }
-    public String payOrder(Client client,Store store) throws BadQuantityException {
-        return finalizeOrder(client,store);
+
+    public String payOrder(Client client, Store store) throws BadQuantityException, CookException, StoreException {
+        return finalizeOrder(client, store);
     }
 
-    private void createOrderItem(Cart cart,Order order) throws BadQuantityException {
+    private void createOrderItem(Cart cart, Order order) throws BadQuantityException {
         for (Item item : cart.getItems()) {
             Cookie cookie = item.getCookie();
             int numberOfCookie = item.getQuantity();

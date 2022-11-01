@@ -4,6 +4,7 @@ package fr.unice.polytech.store;
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
+import fr.unice.polytech.exception.StoreException;
 import fr.unice.polytech.recipe.*;
 import lombok.Getter;
 
@@ -54,9 +55,24 @@ public class Store {
                 '}';
     }
 
-    public Cook getFreeCook(Cart cart) {
-        //On considère le cook toujours libre pour l'instant
-        return cooks.get(0);
+    public Cook getFreeCook(Cart cart) throws StoreException {
+        for (Cook c: cooks) {
+            if (c.canCook(cart, this))
+                return c;
+        }
+        throw new StoreException("No cook can cook this order in the store "+id);
+    }
+
+    public List<Cook> getCooks() {
+        return cooks;
+    }
+
+    public LocalTime getOpeningTime() {
+        return openingTime;
+    }
+
+    public LocalTime getClosingTime() {
+        return closingTime;
     }
 
     public void addIngredients(Ingredient ingredient, int quantity) throws AlreadyExistException, BadQuantityException {
