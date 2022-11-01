@@ -29,6 +29,9 @@ public class Order {
     private Cook cook;
     @Getter
     private OrderStatus status;
+    @Getter
+    @Setter
+    private double price;
 
     private Map<OrderStatus, Date> history;
 
@@ -43,7 +46,7 @@ public class Order {
                 '}';
     }
 
-    public  Order(String id, Client client, Cook cook) {
+    public  Order(String id, Client client, Cook cook,Store store) {
         this.id = id;
         this.client = client;
         this.cook = cook;
@@ -51,6 +54,8 @@ public class Order {
         this.items = List.copyOf(client.getCart().getItems());
         this.history = new HashMap<>();
         this.history.put(OrderStatus.NOT_STARTED, new Date());
+        this.price = 0;
+        this.store =store;
         //Tant qu'on a pas l'interaction entre les cooks et le système,
         //On met directement l'order en status READY
     }

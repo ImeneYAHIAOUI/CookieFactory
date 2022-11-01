@@ -73,24 +73,17 @@ public class COD {
 
     public String finalizeOrder(Client client, Store store) throws BadQuantityException {
         Cook cook = store.getFreeCook(client.getCart());
-        Order order = new Order("order1", client, cook);
-        // remove ingredients from inventory
-        for (Item item : order.getItems()) {
-            Cookie cookie = item.getCookie();
-            int numberOfCookie = item.getQuantity();
-            Ingredient dough = cookie.getDough();
-            int doughQuantity = dough.getQuantity();
-            order.store.getInventory().decreaseIngredientQuantity(dough, doughQuantity * numberOfCookie);
-            Ingredient flavour = cookie.getFlavour();
-            int flavourQuantity = flavour.getQuantity();
-            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie * flavourQuantity);
-            // topping
-            for (Topping topping : cookie.getToppings()) {
-                store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * topping.getQuantity());
-            }
-            client.emptyCart(order);
-            this.orders.add(order);
+        Order order;
+        if (orders.isEmpty())
+            order = new Order("0", client, cook,store);
+        else
+        {
+            String id = String.valueOf(Integer.parseInt(orders.get(orders.size()-1).getId())+1);
+            order = new Order(id, client, cook,store);
         }
+        createOrderItem(client.getCart(), order);
+        client.emptyCart(order);
+        this.orders.add(order);
         //cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
         return order.getId();
     }
@@ -196,11 +189,51 @@ public class COD {
             System.out.println(store.openingTime + " - " + store.closingTime);
         }
     }
+    public String payOrder(Client client,Store store) throws BadQuantityException {
+        return finalizeOrder(client,store);
+    }
 
+    private void createOrderItem(Cart cart,Order order) throws BadQuantityException {
+        for (Item item : cart.getItems()) {
+            Cookie cookie = item.getCookie();
+            int numberOfCookie = item.getQuantity();
+            Ingredient dough = cookie.getDough();
+            int doughQuantity = dough.getQuantity();
+            order.store.getInventory().decreaseIngredientQuantity(dough, doughQuantity * numberOfCookie);
+            Ingredient flavour = cookie.getFlavour();
+            int flavourQuantity = flavour.getQuantity();
+            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie * flavourQuantity);
+            for (Topping topping : cookie.getToppings()) {
+                order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * topping.getQuantity());
+            }
+        }
+        calculatePrice(order);
+    }
 
+    private void calculatePrice(Order order){
+        for (Item item : order.getItems()) {
+            Cookie cookie = item.getCookie();
+            int numberOfCookie = item.getQuantity();
+            order.setPrice(order.getPrice() + cookie.getPrice() * numberOfCookie);
+        }
+    }
 
+    public void addStore(Store store){
+        stores.add(store);
+    }
 
+    public void addOrder(Order order){
+        orders.add(order);
+    }
 
+    public Order getOrder(String id) throws OrderException {
+        for (Order order : orders) {
+            if (order.getId().equals(String.valueOf(id))){
+                return order;
+            }
+        }
+        throw new OrderException("Order not found");
+    }
 
 }
 

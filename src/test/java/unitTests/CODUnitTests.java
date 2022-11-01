@@ -46,7 +46,6 @@ public class CODUnitTests {
 
         }
         cook = new Cook(1);
-        order = new Order("1",client,cook);
 
         store = new Store(
                 List.of(cook),
@@ -57,6 +56,8 @@ public class CODUnitTests {
                 1,
                 new Inventory(new ArrayList<>())
         );
+        order = new Order("1",client,cook,store);
+
     }
 
     @Test

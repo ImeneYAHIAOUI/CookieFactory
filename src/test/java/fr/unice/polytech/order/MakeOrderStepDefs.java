@@ -5,6 +5,7 @@ import fr.unice.polytech.SMSService;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.OrderException;
+import fr.unice.polytech.store.Store;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -20,6 +21,7 @@ public class MakeOrderStepDefs {
     Client client;
     SMSService smsService;
     COD cod;
+    Store store = mock(Store.class);
 
     @Before
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
@@ -38,7 +40,7 @@ public class MakeOrderStepDefs {
 
     @And("an order from this client")
     public void andAnOrderFromThisClient() {
-        cod.getOrders().add(new Order("1", client, null));
+        cod.getOrders().add(new Order("1", client, null,store));
     }
 
     @Then("the order has status {string}")

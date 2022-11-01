@@ -6,9 +6,15 @@ import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Cook;
+import fr.unice.polytech.store.Inventory;
+import fr.unice.polytech.store.Store;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,6 +24,7 @@ public class OrderStepDefs {
     final Client client = new UnregisteredClient(0606060606);
     final Cook cook = new Cook(1234);
     Order order;
+    Store store = new Store(List.of(cook),List.of(), "30 Rte des Colles, 06410 Biot", LocalTime.parse("08:00"), LocalTime.parse("20:00"), 1, new Inventory(new ArrayList<>()));
     COD cod;
 
     public OrderStepDefs() {
@@ -25,7 +32,7 @@ public class OrderStepDefs {
 
     @Given("an order with id {string}")
     public void givenAnOrder(String id) {
-        order = new Order(id, client, cook);
+        order = new Order(id, client, cook,store);
     }
 
     @When("order status is {string}")
