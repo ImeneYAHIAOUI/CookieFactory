@@ -22,7 +22,7 @@ public class Cook {
         return List.copyOf(workingTimeSlot);
     }
 
-    public boolean canCook(Cart cart, Store store){
+    public boolean canCook(Cart cart, Store store) throws CookException {
         return firstPlace(store, timeOrder(cart.getItems())) != null;
     }
 
@@ -59,7 +59,9 @@ public class Cook {
 
     //Search the first available time to do the order
     //Return null if this cook can't do the order
-    private LocalTime firstPlace(Store store, long timeOrder){
+    private LocalTime firstPlace(Store store, long timeOrder) throws CookException {
+        if(!store.getCooks().contains(this))
+            throw new CookException("The store "+store.getId()+" does not contains the cook "+id);
         if (workingTimeSlot.isEmpty() && store.getOpeningTime().plusMinutes(timeOrder).isBefore(store.getClosingTime()))
             return store.getOpeningTime();
         LocalTime firstAvailabilityOrder = store.getOpeningTime();

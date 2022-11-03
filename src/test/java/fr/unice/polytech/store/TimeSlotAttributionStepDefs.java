@@ -58,12 +58,12 @@ public class TimeSlotAttributionStepDefs {
     }
 
     @Then("The cook can't do the order")
-    public void cookCant() {
+    public void cookCant() throws CookException {
         assertFalse(cook.canCook(client.getCart(), store));
     }
 
     @Then("The cook can do the order")
-    public void cookCan() {
+    public void cookCan() throws CookException {
         assertTrue(cook.canCook(client.getCart(), store));
     }
 

@@ -4,6 +4,7 @@ package fr.unice.polytech.store;
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
+import fr.unice.polytech.exception.CookException;
 import fr.unice.polytech.exception.StoreException;
 import fr.unice.polytech.recipe.*;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class Store {
     public final String address;
     public LocalTime openingTime;
     public LocalTime closingTime;
+    @Getter
     private final int id;
     @Getter
     private final Inventory inventory;
@@ -55,7 +57,7 @@ public class Store {
                 '}';
     }
 
-    public Cook getFreeCook(Cart cart) throws StoreException {
+    public Cook getFreeCook(Cart cart) throws StoreException, CookException {
         for (Cook c: cooks) {
             if (c.canCook(cart, this))
                 return c;
