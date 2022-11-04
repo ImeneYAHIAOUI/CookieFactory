@@ -24,8 +24,8 @@ public class OrderStepDefs {
     final Client client = new UnregisteredClient(0606060606);
     final Cook cook = new Cook(1234);
     Order order;
+    COD cod = new COD();
     Store store = new Store(List.of(cook),List.of(), "30 Rte des Colles, 06410 Biot", LocalTime.parse("08:00"), LocalTime.parse("20:00"), 1, new Inventory(new ArrayList<>()));
-    COD cod;
 
     public OrderStepDefs() {
     }
@@ -40,7 +40,7 @@ public class OrderStepDefs {
 
         OrderStatus EnumStatus = stringToOrderStatus(status);
         if(! EnumStatus.equals(order.getStatus())) {
-            order.setStatus(EnumStatus);
+            cod.setStatus(order,EnumStatus);
         }
     }
 
@@ -50,13 +50,13 @@ public class OrderStepDefs {
     public void thenTheOrderCanBeSetTo(String status)
     {
         OrderStatus EnumStatus = stringToOrderStatus(status);
-        assertDoesNotThrow(() -> order.setStatus(EnumStatus));
+        assertDoesNotThrow(() -> cod.setStatus(order,EnumStatus));
     }
 
     @Then("the order can not be set to {string}")
     public void thenTheOrderCanNotBeSetTo(String status) {
         OrderStatus EnumStatus = stringToOrderStatus(status);
-        assertThrows(OrderException.class, () -> order.setStatus(EnumStatus));
+        assertThrows(OrderException.class, () -> cod.setStatus(order,EnumStatus));
     }
 
     public OrderStatus stringToOrderStatus(String status) {

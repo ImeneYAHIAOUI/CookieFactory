@@ -4,6 +4,7 @@ import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,11 +17,12 @@ public class RegisteredClient extends Client {
     private final String id;
     @Getter
     private final String password;
+    @Setter
     @Getter
     private List<Order> pastOrders;
     @Getter
     private int nbCookie;
-
+    @Getter
     private String remainingBanTime;
     public RegisteredClient(String id, String password, int phoneNumber) {
         super(phoneNumber);
@@ -42,9 +44,6 @@ public class RegisteredClient extends Client {
     }
 
 
-    public String getRemainingBanTime() {
-        return remainingBanTime;
-    }
 
     public boolean isBanned()
     {
@@ -69,13 +68,7 @@ public class RegisteredClient extends Client {
                         (remainingBanTimeInmilis / 1000) / 60, (remainingBanTimeInmilis) / 1000 % 60);
 
         return differenceInMinutes < 8;
-
-
-
-
     }
-     public void setPastOrders(List<Order> pastOrders) {
-         this.pastOrders = pastOrders;
-     }
+
 
 }

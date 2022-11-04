@@ -145,6 +145,8 @@ public class COD {
             throw new CookieException("this store can't make this amount of cookies");
         }
         client.getCart().addItem(new Item(amount, cookie));
+
+
     }
 
     public void suggestRecipe(Cookie cookie) {
@@ -194,51 +196,55 @@ public class COD {
         }
     }
 
-    public String payOrder(Client client, Store store) throws BadQuantityException, CookException, StoreException {
-        return finalizeOrder(client, store);
+    public List<Order> getClientPastOrders(RegisteredClient client) {
+        return client.getPastOrders();
     }
+        public String payOrder(Client client, Store store) throws BadQuantityException, CookException, StoreException {
+            return finalizeOrder(client, store);
+        }
 
-    private void createOrderItem(Cart cart, Order order) throws BadQuantityException {
-        for (Item item : cart.getItems()) {
-            Cookie cookie = item.getCookie();
-            int numberOfCookie = item.getQuantity();
-            Ingredient dough = cookie.getDough();
-            int doughQuantity = dough.getQuantity();
-            order.store.getInventory().decreaseIngredientQuantity(dough, doughQuantity * numberOfCookie);
-            Ingredient flavour = cookie.getFlavour();
-            int flavourQuantity = flavour.getQuantity();
-            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie * flavourQuantity);
-            for (Topping topping : cookie.getToppings()) {
-                order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * topping.getQuantity());
+
+        private void createOrderItem (Cart cart, Order order) throws BadQuantityException {
+            for (Item item : cart.getItems()) {
+                Cookie cookie = item.getCookie();
+                int numberOfCookie = item.getQuantity();
+                Ingredient dough = cookie.getDough();
+                int doughQuantity = dough.getQuantity();
+                order.store.getInventory().decreaseIngredientQuantity(dough, doughQuantity * numberOfCookie);
+                Ingredient flavour = cookie.getFlavour();
+                int flavourQuantity = flavour.getQuantity();
+                order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie * flavourQuantity);
+                for (Topping topping : cookie.getToppings()) {
+                    order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * topping.getQuantity());
+                }
+            }
+            calculatePrice(order);
+        }
+
+        private void calculatePrice (Order order){
+            for (Item item : order.getItems()) {
+                Cookie cookie = item.getCookie();
+                int numberOfCookie = item.getQuantity();
+                order.setPrice(order.getPrice() + cookie.getPrice() * numberOfCookie);
             }
         }
-        calculatePrice(order);
-    }
 
-    private void calculatePrice(Order order){
-        for (Item item : order.getItems()) {
-            Cookie cookie = item.getCookie();
-            int numberOfCookie = item.getQuantity();
-            order.setPrice(order.getPrice() + cookie.getPrice() * numberOfCookie);
+        public void addStore (Store store){
+            stores.add(store);
         }
-    }
 
-    public void addStore(Store store){
-        stores.add(store);
-    }
+        public void addOrder (Order order){
+            orders.add(order);
+        }
 
-    public void addOrder(Order order){
-        orders.add(order);
-    }
-
-    public Order getOrder(String id) throws OrderException {
-        for (Order order : orders) {
-            if (order.getId().equals(String.valueOf(id))){
-                return order;
+        public Order getOrder (String id) throws OrderException {
+            for (Order order : orders) {
+                if (order.getId().equals(String.valueOf(id))) {
+                    return order;
+                }
             }
+            throw new OrderException("Order not found");
         }
-        throw new OrderException("Order not found");
     }
 
-}
 

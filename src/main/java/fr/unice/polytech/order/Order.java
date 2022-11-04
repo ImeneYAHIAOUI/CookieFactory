@@ -32,6 +32,8 @@ public class Order {
     @Setter
     private double price;
 
+    @Getter
+    @Setter
     private Map<OrderStatus, Date> history;
 
     @Override
@@ -74,12 +76,11 @@ public class Order {
         }
         this.status = status;
         this.history.put(status, new Date());
+
+
     }
 
 
-    public Map<OrderStatus, Date> getHistory() {
-        return history;
-    }
 
 }
 

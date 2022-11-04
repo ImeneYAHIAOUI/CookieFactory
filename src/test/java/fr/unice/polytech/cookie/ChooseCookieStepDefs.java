@@ -24,8 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
@@ -203,6 +202,8 @@ public class ChooseCookieStepDefs {
 
     }
 
+
+
     @Then("the client is not banned")
     public void thenClientNotBanned() {
         assertDoesNotThrow(() -> cod.chooseCookie(registeredClient, store, store.getRecipes().get(0), 1));
@@ -269,6 +270,13 @@ public class ChooseCookieStepDefs {
 
         registeredClient.setPastOrders(OrderList);
 
+    }
+
+    @And("^the store doesn't have the cookies$")
+    public void theStoreDoesntHaveTheCookies(List<String> cookies) {
+        for (String cookie : cookies) {
+            assertFalse(store.getRecipes().stream().anyMatch(r -> r.getName().equals(cookie)));
+        }
     }
 }
 

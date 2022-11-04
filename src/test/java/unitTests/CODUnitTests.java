@@ -1,9 +1,13 @@
 package unitTests;
 
 import fr.unice.polytech.COD;
+import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidInputException;
+
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.exception.RegistrationException;
 import fr.unice.polytech.order.Order;
@@ -20,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CODUnitTests {
     
@@ -28,15 +34,22 @@ public class CODUnitTests {
 
     Client client;
 
+    RegisteredClient registeredClient;
+
     Cook cook;
 
     Store store;
 
+    Store mockstore;
 
+    Cookie cookie1;
+
+    Inventory inventory;
     @BeforeEach
     public void setUp() {
         cod = new COD();
         client = new UnregisteredClient(0606060606);
+
         try {
 
             cod.register("15", "^mldp", 0707060106);
@@ -45,6 +58,13 @@ public class CODUnitTests {
         }
         cook = new Cook(1);
 
+        mockstore = mock(Store.class);
+
+        registeredClient = mock(RegisteredClient.class);
+
+        cookie1 = new Cookie("chocolala",1.,15,Cooking.CHEWY,Mix.MIXED, new Dough("chocolate",1),new Flavour("chocolate",1),List.of(new Topping("chocolat",1.)));
+
+        inventory = mock(Inventory.class);
         store = new Store(
                 List.of(cook),
                 List.of(new Cookie("chocolala", 1., 15, Cooking.CHEWY, Mix.MIXED, new Dough("chocolate", 1), new Flavour("chocolate", 1), List.of(new Topping("chocolate chips", 1)))),
@@ -79,6 +99,57 @@ public class CODUnitTests {
         assertEquals(order.getStatus(), OrderStatus.CANCELLED);
         assertThrows(OrderException.class,() ->cod.setStatus(order, OrderStatus.PAYED));
     }
+
+    @Test
+    public void testChooseCookieBannedClient()
+    {
+        when(registeredClient.isBanned()).thenReturn(false,true);
+        when(registeredClient.getCart()).thenReturn(new Cart(),new Cart());
+        when(mockstore.getRecipes()).thenReturn(List.of(cookie1),List.of(cookie1));
+        when(mockstore.getMaxCookieAmount(cookie1)).thenReturn(1,1);
+        assertDoesNotThrow(() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
+        assertThrows(OrderException.class,() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
+    }
+
+    @Test
+    public void testChooseCookieNotEnoughCookie()
+    {
+        when(registeredClient.isBanned()).thenReturn(false,false);
+        when(registeredClient.getCart()).thenReturn(new Cart(),new Cart());
+        when(mockstore.getRecipes()).thenReturn(List.of(cookie1),List.of(cookie1));
+        when(mockstore.getMaxCookieAmount(cookie1)).thenReturn(1,0);
+        assertDoesNotThrow(() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
+        assertThrows(CookieException.class,() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
+    }
+
+    @Test
+    public void testChooseCookieNonAvailableCookie()
+    {
+        when(registeredClient.isBanned()).thenReturn(false,false);
+        when(registeredClient.getCart()).thenReturn(new Cart(),new Cart());
+        when(mockstore.getRecipes()).thenReturn(List.of(cookie1),List.of());
+        when(mockstore.getMaxCookieAmount(cookie1)).thenReturn(1,0);
+        assertDoesNotThrow(() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
+        assertThrows(CookieException.class,() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
+    }
+
+    @Test
+    public void testGetClientPastOrders()
+    {
+        Order order2 = new Order("1",client,cook,store);
+        Order order3 = new Order("1",client,cook,store);
+        List<Order> orders = new ArrayList<>();
+        orders.add(order);
+        orders.add(order2);
+        orders.add(order3);
+        when(registeredClient.getPastOrders()).thenReturn(orders);
+        assertEquals(cod.getClientPastOrders(registeredClient),orders);
+
+    }
+
+
+
+
     @Test
     public void testLogIn() throws InvalidInputException {
         cod.logIn("15" ,"^mldp");

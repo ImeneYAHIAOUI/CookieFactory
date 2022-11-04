@@ -22,6 +22,7 @@ public abstract class Client {
         cart.emptyItems();
     }
 
+
     public int getPhoneNumber() {
         return phoneNumber;
     }

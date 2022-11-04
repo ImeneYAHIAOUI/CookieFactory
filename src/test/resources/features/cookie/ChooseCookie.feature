@@ -57,11 +57,11 @@ Feature: choose a cookie and an amount
   Scenario: choose same cookie twice
     Given an inventory with the ingredients and amounts
       | chocolate chips       | 6 |
-      | chocolate dough       | 4 |
+      | chocolate dough       | 5 |
       | vanillaFlavour        | 2 |
       | strawberryFlavour     | 3 |
-      | chocolateFlavour      | 8 |
-      | white chocolate chips | 4 |
+      | chocolateFlavour      | 4 |
+      | white chocolate chips | 5 |
 
     And a store with id 1
 
@@ -81,6 +81,7 @@ Feature: choose a cookie and an amount
 
     Then this order can be purchased
     And the clients card contains 4 cookie(s) of type "chocolala"
+
 
 
   Scenario: choose an unavailable amount of cookie
