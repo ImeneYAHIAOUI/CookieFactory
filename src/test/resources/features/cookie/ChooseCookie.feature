@@ -3,7 +3,7 @@ Feature: choose a cookie and an amount
   # Enter feature description here
   Background:
     Given a cod to store data
-    And A client with phone number 0606060606
+    And A client with phone number "0606060606"
 
 
 

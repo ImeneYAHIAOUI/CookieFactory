@@ -7,6 +7,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.Objects;
+
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -14,15 +16,15 @@ public class RegisterStepDefs {
     COD cod;
     String id;
     String mdp;
-    int phoneNumber;
+    String phoneNumber;
 
     @Given("an empty cod without data")
     public void andGivenAnEmptyCOD() {
         cod = new COD();
     }
 
-    @When("Client register with id {string}, mdp {string}, phone number {int}")
-    public void registerClient(String id, String mdp, int phoneNumber) {
+    @When("Client register with id {string}, mdp {string}, phone number {string}")
+    public void registerClient(String id, String mdp, String phoneNumber) {
         this.id = id;
         this.mdp = mdp;
         this.phoneNumber = phoneNumber;
@@ -33,9 +35,9 @@ public class RegisterStepDefs {
         assertFalse(cod.getClients().isEmpty());
     }
 
-    @And("Cod client contains client with id {string}, mdp {string}, phone number {int}")
-    public void codClientContainsClientWithIdMdpPhoneNumber(String id, String mdp, int phoneNumber) {
-        assertTrue(cod.getClients().stream().anyMatch(c -> c.getId().equals(id) && c.getPassword().equals(mdp) && c.getPhoneNumber() == phoneNumber));
+    @And("Cod client contains client with id {string}, mdp {string}, phone number {string}")
+    public void codClientContainsClientWithIdMdpPhoneNumber(String id, String mdp, String phoneNumber) {
+        assertTrue(cod.getClients().stream().anyMatch(c -> c.getId().equals(id) && c.getPassword().equals(mdp) && Objects.equals(c.getPhoneNumber(), phoneNumber)));
     }
 
     @And("Cod client contains {int} element")

@@ -3,8 +3,6 @@ package unitTests;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.store.Cook;
-import io.cucumber.java.it.Ma;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +29,7 @@ public class RegisteredClientUnitTests {
 
     @BeforeEach
     public void setUp() {
-        registeredClient = new RegisteredClient("1", "****", 0606060606);
+        registeredClient = new RegisteredClient("1", "****", "0606060606");
         order1 = mock(Order.class);
         order2 = mock(Order.class);
         order3 = mock(Order.class);

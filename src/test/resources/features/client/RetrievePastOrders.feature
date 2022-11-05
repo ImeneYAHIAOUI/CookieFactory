@@ -3,7 +3,7 @@ Feature: Retrieve past orders for registered clients
   # Enter feature description here
 
   Background:
-    Given a Registered client with id "1" and phone number 0606060606
+    Given a Registered client with id "1" and phone number "0606060606"
 
     # Enter steps here
   Scenario: get past orders

@@ -3,7 +3,7 @@
 Feature: Pay an Order
 
   Background:
-    Given an empty cod and a unregistered client with phone number 06
+    Given an empty cod and a unregistered client with phone number "0606060606"
     And the client's cart contains 1 cookies of type "Chocolala"
 
   Scenario: As a Client Pay an Order (no problems)

@@ -47,11 +47,11 @@ public class CODUnitTests {
     @BeforeEach
     public void setUp() {
         cod = new COD();
-        client = new UnregisteredClient(0606060606);
+        client = new UnregisteredClient("0606060606");
 
         try {
 
-            cod.register("15", "^mldp", 0707060106);
+            cod.register("15", "^mldp", "0707060106");
         } catch (RegistrationException ignored) {
 
         }

@@ -13,22 +13,24 @@ public class LogInTest {
     COD cod;
     String id;
     String password;
-    @Given("cod with registered client with id {string} , password {string} and phone number {int}")
-    public void cod_with_registered_client_with_id_and_password(String id, String password, int phoneNumber) {
-        cod=new COD();
-        try{
-            cod.register(id,password,phoneNumber);
-            this.id=id;
-            this.password=password;
-        }catch(RegistrationException exception){
+
+    @Given("cod with registered client with id {string} , password {string} and phone number {string}")
+    public void cod_with_registered_client_with_id_and_password(String id, String password, String phoneNumber) {
+        cod = new COD();
+        try {
+            cod.register(id, password, phoneNumber);
+            this.id = id;
+            this.password = password;
+        } catch (RegistrationException exception) {
 
         }
     }
+
     @When("Client log in  with id {string} and password {string}")
     public void client_log_in_with_id_and_password(String id, String password) {
-        try{
-            cod.logIn(id,password);
-        }catch(InvalidInputException exception){
+        try {
+            cod.logIn(id, password);
+        } catch (InvalidInputException exception) {
 
         }
     }

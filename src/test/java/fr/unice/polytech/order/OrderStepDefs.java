@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OrderStepDefs {
 
-    final Client client = new UnregisteredClient(0606060606);
+    final Client client = new UnregisteredClient("0606060606");
     final Cook cook = new Cook(1234);
     Order order;
     COD cod = new COD();

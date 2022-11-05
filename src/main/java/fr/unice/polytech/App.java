@@ -16,7 +16,7 @@ public class App {
 
         System.out.println("Enter your phone number :");
         String phoneNumber = scanner.nextLine();
-        Client client = new UnregisteredClient(Integer.parseInt(phoneNumber));
+        Client client = new UnregisteredClient(phoneNumber);
 
         System.out.println("Enter the number of cookie you want :");
         String amount = scanner.nextLine();

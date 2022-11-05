@@ -36,7 +36,7 @@ public class MakeOrderStepDefs {
 
     @Given("a client")
     public void givenAClient() {
-        client = new UnregisteredClient(1);
+        client = new UnregisteredClient("0123456789");
     }
 
     @And("an order from this client")

@@ -5,11 +5,11 @@ import lombok.Getter;
 
 public abstract class Client {
     @Getter
-    private final int  phoneNumber;
+    private final String phoneNumber;
     @Getter
     private final Cart cart;
 
-    public Client(int phoneNumber) {
+    public Client(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         this.cart = new Cart();
     }

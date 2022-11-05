@@ -92,7 +92,7 @@ public class COD {
         return order.getId();
     }
 
-    public void register(String id, String password, int phoneNumber) throws RegistrationException {
+    public void register(String id, String password, String phoneNumber) throws RegistrationException {
         if (clients.stream().anyMatch(client -> client.getId().equals(id)))
             throw new RegistrationException("User " + id + " is already registered.");
         clients.add(new RegisteredClient(id, password, phoneNumber));

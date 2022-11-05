@@ -15,7 +15,7 @@ public class SMSService {
         return INSTANCE;
     }
 
-    public void notifyClient(int clientPhoneNumber) {
+    public void notifyClient(String clientPhoneNumber) {
         System.out.println("Sending SMS to " + clientPhoneNumber);
     }
 }

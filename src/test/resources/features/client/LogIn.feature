@@ -3,7 +3,7 @@
 Feature: LogIn
 
   Background:
-    Given cod with registered client with id "sgazzeh" , password "password" and phone number 066
+    Given cod with registered client with id "sgazzeh" , password "password" and phone number "0123456789"
 
   Scenario: logIn with valid input
     When Client log in  with id "sgazzeh" and password "password"

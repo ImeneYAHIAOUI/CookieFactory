@@ -1,7 +1,6 @@
 package fr.unice.polytech.cookie;
 
 import fr.unice.polytech.COD;
-import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
@@ -26,7 +25,8 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class ChooseCookieStepDefs {
@@ -48,15 +48,14 @@ public class ChooseCookieStepDefs {
 
     final List<Cookie> cookieList = new ArrayList<>();
 
-    RegisteredClient registeredClient = new RegisteredClient("1","****",0606060606);;
+    RegisteredClient registeredClient = new RegisteredClient("1", "****", "0606060606");
 
     Order mockOrder1;
 
-    Order mockOrder2  ;
+    Order mockOrder2;
 
-    @And("A client with phone number {int}")
-    public void givenAClient(Integer number)
-    {
+    @And("A client with phone number {string}")
+    public void givenAClient(String number) {
         client = new UnregisteredClient(number);
     }
 

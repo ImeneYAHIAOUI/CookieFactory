@@ -54,7 +54,7 @@ public class GetDiscountStepDefs {
 
     @Given("a registered client")
     public void givenARegisteredClient() {
-        RegisteredClient realClient = new RegisteredClient("id", "password", 0);
+        RegisteredClient realClient = new RegisteredClient("id", "password", "0123456789");
         client = spy(realClient);
     }
 

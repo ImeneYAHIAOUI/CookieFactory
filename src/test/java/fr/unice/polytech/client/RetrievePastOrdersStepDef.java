@@ -24,24 +24,23 @@ public class RetrievePastOrdersStepDef {
 
     List<Order> pastOrders = new ArrayList<>();
 
-    @Given("a Registered client with id {string} and phone number {int}")
-    public void givenARegisteredClient(String id, Integer number) {
+    @Given("a Registered client with id {string} and phone number {string}")
+    public void givenARegisteredClient(String id, String number) {
         client = new RegisteredClient(id, "*******", number);
     }
 
     @When("^a the Client has theses past orders$")
-    public void whenTheClientHasThesesPartOrders(DataTable data)
-    {
+    public void whenTheClientHasThesesPartOrders(DataTable data) {
         List<List<String>> rows = data.asLists(String.class);
         int i = 1;
         for (List<String> row : rows) {
 
-            row.forEach( item -> {
+            row.forEach(item -> {
                 String[] itemSplit = item.split(" ");
-                client.getCart().addItem(new Item(Integer.parseInt(itemSplit[1]), new Cookie(itemSplit[0],1.,1, Cooking.CHEWY, Mix.MIXED, new Dough("dough",1.),new Flavour("flavour",1.),List.of(new Topping("topping",1.)))));
+                client.getCart().addItem(new Item(Integer.parseInt(itemSplit[1]), new Cookie(itemSplit[0], 1., 1, Cooking.CHEWY, Mix.MIXED, new Dough("dough", 1.), new Flavour("flavour", 1.), List.of(new Topping("topping", 1.)))));
             });
 
-            Order order = new Order(String.valueOf(i),client,new Cook(i), null);
+            Order order = new Order(String.valueOf(i), client, new Cook(i), null);
             orders.add(order);
             client.validateOrder(order);
         }

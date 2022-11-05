@@ -26,7 +26,7 @@ public class RegisteredClient extends Client {
     @Getter
     private boolean eligibleForDiscount;
 
-    public RegisteredClient(String id, String password, int phoneNumber) {
+    public RegisteredClient(String id, String password, String phoneNumber) {
         super(phoneNumber);
         this.id = id;
         this.password = password;

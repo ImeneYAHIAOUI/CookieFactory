@@ -31,8 +31,8 @@ public class PayOrderStepDefs {
     final List<Cookie> cookieList = new ArrayList<>();
 
 
-    @Given("an empty cod and a unregistered client with phone number {int}")
-    public void givenACODAndUnregisteredClient(int phoneNumber) {
+    @Given("an empty cod and a unregistered client with phone number {string}")
+    public void givenACODAndUnregisteredClient(String phoneNumber) {
         cod = new COD();
         client = new UnregisteredClient(phoneNumber);
         cooks.add(new Cook(0));
@@ -40,6 +40,7 @@ public class PayOrderStepDefs {
         cod.addStore(store);
 
     }
+
     @And("the client's cart contains {int} cookies of type {string}")
     public void andTheClientSCartContainsCookiesOfType(int quantity, String cookieName) throws CookieException, OrderException, AlreadyExistException, BadQuantityException {
         List<Topping> toppings = new ArrayList<>();
@@ -68,7 +69,7 @@ public class PayOrderStepDefs {
 
     @Given("the cod already has some orders")
     public void theCodAlreadyHasSomeOrders() {
-        Client client2 = new RegisteredClient("id", "mdp", 123456789);
+        Client client2 = new RegisteredClient("id", "mdp", "0123456789");
         Cook cook = new Cook(1);
         Order order = new Order("0", client2, cook,store);
         Order order2 = new Order("1", client2, cook,store);
