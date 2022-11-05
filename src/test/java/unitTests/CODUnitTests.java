@@ -7,7 +7,6 @@ import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidInputException;
-
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.exception.RegistrationException;
 import fr.unice.polytech.order.Order;
@@ -152,14 +151,14 @@ public class CODUnitTests {
 
     @Test
     public void testLogIn() throws InvalidInputException {
-        cod.logIn("15" ,"^mldp");
+        cod.logIn("15", "^mldp");
         assertEquals("15", cod.getConnectedClients().get(0).getId());
         assertEquals("^mldp", cod.getConnectedClients().get(0).getPassword());
-        assertThrows(InvalidInputException.class, ()-> cod.logIn("15" ,"^mldp"),
-               "Your are already connected ");
-        assertThrows(InvalidInputException.class, ()-> cod.logIn("10" ,"^mldp"),
+        assertThrows(InvalidInputException.class, () -> cod.logIn("15", "^mldp"),
+                "Your are already connected ");
+        assertThrows(InvalidInputException.class, () -> cod.logIn("10", "^mldp"),
                 "ID not found. Please log in with another ID");
-        assertThrows(InvalidInputException.class, ()-> cod.logIn("15" ,"^mdp"),
+        assertThrows(InvalidInputException.class, () -> cod.logIn("15", "^mdp"),
                 "The password you entered is not valid. ");
     }
 

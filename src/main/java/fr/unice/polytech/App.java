@@ -2,9 +2,6 @@ package fr.unice.polytech;
 
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
-import fr.unice.polytech.exception.BadQuantityException;
-import fr.unice.polytech.exception.CookException;
-import fr.unice.polytech.exception.StoreException;
 
 import java.util.Scanner;
 
@@ -27,7 +24,7 @@ public class App {
         try {
             String orderId = cod.finalizeOrder(client, cod.getStores().get(0));
             System.out.println("Congrats ! Here is the id to pick up your order : " + orderId);
-        } catch (BadQuantityException | CookException | StoreException exception) {
+        } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
 

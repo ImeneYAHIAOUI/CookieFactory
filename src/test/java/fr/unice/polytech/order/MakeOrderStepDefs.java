@@ -1,12 +1,12 @@
 package fr.unice.polytech.order;
 
 import fr.unice.polytech.COD;
-import fr.unice.polytech.SMSService;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.services.SMSService;
 import fr.unice.polytech.store.Cook;
+import fr.unice.polytech.store.Store;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

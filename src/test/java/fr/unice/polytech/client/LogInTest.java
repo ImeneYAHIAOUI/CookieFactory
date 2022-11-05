@@ -38,7 +38,7 @@ public class LogInTest {
     }
     @And("this client can logIn")
     public void this_client_can_log_in() {
-        RegisteredClient client=cod.getConnectedClients().get(0);
+        RegisteredClient client = cod.getConnectedClients().get(0);
         assertEquals(client.getId(),id);
         assertEquals(client.getPassword(),password);
     }

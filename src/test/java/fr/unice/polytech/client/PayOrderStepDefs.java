@@ -57,7 +57,7 @@ public class PayOrderStepDefs {
     }
 
     @When("I confirm my cart and pay my order")
-    public void iConfirmMyCartAndPayMyOrder() throws BadQuantityException, CookException, StoreException {
+    public void iConfirmMyCartAndPayMyOrder() throws BadQuantityException, CookException, StoreException, PaymentException {
         orderID = cod.payOrder(client, store);
     }
 

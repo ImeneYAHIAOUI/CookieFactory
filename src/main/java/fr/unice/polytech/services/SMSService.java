@@ -1,4 +1,4 @@
-package fr.unice.polytech;
+package fr.unice.polytech.services;
 
 /**
  * Service that sends SMS to the user when the status of the order changes

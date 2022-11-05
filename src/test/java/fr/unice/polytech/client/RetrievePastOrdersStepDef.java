@@ -3,10 +3,8 @@ package fr.unice.polytech.client;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Store;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -15,9 +13,6 @@ import io.cucumber.java.en.When;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class RetrievePastOrdersStepDef {
 
@@ -48,7 +43,7 @@ public class RetrievePastOrdersStepDef {
 
             Order order = new Order(String.valueOf(i),client,new Cook(i), null);
             orders.add(order);
-            client.emptyCart(order);
+            client.validateOrder(order);
         }
     }
 

@@ -14,16 +14,7 @@ public abstract class Client {
         this.cart = new Cart();
     }
 
-    public Cart getCart() {
-        return this.cart;
-    }
-
-    public void emptyCart(Order order) {
+    public void validateOrder(Order order) {
         cart.emptyItems();
-    }
-
-
-    public int getPhoneNumber() {
-        return phoneNumber;
     }
 }

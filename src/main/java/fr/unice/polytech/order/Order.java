@@ -1,8 +1,8 @@
 package fr.unice.polytech.order;
 
-import fr.unice.polytech.SMSService;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.exception.OrderException;
+import fr.unice.polytech.services.SMSService;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
 import lombok.Getter;

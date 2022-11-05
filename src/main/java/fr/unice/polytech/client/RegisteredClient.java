@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class RegisteredClient extends Client {
 
@@ -24,20 +23,25 @@ public class RegisteredClient extends Client {
     private int nbCookie;
     @Getter
     private String remainingBanTime;
+    @Getter
+    private boolean eligibleForDiscount;
+
     public RegisteredClient(String id, String password, int phoneNumber) {
         super(phoneNumber);
         this.id = id;
         this.password = password;
         nbCookie = 0;
         this.pastOrders = new ArrayList<>();
+        eligibleForDiscount = false;
     }
 
     @Override
-    public void emptyCart(Order order) {
+    public void validateOrder(Order order) {
         int nb = 0;
         for (Item item : this.getCart().getItems()) {
             nb += item.getQuantity();
         }
+        eligibleForDiscount = nbCookie < 30 && nbCookie + nb >= 30;
         nbCookie += nb;
         pastOrders.add(order);
         getCart().emptyItems();
