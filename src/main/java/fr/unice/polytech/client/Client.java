@@ -17,4 +17,8 @@ public abstract class Client {
     public void validateOrder(Order order) {
         cart.emptyItems();
     }
+
+    public void getNotified(Order order, String message) {
+        System.out.println(order + " : " + message);
+    }
 }

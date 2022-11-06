@@ -14,6 +14,9 @@ import io.cucumber.java.en.When;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class RetrievePastOrdersStepDef {
 
     COD cod = new COD();
@@ -40,9 +43,11 @@ public class RetrievePastOrdersStepDef {
                 client.getCart().addItem(new Item(Integer.parseInt(itemSplit[1]), new Cookie(itemSplit[0], 1., 1, Cooking.CHEWY, Mix.MIXED, new Dough("dough", 1.), new Flavour("flavour", 1.), List.of(new Topping("topping", 1.)))));
             });
 
-            Order order = new Order(String.valueOf(i), client, new Cook(i), null);
-            orders.add(order);
-            client.validateOrder(order);
+            Order order = mock(Order.class);
+            when(order.getId()).thenReturn(String.valueOf(i));
+            when(order.getClient()).thenReturn(client);
+            when(order.getCook()).thenReturn(new Cook(i));
+            when(order.getStore()).thenReturn(null);
         }
     }
 

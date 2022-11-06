@@ -37,6 +37,15 @@
       </extension>
     </inspection_tool>
     <inspection_tool class="NewMethodNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
+      <scope name="Tests" level="WARNING" enabled="true">
+        <extension name="InstanceMethodNamingConvention" enabled="true">
+          <option name="m_regex" value="[a-z][A-Za-z\d]*" />
+          <option name="m_minLength" value="4" />
+          <option name="m_maxLength" value="100" />
+        </extension>
+        <extension name="NativeMethodNamingConvention" enabled="true" />
+        <extension name="StaticMethodNamingConvention" enabled="true" />
+      </scope>
       <extension name="InstanceMethodNamingConvention" enabled="true">
         <option name="m_regex" value="[a-z][A-Za-z\d]*" />
         <option name="m_minLength" value="4" />

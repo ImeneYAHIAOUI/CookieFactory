@@ -3,6 +3,7 @@ package fr.unice.polytech.order;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.services.SMSService;
 import fr.unice.polytech.store.Cook;
@@ -14,6 +15,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.lang.reflect.Field;
+import java.time.LocalTime;
 
 import static org.mockito.Mockito.*;
 
@@ -22,12 +24,13 @@ public class MakeOrderStepDefs {
     Client client;
     SMSService smsService;
     COD cod;
-    Store store = mock(Store.class);
+    Store store;
 
     @Before
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
         smsService = mock(SMSService.class);
         cod = new COD();
+        store = cod.getStores().get(0);
         // Mock the sms service singleton
         Field instance = SMSService.class.getDeclaredField("INSTANCE");
         instance.setAccessible(true);
@@ -40,7 +43,8 @@ public class MakeOrderStepDefs {
     }
 
     @And("an order from this client")
-    public void andAnOrderFromThisClient() {
+    public void andAnOrderFromThisClient() throws InvalidPickupTimeException {
+        cod.choosePickupTime(client.getCart(), store, LocalTime.parse("10:00"));
         cod.getOrders().add(new Order("1", client, new Cook(1), store));
     }
 

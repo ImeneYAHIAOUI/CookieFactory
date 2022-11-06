@@ -2,6 +2,7 @@ package fr.unice.polytech.store;
 
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.exception.CookException;
+import fr.unice.polytech.exception.PickupTimeNotSetException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.Cookie;
@@ -48,23 +49,25 @@ public class TimeSlotAttributionStepDefs {
     public void andCart(int i) {
         client = new RegisteredClient("", "", "0123456789");
         client.getCart().addItem(new Item(i, cookie));
+        client.getCart().setPickupTime(LocalTime.parse("10:00"));
     }
 
     @And("an order with {int} of the recipe")
     public void andOrder(int i) {
         client = new RegisteredClient("", "", "0123456789");
         client.getCart().addItem(new Item(i, cookie));
+        client.getCart().setPickupTime(LocalTime.parse("10:00"));
         order = new Order("0", client, cook, store);
     }
 
     @Then("The cook can't do the order")
-    public void cookCant() throws CookException {
-        assertFalse(cook.canCook(client.getCart(), store));
+    public void cookCant() throws PickupTimeNotSetException {
+        assertFalse(cook.canTakeTimeSlot(client.getCart().getEstimatedTimeSlot()));
     }
 
     @Then("The cook can do the order")
-    public void cookCan() throws CookException {
-        assertTrue(cook.canCook(client.getCart(), store));
+    public void cookCan() throws PickupTimeNotSetException {
+        assertTrue(cook.canTakeTimeSlot(client.getCart().getEstimatedTimeSlot()));
     }
 
     @Then("add order throw exception")
@@ -84,12 +87,12 @@ public class TimeSlotAttributionStepDefs {
 
     @And("TimeSlot has beginning time {string}")
     public void andTimeSlotBeginning(String beginning) {
-        assertEquals(cook.getWorkingTimeSlot().get(0).getBegin(), LocalTime.parse(beginning));
+        assertEquals(cook.getWorkingTimeSlot().firstKey().getBegin(), LocalTime.parse(beginning));
     }
 
     @And("TimeSlot has ending time {string}")
     public void andTimeSlotEnding(String ending) {
-        assertEquals(cook.getWorkingTimeSlot().get(0).getEnd(), LocalTime.parse(ending));
+        assertEquals(cook.getWorkingTimeSlot().firstKey().getEnd(), LocalTime.parse(ending));
     }
 
     @When("cancel order")

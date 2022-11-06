@@ -10,6 +10,7 @@ import fr.unice.polytech.store.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -25,9 +26,11 @@ public class OrderUnitTests {
     public void setUp() {
         client = mock(Client.class);
         cook = mock(Cook.class);
-        when(client.getCart()).thenReturn(new Cart());
+        Cart cart = new Cart();
+        cart.setPickupTime(LocalTime.now());
+        when(client.getCart()).thenReturn(cart);
         Store store = mock(Store.class);
-        order = new Order("1",client,cook,store);
+        order = new Order("1", client, cook, store);
     }
 
     @Test

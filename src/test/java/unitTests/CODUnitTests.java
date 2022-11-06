@@ -73,7 +73,8 @@ public class CODUnitTests {
                 1,
                 new Inventory(new ArrayList<>())
         );
-        order = new Order("1",client,cook,store);
+        client.getCart().setPickupTime(LocalTime.parse("10:00"));
+        order = new Order("1", client, cook, store);
 
     }
 

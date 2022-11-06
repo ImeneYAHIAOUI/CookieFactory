@@ -4,6 +4,7 @@ package fr.unice.polytech.order;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
@@ -31,8 +32,9 @@ public class OrderStepDefs {
     }
 
     @Given("an order with id {string}")
-    public void givenAnOrder(String id) {
-        order = new Order(id, client, cook,store);
+    public void givenAnOrder(String id) throws InvalidPickupTimeException {
+        cod.choosePickupTime(client.getCart(), store, LocalTime.parse("10:00"));
+        order = new Order(id, client, cook, store);
     }
 
     @When("order status is {string}")

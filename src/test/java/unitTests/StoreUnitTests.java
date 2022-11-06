@@ -10,11 +10,10 @@ import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.time.LocalTime;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -43,14 +42,15 @@ public class StoreUnitTests {
         client = mock(Client.class);
         cook = mock(Cook.class);
         when(client.getCart()).thenReturn(new Cart());
-        order = new Order("1",client,cook,store);
-        doughs = List.of(new Dough("chocolate",1),new Dough("strawberry",1));
-        flavours = List.of(new Flavour("chocolate",1),new Flavour("strawberry",1));
-        toppings = List.of(new Topping("chocolat chips",1.),new Topping("m&ms",1.),new Topping("strawberry flakes",1.));
+        client.getCart().setPickupTime(LocalTime.of(12, 0));
+        order = new Order("1", client, cook, store);
+        doughs = List.of(new Dough("chocolate", 1), new Dough("strawberry", 1));
+        flavours = List.of(new Flavour("chocolate", 1), new Flavour("strawberry", 1));
+        toppings = List.of(new Topping("chocolat chips", 1.), new Topping("m&ms", 1.), new Topping("strawberry flakes", 1.));
         inventory = mock(Inventory.class);
-        cookie1 = new Cookie("chocolala",1.,15, Cooking.CHEWY,Mix.MIXED, doughs.get(0),flavours.get(0),List.of(toppings.get(0)));
-        cookie2 = new Cookie("m&ms",1.,15, Cooking.CHEWY,Mix.MIXED, doughs.get(0),flavours.get(0),List.of(toppings.get(1)));
-        cookie3 = new Cookie("strawbarry",1.,15, Cooking.CHEWY,Mix.MIXED, doughs.get(1),flavours.get(1),List.of(toppings.get(2)));
+        cookie1 = new Cookie("chocolala", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavours.get(0), List.of(toppings.get(0)));
+        cookie2 = new Cookie("m&ms", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavours.get(0), List.of(toppings.get(1)));
+        cookie3 = new Cookie("strawbarry", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(1), flavours.get(1), List.of(toppings.get(2)));
         List<Cookie> cookies = new ArrayList<>();
         cookies.add(cookie1);
         cookies.add(cookie2);

@@ -1,31 +1,35 @@
 package fr.unice.polytech.store;
 
-import fr.unice.polytech.order.Order;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.Duration;
 import java.time.LocalTime;
 
 @Data
-public class TimeSlot {
-    private final LocalTime begin;
-    private final LocalTime end;
-    private final Order order;
+@AllArgsConstructor
+public class TimeSlot implements Comparable<TimeSlot> {
+    private LocalTime begin;
+    private LocalTime end;
 
-    public TimeSlot(LocalTime begin, LocalTime end, Order order) {
+    public TimeSlot(LocalTime begin, Duration duration) {
         this.begin = begin;
-        this.end = end;
-        this.order = order;
+        this.end = begin.plus(duration);
     }
 
-    public LocalTime getBegin() {
-        return begin;
+    public void slideBy(Duration duration) {
+        begin = begin.plus(duration);
+        end = end.plus(duration);
     }
 
-    public LocalTime getEnd() {
-        return end;
+    public boolean overlaps(TimeSlot other) {
+        return begin.isBefore(other.end) && end.isAfter(other.begin)
+                || begin.equals(other.begin) || end.equals(other.end)
+                || begin.isAfter(other.end) && end.isBefore(other.begin);
     }
 
-    public Order getOrder() {
-        return order;
+    @Override
+    public int compareTo(TimeSlot o) {
+        return begin.compareTo(o.begin);
     }
 }

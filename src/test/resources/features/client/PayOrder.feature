@@ -8,10 +8,10 @@ Feature: Pay an Order
 
   Scenario: As a Client Pay an Order (no problems)
     When I confirm my cart and pay my order
-    Then I should see a confirm message and my orderID is 0
+    Then I should be notified that my order is paid
 
   Scenario: As a Client Pay an Order (already orders in the list)
     Given the cod already has some orders
     When I confirm my cart and pay my order
-    Then I should see a confirm message and get my orderID
+    Then I should pay the right price and be notified
 

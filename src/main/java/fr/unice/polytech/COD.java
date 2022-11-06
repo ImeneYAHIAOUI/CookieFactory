@@ -13,11 +13,14 @@ import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.time.Clock;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class COD {
     @Getter
@@ -33,8 +36,11 @@ public class COD {
     private final List<Order> orders;
     @Getter
     private final List<RegisteredClient> clients;
+
+    @Getter
+    @Setter
+    private static Clock CLOCK = Clock.systemDefaultZone();
     private int idCook = 0;
-    private int idOrder = 0;
     private int idStore = 0;
 
 
@@ -49,7 +55,7 @@ public class COD {
         //Initialisation with 1 store + 1 recipe
         Inventory inventory = new Inventory(new ArrayList<>());
         Store store = new Store(
-                List.of(new Cook(idCook++)),
+                List.of(new Cook(idCook++), new Cook(idCook++)),
                 new ArrayList<>(),
                 "30 Rte des Colles, 06410 Biot",
                 LocalTime.parse("08:00"),
@@ -75,18 +81,15 @@ public class COD {
         cart.addItem(new Item(i, cookie));
     }
 
-    public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException, StoreException, PaymentException {
+    public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException, PaymentException {
         Cook cook = store.getFreeCook(client.getCart());
         Order order;
-        if (orders.isEmpty())
-            order = new Order(String.valueOf(idOrder++), client, cook, store);
-        else {
-            String id = String.valueOf(Integer.parseInt(orders.get(orders.size() - 1).getId()) + 1);
-            order = new Order(id, client, cook, store);
-        }
+        String id = UUID.randomUUID().toString();
+        order = new Order(id, client, cook, store);
         createOrderItem(client.getCart(), order);
         client.validateOrder(order);
         PaymentService.getInstance().performPayment(order.getPrice());
+        client.getNotified(order, "Your order is paid");
         this.orders.add(order);
         cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
         return order.getId();
@@ -143,9 +146,8 @@ public class COD {
             throw new CookieException("this store can't make this amount of cookies");
         }
         client.getCart().addItem(new Item(amount, cookie));
-
-
     }
+
 
     public void suggestRecipe(Cookie cookie) {
         if (!suggestedRecipes.contains(cookie) && !recipes.contains(cookie)) {
@@ -186,7 +188,7 @@ public class COD {
 
     public void printStoresOpeningHours() {
         for (Store store : stores) {
-            System.err.println(store.openingTime + " - " + store.closingTime);
+            System.out.println(store.openingTime + " - " + store.closingTime);
         }
     }
 
@@ -194,7 +196,7 @@ public class COD {
         return client.getPastOrders();
     }
 
-    public String payOrder(Client client, Store store) throws BadQuantityException, CookException, StoreException, PaymentException {
+    public String payOrder(Client client, Store store) throws BadQuantityException, CookException, PaymentException {
         return finalizeOrder(client, store);
     }
 
@@ -245,6 +247,32 @@ public class COD {
             }
         }
         throw new OrderException("Order not found");
+    }
+
+    /**
+     * Returns the list of possible pickup times for the given cart and store
+     *
+     * @param cart  the cart to be ordered
+     * @param store the store where the order will be picked up
+     * @return a list of possible pickup times
+     */
+    public List<LocalTime> getPickupTimes(Cart cart, Store store) {
+        return store.getPossiblePickupTimes(cart);
+    }
+
+    /**
+     * Sets the desired pickup time on the given cart
+     *
+     * @param cart       the cart to set the pickup time on
+     * @param store      the store where the order will be picked up
+     * @param pickupTime the desired pickup time
+     */
+    public void choosePickupTime(Cart cart, Store store, LocalTime pickupTime) throws InvalidPickupTimeException {
+        List<LocalTime> validPickupTimes = getPickupTimes(cart, store);
+        if (!validPickupTimes.contains(pickupTime)) {
+            throw new InvalidPickupTimeException(pickupTime);
+        }
+        cart.setPickupTime(pickupTime);
     }
 }
 

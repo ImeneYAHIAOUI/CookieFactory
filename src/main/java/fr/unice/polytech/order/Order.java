@@ -5,47 +5,27 @@ import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.services.SMSService;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
-import lombok.Getter;
-import lombok.Setter;
+import fr.unice.polytech.store.TimeSlot;
+import lombok.Data;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Data
 public class Order {
-    @Getter
     private final List<Item> items;
-    @Getter
-    public Store store;
-    @Getter
-    @Setter
+    public final Store store;
     private String id;
-    @Getter
-    @Setter
     private Client client;
-    @Getter
-    private Cook cook;
-    @Getter
+    private final Cook cook;
     private OrderStatus status;
-    @Getter
-    @Setter
     private double price;
-
-    @Getter
-    @Setter
-    private Map<OrderStatus, Date> history;
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id='" + id + '\'' +
-                ", client=" + client +
-                ", cook=" + cook +
-                ", status=" + status +
-                ", items=" + items +
-                '}';
-    }
+    private final Map<OrderStatus, Date> history;
+    private final TimeSlot timeSlot;
+    private LocalTime pickupTime;
 
     public Order(String id, Client client, Cook cook, Store store) {
         this.id = id;
@@ -56,7 +36,9 @@ public class Order {
         this.history = new HashMap<>();
         this.history.put(OrderStatus.NOT_STARTED, new Date());
         this.price = 0;
-        this.store =store;
+        this.store = store;
+        this.pickupTime = client.getCart().getPickupTime();
+        this.timeSlot = new TimeSlot(pickupTime.minus(client.getCart().totalCookingTime()), pickupTime);
         //Tant qu'on a pas l'interaction entre les cooks et le système,
         //On met directement l'order en status READY
     }
@@ -76,11 +58,6 @@ public class Order {
         }
         this.status = status;
         this.history.put(status, new Date());
-
-
     }
-
-
-
 }
 

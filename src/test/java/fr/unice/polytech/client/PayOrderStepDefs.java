@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 public class PayOrderStepDefs {
     COD cod;
@@ -34,7 +37,8 @@ public class PayOrderStepDefs {
     @Given("an empty cod and a unregistered client with phone number {string}")
     public void givenACODAndUnregisteredClient(String phoneNumber) {
         cod = new COD();
-        client = new UnregisteredClient(phoneNumber);
+        Client realClient = new UnregisteredClient(phoneNumber);
+        client = spy(realClient);
         cooks.add(new Cook(0));
         store = new Store(cooks, recipes, "address", LocalTime.parse("08:00"), LocalTime.parse("20:00"), 1, inventory);
         cod.addStore(store);
@@ -59,26 +63,28 @@ public class PayOrderStepDefs {
 
     @When("I confirm my cart and pay my order")
     public void iConfirmMyCartAndPayMyOrder() throws BadQuantityException, CookException, StoreException, PaymentException {
+        client.getCart().setPickupTime(LocalTime.parse("10:00"));
         orderID = cod.payOrder(client, store);
     }
 
-    @Then("I should see a confirm message and my orderID is 0")
-    public void iShouldSeeAConfirmMessageAndOrderIdIs0() {
-        assertEquals(orderID, "0");
+    @Then("I should be notified that my order is paid")
+    public void iShouldBeNotifiedThatMyOrderIsPaid() {
+        verify(client).getNotified(any(Order.class), eq("Your order is paid"));
     }
 
     @Given("the cod already has some orders")
     public void theCodAlreadyHasSomeOrders() {
-        Client client2 = new RegisteredClient("id", "mdp", "0123456789");
-        Cook cook = new Cook(1);
-        Order order = new Order("0", client2, cook,store);
-        Order order2 = new Order("1", client2, cook,store);
+        Order order = mock(Order.class);
+        when(order.getId()).thenReturn("1");
+        Order order2 = mock(Order.class);
+        when(order2.getId()).thenReturn("2");
         this.cod.addOrder(order);
         this.cod.addOrder(order2);
     }
-    @Then("I should see a confirm message and get my orderID")
-    public void iShouldSeeAConfirmMessageAndGetMyOrderID() throws OrderException {
-        assertEquals(Integer.toString(cod.getOrders().size()-1),orderID);
+
+    @Then("I should pay the right price and be notified")
+    public void iShouldPayTheRightPriceAndBeNotified() throws OrderException {
+        verify(client).getNotified(any(Order.class), eq("Your order is paid"));
         assertEquals(1., cod.getOrder(orderID).getPrice());
     }
 }
