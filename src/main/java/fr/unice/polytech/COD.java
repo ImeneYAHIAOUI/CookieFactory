@@ -53,17 +53,6 @@ public class COD {
         this.connectedClients = new ArrayList<>();
 
         //Initialisation with 1 store + 1 recipe
-        Inventory inventory = new Inventory(new ArrayList<>());
-        Store store = new Store(
-                List.of(new Cook(idCook++), new Cook(idCook++)),
-                new ArrayList<>(),
-                "30 Rte des Colles, 06410 Biot",
-                LocalTime.parse("08:00"),
-                LocalTime.parse("20:00"),
-                idStore++,
-                inventory
-        );
-        stores.add(store);
         recipes.add(new Cookie(
                 "chocolala",
                 1.,
@@ -74,11 +63,7 @@ public class COD {
                 new Flavour("chocolate", 1),
                 List.of(new Topping("chocolate chips", 1))
         ));
-
-    }
-
-    public void chooseAmount(int i, Cookie cookie, Cart cart) {
-        cart.addItem(new Item(i, cookie));
+        addStore(2, "30 Rte des Colles, 06410 Biot", "08:00", "20:00");
     }
 
     public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException, PaymentException {
@@ -101,22 +86,22 @@ public class COD {
         clients.add(new RegisteredClient(id, password, phoneNumber));
     }
 
-    public void logIn(String id, String password) throws InvalidInputException {
-
+    public RegisteredClient logIn(String id, String password) throws InvalidInputException {
         if (connectedClients.stream().noneMatch(client -> client.getId().equals(id))) {
             Optional<RegisteredClient> registeredClient = (clients.stream().filter(client -> client.getId().equals(id)).findFirst());
             if (registeredClient.isPresent()) {
                 RegisteredClient client = registeredClient.get();
-                if (client.getPassword().equals(password))
+                if (client.getPassword().equals(password)){
                     connectedClients.add(client);
+                    return client;
+                }
                 else
                     throw new InvalidInputException("The password you entered is not valid. ");
 
             } else
                 throw new InvalidInputException("ID not found. Please log in with another ID");
-        } else {
-            throw new InvalidInputException("Your are already connected ");
         }
+        throw new InvalidInputException("You are already connected ");
     }
 
 
@@ -131,6 +116,13 @@ public class COD {
             System.err.println("Error, given closingTime is before openingTime, openingTime get closedTime value and closingTime get openingTime value");
             this.stores.get(this.stores.indexOf(store)).setHours(closingTime, openingTime);
         }
+    }
+
+    public void chooseCookie(Client client, Store store, String cookieName, int amount) throws CookieException, OrderException {
+        Optional<Cookie> cookie = (store.getRecipes().stream().filter(c -> (c.getName().equals(cookieName))).findFirst());
+        if(cookie.isEmpty())
+            throw new CookieException("The cookie "+cookieName+" does not exist.");
+        chooseCookie(client, store, cookie.get(), amount);
     }
 
     public void chooseCookie(Client client, Store store, Cookie cookie, int amount) throws CookieException, OrderException {
@@ -166,6 +158,14 @@ public class COD {
 
     public void declineRecipe(Cookie cookie) {
         suggestedRecipes.remove(cookie);
+    }
+
+    public void cancelOrder(String idOrder) throws OrderException {
+        Optional<Order> order = (orders.stream().filter(o -> (o.getId().equals(idOrder))).findFirst());
+        if(order.isPresent())
+            cancelOrder(order.get());
+        else
+            throw new OrderException("The order "+idOrder+" does not exist.");
     }
 
     public void cancelOrder(Order order) throws OrderException {
@@ -273,6 +273,25 @@ public class COD {
             throw new InvalidPickupTimeException(pickupTime);
         }
         cart.setPickupTime(pickupTime);
+    }
+
+    public void addStore(int nbCooks, String address, String openingTime, String endingTime){
+        List<Cook> cooks = new ArrayList<>();
+        for (int i =0; i<nbCooks; i++)
+            cooks.add(new Cook(idCook++));
+        stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>())));
+    }
+
+    public void addCook(int idStore) throws StoreException {
+        getStore(idStore).addCook(new Cook(idCook++));
+    }
+
+    public Store getStore(int idStore) throws StoreException {
+        Optional<Store> store = (stores.stream().filter(s -> (s.getId()==idStore)).findFirst());
+        if(store.isPresent())
+            return store.get();
+        else
+            throw new StoreException("The store "+idStore+" does not exist.");
     }
 }
 

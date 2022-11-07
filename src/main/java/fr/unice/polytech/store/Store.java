@@ -57,6 +57,7 @@ public class Store {
     public String toString() {
         return "Store{" +
                 "address='" + address + '\'' +
+                ", storeId=" + id +
                 ", openingTime=" + openingTime +
                 ", closingTime=" + closingTime +
                 '}';
@@ -142,5 +143,8 @@ public class Store {
         if (ingredient instanceof Topping) {
             recipes.removeIf(cookie -> cookie.getToppings().contains(ingredient));
         }
+    }
+    public void addCook(Cook c){
+        cooks.add(c);
     }
 }

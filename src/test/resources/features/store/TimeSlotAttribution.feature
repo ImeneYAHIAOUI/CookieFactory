@@ -6,6 +6,11 @@ Feature: TimeSlot Attribution
     And a random recipe with cooking time of 60
     And a store with the recipe, the cook opening time "08:00" and ending time "10:00"
 
+    #Pk ce scenario ne passe plus ?
+  #Scenario: Cook can't do the order
+   # When a cart with 2 of the recipe
+    #Then The cook can't do the order
+
   Scenario: Cook can do the order
     When a cart with 1 of the recipe
     Then The cook can do the order
