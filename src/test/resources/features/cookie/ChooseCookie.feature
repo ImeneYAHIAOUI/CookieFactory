@@ -14,7 +14,7 @@ Feature: choose a cookie and an amount
       | chocolate dough       | 4 |
       | vanillaFlavour        | 2 |
       | strawberryFlavour     | 3 |
-      | chocolateFlavour      | 8 |
+      | chocolateFlavour      | 2 |
       | white chocolate chips | 4 |
 
     And a store with id 1

@@ -11,8 +11,6 @@ public class Ingredient {
     private final String name;
     @Getter
     private final double price;
-    @Getter
-    private int quantity;
 
     @Override
     public boolean equals(Object o) {

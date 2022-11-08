@@ -45,9 +45,9 @@ public class GetDiscountStepDefs {
         paymentServiceInstance.set(paymentServiceInstance, paymentService);
         store = cod.getStores().get(0);
         pastOrders = new ArrayList<>();
-        store.getInventory().addIngredient(new Dough("chocolate", 1), 100);
-        store.getInventory().addIngredient(new Flavour("chocolate", 1), 100);
-        store.getInventory().addIngredient(new Topping("chocolate chips", 1), 100);
+        store.getInventory().addIngredient(new Dough("chocolate", 1), 150);
+        store.getInventory().addIngredient(new Flavour("chocolate", 1), 150);
+        store.getInventory().addIngredient(new Topping("chocolate chips", 1), 150);
     }
 
     @Given("a registered client")

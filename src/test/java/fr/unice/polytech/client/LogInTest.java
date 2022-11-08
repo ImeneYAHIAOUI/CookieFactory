@@ -25,7 +25,6 @@ public class LogInTest {
 
         }
     }
-
     @When("Client log in  with id {string} and password {string}")
     public void client_log_in_with_id_and_password(String id, String password) {
         try {
