@@ -3,10 +3,12 @@ package fr.unice.polytech;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.*;
-import fr.unice.polytech.recipe.Cookie;
-import fr.unice.polytech.recipe.Ingredient;
+import fr.unice.polytech.order.Order;
+import fr.unice.polytech.order.OrderStatus;
+import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Store;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
@@ -37,20 +39,79 @@ public class App {
         }
     }
 
-    private static boolean welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException {
+    private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException {
+        System.out.println("Welcome in the Cookie On Demand System !");
         printStores();
         printRecipes();
 
-        if(isClient()){
-            clientInterface();
-        } else {
-            adminInterface();
+        System.out.println("Are you a Client (Cl), a Cook (Co), an admin (A) or do ypu want to Quit (Q) ?");
+        String rep = SCANNER.nextLine();
+        switch (rep) {
+            case "Cl" -> clientInterface();
+            case "Co" -> cookInterface();
+            case "A" -> adminInterface();
+            case "Q" -> {
+                return;
+            }
+            default -> welcomeInterface();
         }
-        return welcomeInterface();
+        welcomeInterface();
+    }
+
+    private static void cookInterface() throws OrderException {
+        System.out.println("Cook Interface : Do you want to suggest a recipe (S), or to set a status order (O) ?");
+        String rep = SCANNER.nextLine();
+        switch (rep) {
+            case "S" -> suggestRecipe();
+            case "O" -> setStatusOrder();
+            default -> cookInterface();
+        }
+    }
+
+    private static void suggestRecipe(){
+        System.out.println("Let's create a recipe ! What is the name ?");
+        String name = SCANNER.nextLine();
+        System.out.println("Choose a price :");
+        String price = SCANNER.nextLine();
+        System.out.println("Estimate the cooking time :");
+        String time = SCANNER.nextLine();
+        System.out.println("Do you want a Cooking Crunchy (Cr) or Chewy (Ch) ? ");
+        String cooking = SCANNER.nextLine();
+        System.out.println("Do you want a mix Mixed (M) or Topped (T)? ");
+        String mix = SCANNER.nextLine();
+        System.out.println("Choose a dough :");
+        String dough = SCANNER.nextLine();
+        System.out.println("Choose a flavor :");
+        String flavor = SCANNER.nextLine();
+        Mix mix_chosen = Mix.MIXED;
+        if(mix.equals("T"))
+            mix_chosen = Mix.TOPPED;
+        Cooking cooking_chosen = Cooking.CHEWY;
+        if(cooking.equals("Cr"))
+            cooking_chosen = Cooking.CRUNCHY;
+        COD.suggestRecipe(new Cookie(name, Double.valueOf(price), Integer.parseInt(time), cooking_chosen, mix_chosen, new Dough(dough, 0.0), new Flavour(flavor, 0.0), new ArrayList<>()));
+    }
+
+    private static void setStatusOrder() throws OrderException {
+        System.out.println("Enter the idOrder :");
+        String rep = SCANNER.nextLine();
+        Order o = COD.getOrder(rep);
+        System.out.println("The order "+rep+" has a status "+o.getStatus());
+        System.out.println("Choose the new status : in progress (P), Ready (R), Completed (C), Obsolete (O).");
+        rep = SCANNER.nextLine();
+        OrderStatus status = o.getStatus();
+        switch (rep) {
+            case "P" -> status = OrderStatus.IN_PROGRESS;
+            case "R" -> status = OrderStatus.READY;
+            case "C" -> status = OrderStatus.COMPLETED;
+            case "O" -> status = OrderStatus.OBSOLETE;
+            default -> {}
+        }
+        COD.setStatus(o, status);
     }
 
     private static void adminInterface() throws StoreException, AlreadyExistException, BadQuantityException {
-        System.out.println("Do you want to add a Store (S), fill an Inventory (I), add a Cook (C), or to validate the news Recipes (R) ?");
+        System.out.println("Admin Interface : Do you want to add a Store (S), fill an Inventory (I), add a Cook (C), or to validate the news Recipes (R) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
             case "S" -> addStore();
@@ -114,6 +175,7 @@ public class App {
 
     private static void clientInterface() throws RegistrationException, InvalidInputException, OrderException, StoreException, CookieException, PaymentException, CookException, BadQuantityException {
         Client client;
+        System.out.println("Client Interface : ");
 
         //Authentication
         if(askIfRegister()){
@@ -178,17 +240,6 @@ public class App {
             return false;
         } else
             return orderOrCancel();
-    }
-
-    private static boolean isClient(){
-        System.out.println("Are you a client (C) or an admin (A) ? :");
-        String rep = SCANNER.nextLine();
-        if(rep.equals("C"))
-            return true;
-        else if (rep.equals("A")) {
-            return false;
-        } else
-            return isClient();
     }
 
     private static boolean askIfRegister(){
