@@ -1,5 +1,4 @@
 package fr.unice.polytech;
-
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
@@ -12,15 +11,22 @@ import fr.unice.polytech.services.PaymentService;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Clock;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class COD {
     @Getter
@@ -42,6 +48,10 @@ public class COD {
     private static Clock CLOCK = Clock.systemDefaultZone();
     private int idCook = 0;
     private int idStore = 0;
+    private Store choosenStore;
+    @Setter
+    private LocationServer locationServer;
+
 
 
     public COD() {
@@ -64,6 +74,7 @@ public class COD {
                 List.of(new Topping("chocolate chips", 1))
         ));
         addStore(2, "30 Rte des Colles, 06410 Biot", "08:00", "20:00");
+        locationServer = new LocationServer();
     }
 
     public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException, PaymentException {
@@ -289,6 +300,42 @@ public class COD {
         else
             throw new StoreException("The store "+idStore+" does not exist.");
     }
+
+    public List<Store> getNearbyStores(String address)  {
+        List<Store> nearbyStores = new ArrayList<>();
+
+        for (Store store : stores) {
+            String storeAddress = store.getAddress();
+            double distance = locationServer.distance(address, storeAddress);
+            if (distance <= 3) {
+                nearbyStores.add(store);
+            }
+        }
+        return nearbyStores;
+
+    }
+
+    public List<Store> getNearbyStores(String address, int proximity, String unit)
+    {
+        List<Store> nearbyStores = new ArrayList<>();
+
+        for (Store store : stores) {
+            String storeAddress = store.getAddress();
+            double distance = locationServer.distance(address,storeAddress,unit);
+            if (distance <= proximity) {
+                nearbyStores.add(store);
+            }
+        }
+        return nearbyStores;
+    }
+
+
+    public void chooseStore(Store store) {
+        this.choosenStore = store;
+    }
+
+
+
 }
 
 

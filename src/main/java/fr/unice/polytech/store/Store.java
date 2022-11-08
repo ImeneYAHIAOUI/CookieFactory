@@ -31,6 +31,8 @@ public class Store {
     @Getter
     private final Inventory inventory;
 
+    private Store chosenStore;
+
     public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime, int id, Inventory inventory) {
         this.cooks = cooks;
         this.recipes = recipes;
@@ -146,5 +148,9 @@ public class Store {
     }
     public void addCook(Cook c){
         cooks.add(c);
+    }
+
+    public void chooseStore(Store store) {
+
     }
 }
