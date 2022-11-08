@@ -176,13 +176,11 @@ public class COD {
             Cookie cookie = item.getCookie();
             int numberOfCookie = item.getQuantity();
             Ingredient dough = cookie.getDough();
-            int doughQuantity = dough.getQuantity();
-            store.getInventory().addIngredient(dough, doughQuantity * numberOfCookie);
+            store.getInventory().addIngredient(dough,  numberOfCookie);
             Ingredient flavour = cookie.getFlavour();
-            int flavourQuantity = flavour.getQuantity();
-            store.getInventory().addIngredient(item.getCookie().getFlavour(), numberOfCookie * flavourQuantity);
+            store.getInventory().addIngredient(item.getCookie().getFlavour(), numberOfCookie);
             //topping
-            cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie * topping.getQuantity()));
+            cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie));
         }
     }
 
@@ -206,13 +204,11 @@ public class COD {
             Cookie cookie = item.getCookie();
             int numberOfCookie = item.getQuantity();
             Ingredient dough = cookie.getDough();
-            int doughQuantity = dough.getQuantity();
-            order.store.getInventory().decreaseIngredientQuantity(dough, doughQuantity * numberOfCookie);
+            order.store.getInventory().decreaseIngredientQuantity(dough, numberOfCookie);
             Ingredient flavour = cookie.getFlavour();
-            int flavourQuantity = flavour.getQuantity();
-            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie * flavourQuantity);
+            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie);
             for (Topping topping : cookie.getToppings()) {
-                order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * topping.getQuantity());
+                order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie);
             }
         }
         calculatePrice(order);
