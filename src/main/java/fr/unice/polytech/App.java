@@ -1,6 +1,7 @@
 package fr.unice.polytech;
 
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
@@ -8,6 +9,7 @@ import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Store;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -47,7 +49,7 @@ public class App {
         System.out.println("Are you a Client (Cl), a Cook (Co), an admin (A) or do ypu want to Quit (Q) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
-            case "Cl" -> clientInterface();
+            case "Cl" -> authenticationInterface();
             case "Co" -> cookInterface();
             case "A" -> adminInterface();
             case "Q" -> {
@@ -90,13 +92,14 @@ public class App {
         if(cooking.equals("Cr"))
             cooking_chosen = Cooking.CRUNCHY;
         COD.suggestRecipe(new Cookie(name, Double.valueOf(price), Integer.parseInt(time), cooking_chosen, mix_chosen, new Dough(dough, 0.0), new Flavour(flavor, 0.0), new ArrayList<>()));
+        System.out.println("You suggested the recipe "+name+".");
     }
 
     private static void setStatusOrder() throws OrderException {
         System.out.println("Enter the idOrder :");
         String rep = SCANNER.nextLine();
         Order o = COD.getOrder(rep);
-        System.out.println("The order "+rep+" has a status "+o.getStatus());
+        System.out.println("The order "+rep+" has a status "+o.getStatus()+".");
         System.out.println("Choose the new status : in progress (P), Ready (R), Completed (C), Obsolete (O).");
         rep = SCANNER.nextLine();
         OrderStatus status = o.getStatus();
@@ -108,18 +111,45 @@ public class App {
             default -> {}
         }
         COD.setStatus(o, status);
+        System.out.println("The order "+rep+" has now a status "+o.getStatus()+".");
     }
 
     private static void adminInterface() throws StoreException, AlreadyExistException, BadQuantityException {
-        System.out.println("Admin Interface : Do you want to add a Store (S), fill an Inventory (I), add a Cook (C), or to validate the news Recipes (R) ?");
+        System.out.println("Admin Interface : Do you want to add a Store (S), change Taxes of a store (T), change Hours of a store, fill an Inventory (I), add a Cook (C), or to validate the news Recipes (R) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
             case "S" -> addStore();
             case "I" -> fillInventory();
+            case "T" -> setTax();
+            case "H" -> setHours();
             case "C" -> addCook();
             case "R" -> validateRecipes();
             default -> adminInterface();
         }
+    }
+
+    private static void setTax() throws StoreException {
+        System.out.println("Enter the idStore :");
+        String rep = SCANNER.nextLine();
+        Store s = COD.getStore(Integer.parseInt(rep));
+        System.out.println("The store "+rep+" has taxes at "+s.getTax()+".");
+        System.out.println("Enter the new taxes :");
+        String tax = SCANNER.nextLine();
+        COD.setTax(s, Double.parseDouble(tax));
+        System.out.println("The store "+rep+" has now taxes at "+s.getTax()+".");
+    }
+
+    private static void setHours() throws StoreException {
+        System.out.println("Enter the idStore :");
+        String rep = SCANNER.nextLine();
+        Store s = COD.getStore(Integer.parseInt(rep));
+        System.out.println("The store "+rep+" has hours ("+s.openingTime+";"+s.closingTime+").");
+        System.out.println("Enter the new opening hour (ex: \"08:00\":");
+        String open = SCANNER.nextLine();
+        System.out.println("Enter the new ending hour (ex: \"08:00\":");
+        String end = SCANNER.nextLine();
+        COD.setHours(s, LocalTime.parse(open), LocalTime.parse(end));
+        System.out.println("The store "+rep+" has now hours ("+s.openingTime+";"+s.closingTime+").");
     }
 
     private static void addStore(){
@@ -131,7 +161,10 @@ public class App {
         String open = SCANNER.nextLine();
         System.out.println("Enter the ending time :");
         String end = SCANNER.nextLine();
-        COD.addStore(Integer.parseInt(nbCook), address, open, end);
+        System.out.println("Enter the tax :");
+        String tax = SCANNER.nextLine();
+        COD.addStore(Integer.parseInt(nbCook), address, open, end, Double.parseDouble(tax));
+        System.out.println("You added a store at the address"+address+".");
     }
 
     private static void fillInventory() throws StoreException, AlreadyExistException, BadQuantityException {
@@ -144,12 +177,14 @@ public class App {
         String amount = SCANNER.nextLine();
         //Pb d'ingredient, pas sûre de comprendre comment l'utiliser
         store.addIngredients(new Ingredient(name, 0.0), Integer.parseInt(amount));
+        System.out.println("You added "+amount+" "+name+" in the store "+idStore+".");
     }
 
     private static void addCook() throws StoreException {
         System.out.println("Enter the id of the store for the cook :");
         String idStore = SCANNER.nextLine();
         COD.addCook(Integer.parseInt(idStore));
+        System.out.println("Cook added in the store "+idStore+".");
     }
 
     private static void validateRecipes(){
@@ -173,7 +208,7 @@ public class App {
         }
     }
 
-    private static void clientInterface() throws RegistrationException, InvalidInputException, OrderException, StoreException, CookieException, PaymentException, CookException, BadQuantityException {
+    private static void authenticationInterface() throws RegistrationException, InvalidInputException, OrderException, StoreException, CookieException, PaymentException, CookException, BadQuantityException{
         Client client;
         System.out.println("Client Interface : ");
 
@@ -198,48 +233,57 @@ public class App {
             String phoneNumber = SCANNER.nextLine();
             client = new UnregisteredClient(phoneNumber);
         }
-
         //Order a cookie
-        if(orderOrCancel()){
-            printStores();
-            System.out.println("Enter the id of a store :");
-            String idStore = SCANNER.nextLine();
-            Store store = COD.getStore(Integer.parseInt(idStore));
-            printRecipes(store);
-            System.out.println("Choose a recipe :");
-            String name = SCANNER.nextLine();
-            System.out.println("Choose an amount :");
-            String amount = SCANNER.nextLine();
-            COD.chooseCookie(client, store, name, Integer.parseInt(amount));
-
-            while (name.equals("STOP")){
-                System.out.println("Choose a recipe (STOP if you have enough):");
-                name = SCANNER.nextLine();
-                System.out.println("Choose an amount :");
-                amount = SCANNER.nextLine();
-                //Bug ici, pb d'inventaire ?
-                COD.chooseCookie(client, store, name, Integer.parseInt(amount));
-            }
-            System.out.println("Your Cart : "+client.getCart());
-            String orderId = COD.finalizeOrder(client, store);
-            System.out.println("Congrats ! Here is the id to pick up your order : " + orderId);
-        } else {
-            System.out.println("Enter the id of your order :");
-            String idOrder = SCANNER.nextLine();
-            COD.cancelOrder(idOrder);
-        }
-
+        clientInterface(client);
     }
 
-    private static boolean orderOrCancel(){
-        System.out.println("Do you want to order (O) or to cancel your order (C) ?");
+    private static void clientInterface(Client client) throws StoreException, BadQuantityException, PaymentException, CookException, CookieException, OrderException {
+        System.out.println("Client Interface : Do you want to order (O), to cancel your order (C) or the check your Past orders (P) ?");
         String rep = SCANNER.nextLine();
-        if(rep.equals("O"))
-            return true;
-        else if (rep.equals("C")) {
-            return false;
-        } else
-            return orderOrCancel();
+        switch (rep) {
+            case "O" -> passOrder(client);
+            case "C" -> cancelOrder();
+            case "P" -> pastOrders(client);
+            default -> clientInterface(client);
+        }
+    }
+
+    private static void pastOrders(Client client){
+        if(client.isRegistered())
+            System.out.println(((RegisteredClient)client).getPastOrders());
+        else
+            System.out.println("You can't see you past orders if you aren't registered.");
+    }
+
+    private static void cancelOrder() throws OrderException {
+        System.out.println("Enter the id of your order :");
+        String idOrder = SCANNER.nextLine();
+        COD.cancelOrder(idOrder);
+    }
+
+    private static void passOrder(Client client) throws StoreException, CookieException, OrderException, PaymentException, CookException, BadQuantityException {
+        printStores();
+        System.out.println("Enter the id of a store :");
+        String idStore = SCANNER.nextLine();
+        Store store = COD.getStore(Integer.parseInt(idStore));
+        printRecipes(store);
+        System.out.println("Choose a recipe :");
+        String name = SCANNER.nextLine();
+        System.out.println("Choose an amount :");
+        String amount = SCANNER.nextLine();
+        COD.chooseCookie(client, store, name, Integer.parseInt(amount));
+
+        while (name.equals("STOP")){
+            System.out.println("Choose a recipe (STOP if you have enough):");
+            name = SCANNER.nextLine();
+            System.out.println("Choose an amount :");
+            amount = SCANNER.nextLine();
+            //Bug ici, pb d'inventaire ?
+            COD.chooseCookie(client, store, name, Integer.parseInt(amount));
+        }
+        System.out.println("Your Cart : "+client.getCart());
+        String orderId = COD.finalizeOrder(client, store);
+        System.out.println("Congrats ! Here is the id to pick up your order : " + orderId);
     }
 
     private static boolean askIfRegister(){

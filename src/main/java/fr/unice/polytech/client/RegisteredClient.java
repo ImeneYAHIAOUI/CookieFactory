@@ -12,6 +12,7 @@ import java.util.List;
 
 public class RegisteredClient extends Client {
 
+    private final static int LOYALTY = 30;
     @Getter
     private final String id;
     @Getter
@@ -41,13 +42,16 @@ public class RegisteredClient extends Client {
         for (Item item : this.getCart().getItems()) {
             nb += item.getQuantity();
         }
-        eligibleForDiscount = nbCookie < 30 && nbCookie + nb >= 30;
+        eligibleForDiscount = nbCookie < LOYALTY && nbCookie + nb >= LOYALTY;
         nbCookie += nb;
         pastOrders.add(order);
         getCart().emptyItems();
     }
 
-
+    @Override
+    public boolean isRegistered(){
+        return true;
+    }
 
     public boolean isBanned()
     {

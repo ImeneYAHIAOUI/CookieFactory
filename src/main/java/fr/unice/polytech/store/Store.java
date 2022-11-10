@@ -116,10 +116,6 @@ public class Store {
         }
     }
 
-    public void removeIngredient(Ingredient ingredient) {
-        this.inventory.removeIngredient(ingredient);
-    }
-
     public int getMaxCookieAmount(Cookie cookie) {
         List<Integer> ingredientAmounts = new ArrayList<>();
         ingredientAmounts.add(inventory.get(cookie.getDough()));
@@ -153,7 +149,4 @@ public class Store {
         cooks.add(c);
     }
 
-    public void chooseStore(Store store) {
-
-    }
 }

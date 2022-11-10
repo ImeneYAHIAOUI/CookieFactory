@@ -12,15 +12,6 @@ import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,7 +39,6 @@ public class COD {
     private static Clock CLOCK = Clock.systemDefaultZone();
     private int idCook = 0;
     private int idStore = 0;
-    private Store choosenStore;
     @Setter
     private LocationServer locationServer;
 
@@ -73,7 +63,7 @@ public class COD {
                 new Flavour("chocolate", 1),
                 List.of(new Topping("chocolate chips", 1))
         ));
-        addStore(2, "30 Rte des Colles, 06410 Biot", "08:00", "20:00");
+        addStore(2, "30 Rte des Colles, 06410 Biot", "08:00", "20:00", 10.3);
         locationServer = new LocationServer();
     }
 
@@ -87,7 +77,7 @@ public class COD {
         PaymentService.getInstance().performPayment(order.getPrice());
         client.getNotified(order, "Your order is paid");
         this.orders.add(order);
-        cook.addOrder(order);         //Pas de temps de cuisson pour l'instant donc pas de TimeSlot
+        cook.addOrder(order);
         return order.getId();
     }
 
@@ -191,9 +181,7 @@ public class COD {
         for (Item item : order.getItems()) {
             Cookie cookie = item.getCookie();
             int numberOfCookie = item.getQuantity();
-            Ingredient dough = cookie.getDough();
-            store.getInventory().addIngredient(dough,  numberOfCookie);
-            Ingredient flavour = cookie.getFlavour();
+            store.getInventory().addIngredient(item.getCookie().getDough(),  numberOfCookie);
             store.getInventory().addIngredient(item.getCookie().getFlavour(), numberOfCookie);
             //topping
             cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie));
@@ -222,9 +210,7 @@ public class COD {
         for (Item item : cart.getItems()) {
             Cookie cookie = item.getCookie();
             int numberOfCookie = item.getQuantity();
-            Ingredient dough = cookie.getDough();
-            order.store.getInventory().decreaseIngredientQuantity(dough, numberOfCookie);
-            Ingredient flavour = cookie.getFlavour();
+            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getDough(), numberOfCookie);
             order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie);
             for (Topping topping : cookie.getToppings()) {
                 order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie);
@@ -279,11 +265,11 @@ public class COD {
         cart.setPickupTime(pickupTime);
     }
 
-    public void addStore(int nbCooks, String address, String openingTime, String endingTime){
+    public void addStore(int nbCooks, String address, String openingTime, String endingTime, double tax){
         List<Cook> cooks = new ArrayList<>();
         for (int i =0; i<nbCooks; i++)
             cooks.add(new Cook(idCook++));
-        stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>()),10.3));
+        stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>()),tax));
     }
 
     public void addCook(int idStore) throws StoreException {
@@ -325,13 +311,6 @@ public class COD {
         }
         return nearbyStores;
     }
-
-
-    public void chooseStore(Store store) {
-        this.choosenStore = store;
-    }
-
-
 
 }
 

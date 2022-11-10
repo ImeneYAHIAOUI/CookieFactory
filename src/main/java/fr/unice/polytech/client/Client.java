@@ -21,4 +21,8 @@ public abstract class Client {
     public void getNotified(Order order, String message) {
         System.out.println(order + " : " + message);
     }
+
+    public boolean isRegistered(){
+        return false;
+    }
 }
