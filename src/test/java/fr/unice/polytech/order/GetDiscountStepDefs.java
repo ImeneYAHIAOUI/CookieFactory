@@ -58,6 +58,7 @@ public class GetDiscountStepDefs {
 
     @When("the client makes an order of {int} cookies")
     public void whenTheClientMakesAnOrderOfNCookies(int nbCookies) throws PaymentException, CookException, BadQuantityException, InvalidPickupTimeException {
+        client.getCart().setTax(0.1);
         client.getCart().addItem(new Item(nbCookies, cod.getRecipes().get(0)));
         cod.choosePickupTime(client.getCart(), store, LocalTime.parse("10:00"));
         cod.finalizeOrder(client, store);

@@ -40,7 +40,7 @@ public class PayOrderStepDefs {
         Client realClient = new UnregisteredClient(phoneNumber);
         client = spy(realClient);
         cooks.add(new Cook(0));
-        store = new Store(cooks, recipes, "address", LocalTime.parse("08:00"), LocalTime.parse("20:00"), 1, inventory);
+        store = new Store(cooks, recipes, "address", LocalTime.parse("08:00"), LocalTime.parse("20:00"), 1, inventory,7.0);
         cod.addStore(store);
 
     }
@@ -85,6 +85,6 @@ public class PayOrderStepDefs {
     @Then("I should pay the right price and be notified")
     public void iShouldPayTheRightPriceAndBeNotified() throws OrderException {
         verify(client).getNotified(any(Order.class), eq("Your order is paid"));
-        assertEquals(1., cod.getOrder(orderID).getPrice());
+        assertEquals(8., cod.getOrder(orderID).getPrice());
     }
 }

@@ -4,6 +4,8 @@ import fr.unice.polytech.exception.PickupTimeNotSetException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.store.TimeSlot;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -14,14 +16,22 @@ import java.util.List;
 public class Cart {
     private final List<Item> items;
     private LocalTime pickupTime;
-
-
+    @Getter
+    private Double subtotal;
+    @Getter
+    @Setter
+    private Double tax;
+    @Getter
+    private Double total;
     public Cart() {
         this.items = new ArrayList<>();
         pickupTime = null;
+        subtotal=0.0;
+        total=0.0;
     }
 
     public void addItem(Item item) {
+
         if (items.stream().anyMatch(item1 -> item1.getCookie() == item.getCookie())) {
             Item existingItem = items.stream().filter(item1 -> item1.getCookie() == item.getCookie()).findFirst().orElse(null);
             assert existingItem != null;
@@ -30,7 +40,8 @@ public class Cart {
         } else {
             items.add(item);
         }
-
+        subtotal+=item.getCookie().getPrice()*item.getQuantity();
+        total =subtotal*(1+tax);
     }
 
     /**
@@ -65,5 +76,8 @@ public class Cart {
 
     public void emptyItems() {
         items.clear();
+        subtotal=0.0;
+        total=0.0;
+        tax=0.0;
     }
 }

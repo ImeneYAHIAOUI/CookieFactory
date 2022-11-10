@@ -97,7 +97,7 @@ public class ChooseCookieStepDefs {
     {
 
 
-        store = new Store(new ArrayList<>(), new ArrayList<>(), "address", LocalTime.parse("08:30"), LocalTime.parse("16:00"), id, inventory);
+        store = new Store(new ArrayList<>(), new ArrayList<>(), "address", LocalTime.parse("08:30"), LocalTime.parse("16:00"), id, inventory,4.0);
     }
 
 

@@ -40,6 +40,7 @@ public class RetrievePastOrdersStepDef {
 
             row.forEach(item -> {
                 String[] itemSplit = item.split(" ");
+                client.getCart().setTax(0.1);
                 client.getCart().addItem(new Item(Integer.parseInt(itemSplit[1]), new Cookie(itemSplit[0], 1., 1, Cooking.CHEWY, Mix.MIXED, new Dough("dough", 1.), new Flavour("flavour", 1.), List.of(new Topping("topping", 1.)))));
             });
 

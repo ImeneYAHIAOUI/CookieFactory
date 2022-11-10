@@ -148,7 +148,12 @@ public class COD {
         if (maxCookieAmount < amount) {
             throw new CookieException("this store can't make this amount of cookies");
         }
-        client.getCart().addItem(new Item(amount, cookie));
+        Cart cart= client.getCart();
+        if(cart.getTax() == null && store.getTax()!=null ){
+            cart.setTax(store.getTax());
+        }
+        cart.addItem(new Item(amount, cookie));
+
     }
 
 
@@ -200,6 +205,9 @@ public class COD {
             System.out.println(store.openingTime + " - " + store.closingTime);
         }
     }
+    public void setTax(Store store, double tax){
+        store.setTax(tax);
+    }
 
     public List<Order> getClientPastOrders(RegisteredClient client) {
         return client.getPastOrders();
@@ -222,23 +230,12 @@ public class COD {
                 order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie);
             }
         }
-        calculatePrice(order);
-    }
-
-    private void calculatePrice(Order order) {
-        for (Item item : order.getItems()) {
-            Cookie cookie = item.getCookie();
-            int numberOfCookie = item.getQuantity();
-            double price = order.getPrice() + cookie.getPrice() * numberOfCookie;
-            if (order.getClient() instanceof RegisteredClient) {
-                if (((RegisteredClient) order.getClient()).isEligibleForDiscount()) {
-                    price *= 0.9;
-                }
+        if (order.getClient() instanceof RegisteredClient) {
+            if (((RegisteredClient) order.getClient()).isEligibleForDiscount()) {
+                order.setPrice(order.getPrice()*0.9);
             }
-            order.setPrice(price);
         }
     }
-
     public void addStore(Store store) {
         stores.add(store);
     }
@@ -286,7 +283,7 @@ public class COD {
         List<Cook> cooks = new ArrayList<>();
         for (int i =0; i<nbCooks; i++)
             cooks.add(new Cook(idCook++));
-        stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>())));
+        stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>()),10.3));
     }
 
     public void addCook(int idStore) throws StoreException {

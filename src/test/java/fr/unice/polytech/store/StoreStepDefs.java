@@ -35,7 +35,7 @@ public class StoreStepDefs {
 
     @Given("a store with address {string}")
     public void givenAStore(String address) {
-        this.store = new Store(cooks, recipes, address, LocalTime.parse("08:00"), LocalTime.parse("20:00"), id, inventory);
+        this.store = new Store(cooks, recipes, address, LocalTime.parse("08:00"), LocalTime.parse("20:00"), id, inventory,4.0);
     }
 
     @And("a cod with the store")

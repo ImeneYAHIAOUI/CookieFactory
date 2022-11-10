@@ -13,7 +13,6 @@ public class Item {
         this.quantity = quantity;
         this.cookie = cookie;
     }
-
     @Override
     public String toString() {
         return "Item{" +

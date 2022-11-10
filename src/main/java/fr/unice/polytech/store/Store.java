@@ -8,6 +8,7 @@ import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CookException;
 import fr.unice.polytech.recipe.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -30,13 +31,15 @@ public class Store {
     private final int id;
     @Getter
     private final Inventory inventory;
+    @Getter
+    @Setter
+    private  Double tax;
+    public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime, int id, Inventory inventory,double tax) {
 
-    private Store chosenStore;
-
-    public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime, int id, Inventory inventory) {
         this.cooks = cooks;
         this.recipes = recipes;
         this.address = address;
+        this.tax=tax;
         if (openingTime.isBefore(closingTime)) {
             this.openingTime = openingTime;
             this.closingTime = closingTime;

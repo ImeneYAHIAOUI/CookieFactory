@@ -42,12 +42,13 @@ public class TimeSlotAttributionStepDefs {
         cooks.add(cook);
         List<Cookie> cookies = new ArrayList<>();
         cookies.add(cookie);
-        store = new Store(cooks, cookies, "", LocalTime.parse(openingHour), LocalTime.parse(endingHour), 1, new Inventory(new ArrayList<>()));
+        store = new Store(cooks, cookies, "", LocalTime.parse(openingHour), LocalTime.parse(endingHour), 1, new Inventory(new ArrayList<>()),4.3);
     }
 
     @When("a cart with {int} of the recipe")
     public void andCart(int i) {
         client = new RegisteredClient("", "", "0123456789");
+        client.getCart().setTax(.1);
         client.getCart().addItem(new Item(i, cookie));
         client.getCart().setPickupTime(LocalTime.parse("10:00"));
     }
@@ -55,6 +56,7 @@ public class TimeSlotAttributionStepDefs {
     @And("an order with {int} of the recipe")
     public void andOrder(int i) {
         client = new RegisteredClient("", "", "0123456789");
+        client.getCart().setTax(.1);
         client.getCart().addItem(new Item(i, cookie));
         client.getCart().setPickupTime(LocalTime.parse("10:00"));
         order = new Order("0", client, cook, store);

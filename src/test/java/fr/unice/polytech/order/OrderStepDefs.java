@@ -26,7 +26,7 @@ public class OrderStepDefs {
     final Cook cook = new Cook(1234);
     Order order;
     COD cod = new COD();
-    Store store = new Store(List.of(cook),List.of(), "30 Rte des Colles, 06410 Biot", LocalTime.parse("08:00"), LocalTime.parse("20:00"), 1, new Inventory(new ArrayList<>()));
+    Store store = new Store(List.of(cook),List.of(), "30 Rte des Colles, 06410 Biot", LocalTime.parse("08:00"), LocalTime.parse("20:00"), 1, new Inventory(new ArrayList<>()),5.0);
 
     public OrderStepDefs() {
     }

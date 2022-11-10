@@ -41,6 +41,8 @@ public class ChoosePickupTimeStepDefs {
 
     @Given("a client with a cart containing some items")
     public void aClientWithACartContainingSomeItems() {
+
+        client.getCart().setTax(.1);
         client.getCart()
                 .addItem(new Item(3, cod.getRecipes().get(0)));
     }

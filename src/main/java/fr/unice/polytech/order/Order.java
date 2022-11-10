@@ -1,5 +1,6 @@
 package fr.unice.polytech.order;
 
+import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.services.SMSService;
@@ -7,6 +8,8 @@ import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
 import fr.unice.polytech.store.TimeSlot;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.Date;
@@ -22,10 +25,13 @@ public class Order {
     private Client client;
     private final Cook cook;
     private OrderStatus status;
+    @Getter
+    @Setter
     private double price;
     private final Map<OrderStatus, Date> history;
     private final TimeSlot timeSlot;
     private LocalTime pickupTime;
+
 
     public Order(String id, Client client, Cook cook, Store store) {
         this.id = id;
@@ -35,9 +41,10 @@ public class Order {
         this.items = List.copyOf(client.getCart().getItems());
         this.history = new HashMap<>();
         this.history.put(OrderStatus.NOT_STARTED, new Date());
-        this.price = 0;
         this.store = store;
-        this.pickupTime = client.getCart().getPickupTime();
+        Cart cart=client.getCart();
+        this.pickupTime =cart.getPickupTime();
+        this.price = cart.getTotal();
         this.timeSlot = new TimeSlot(pickupTime.minus(client.getCart().totalCookingTime()), pickupTime);
         //Tant qu'on a pas l'interaction entre les cooks et le système,
         //On met directement l'order en status READY
