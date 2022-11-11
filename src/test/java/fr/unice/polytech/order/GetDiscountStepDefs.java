@@ -37,8 +37,9 @@ public class GetDiscountStepDefs {
     List<Order> pastOrders;
 
     @Before
-    public void setUp() throws NoSuchFieldException, IllegalAccessException, BadQuantityException, CookException {
+    public void setUp() throws NoSuchFieldException, IllegalAccessException {
         cod = new COD();
+        cod.initializationCod();
         paymentService = mock(PaymentService.class);
         Field paymentServiceInstance = PaymentService.class.getDeclaredField("INSTANCE");
         paymentServiceInstance.setAccessible(true);

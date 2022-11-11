@@ -30,6 +30,7 @@ public class MakeOrderStepDefs {
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
         smsService = mock(SMSService.class);
         cod = new COD();
+        cod.initializationCod();
         store = cod.getStores().get(0);
         // Mock the sms service singleton
         Field instance = SMSService.class.getDeclaredField("INSTANCE");

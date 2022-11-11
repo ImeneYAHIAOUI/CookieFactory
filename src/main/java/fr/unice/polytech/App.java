@@ -10,41 +10,19 @@ import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Store;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
     static Scanner SCANNER = new Scanner(System.in);
     static COD COD = new COD();
-    public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException {
+    public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException {
         welcomeInterface();
     }
 
-    private static void printStores(){
-        System.out.println("Stores:");
-        for (Store s: COD.getStores()) {
-            System.out.println(s);
-        }
-    }
-
-    private static void printRecipes(){
-        System.out.println("Recipes:");
-        for (Cookie c: COD.getRecipes()) {
-            System.out.println(c);
-        }
-    }
-
-    private static void printRecipes(Store s){
-        System.out.println("Recipes Store "+s);
-        for (Cookie c: s.getRecipes()) {
-            System.out.println(c);
-        }
-    }
-
-    private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException {
+    private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException {
         System.out.println("Welcome in the Cookie On Demand System !");
-        printStores();
-        printRecipes();
+        COD.printStores();
+        COD.printRecipes();
 
         System.out.println("Are you a Client (Cl), a Cook (Co), an admin (A) or do ypu want to Quit (Q) ?");
         String rep = SCANNER.nextLine();
@@ -60,7 +38,7 @@ public class App {
         welcomeInterface();
     }
 
-    private static void cookInterface() throws OrderException {
+    private static void cookInterface() throws OrderException, CatalogException {
         System.out.println("Cook Interface : Do you want to suggest a recipe (S), or to set a status order (O) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
@@ -70,7 +48,8 @@ public class App {
         }
     }
 
-    private static void suggestRecipe(){
+    private static void suggestRecipe() throws CatalogException {
+        COD.printCatalog();
         System.out.println("Let's create a recipe ! What is the name ?");
         String name = SCANNER.nextLine();
         System.out.println("Choose a price :");
@@ -84,14 +63,16 @@ public class App {
         System.out.println("Choose a dough :");
         String dough = SCANNER.nextLine();
         System.out.println("Choose a flavor :");
-        String flavor = SCANNER.nextLine();
+        String flavour = SCANNER.nextLine();
         Mix mix_chosen = Mix.MIXED;
         if(mix.equals("T"))
             mix_chosen = Mix.TOPPED;
         Cooking cooking_chosen = Cooking.CHEWY;
         if(cooking.equals("Cr"))
             cooking_chosen = Cooking.CRUNCHY;
-        COD.suggestRecipe(new Cookie(name, Double.valueOf(price), Integer.parseInt(time), cooking_chosen, mix_chosen, new Dough(dough, 0.0), new Flavour(flavor, 0.0), new ArrayList<>()));
+        Ingredient doughIngredient = COD.getIngredientCatalog(dough);
+        Ingredient flavourIngredient = COD.getIngredientCatalog(flavour);
+        COD.suggestRecipe(name, Double.parseDouble(price), Integer.parseInt(time), cooking_chosen, mix_chosen, doughIngredient, flavourIngredient);
         System.out.println("You suggested the recipe "+name+".");
     }
 
@@ -102,20 +83,20 @@ public class App {
         System.out.println("The order "+rep+" has a status "+o.getStatus()+".");
         System.out.println("Choose the new status : in progress (P), Ready (R), Completed (C), Obsolete (O).");
         rep = SCANNER.nextLine();
-        OrderStatus status = o.getStatus();
+        OrderStatus status;
         switch (rep) {
             case "P" -> status = OrderStatus.IN_PROGRESS;
             case "R" -> status = OrderStatus.READY;
             case "C" -> status = OrderStatus.COMPLETED;
             case "O" -> status = OrderStatus.OBSOLETE;
-            default -> {}
+            default -> status = o.getStatus();
         }
         COD.setStatus(o, status);
         System.out.println("The order "+rep+" has now a status "+o.getStatus()+".");
     }
 
-    private static void adminInterface() throws StoreException, AlreadyExistException, BadQuantityException {
-        System.out.println("Admin Interface : Do you want to add a Store (S), change Taxes of a store (T), change Hours of a store, fill an Inventory (I), add a Cook (C), or to validate the news Recipes (R) ?");
+    private static void adminInterface() throws StoreException, AlreadyExistException, BadQuantityException, CatalogException {
+        System.out.println("Admin Interface : Do you want to add a Store (S), change Taxes of a store (T), change Hours of a store, fill an Inventory (I), add a Cook (C), add an Ingredient to the Catalog (IC) or to validate the news Recipes (R) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
             case "S" -> addStore();
@@ -124,8 +105,27 @@ public class App {
             case "H" -> setHours();
             case "C" -> addCook();
             case "R" -> validateRecipes();
+            case "IC" -> addIngredientCatalog();
             default -> adminInterface();
         }
+    }
+
+    private static void addIngredientCatalog() throws CatalogException {
+        COD.printCatalog();
+        System.out.println("Enter the name of the ingredient :");
+        String name = SCANNER.nextLine();
+        System.out.println("Enter the price of the ingredient :");
+        String price = SCANNER.nextLine();
+        System.out.println("Is your ingredient a Flavour (F), a Dough (D), or a Topping ?");
+        String rep = SCANNER.nextLine();
+        IngredientType ingredientType;
+        switch (rep) {
+            case "F" -> ingredientType = IngredientType.FLAVOUR;
+            case "D" -> ingredientType = IngredientType.DOUGH;
+            default -> ingredientType = IngredientType.TOPPING;
+        }
+        COD.addIngredientCatalog(name, Double.parseDouble(price), ingredientType);
+        System.out.println(name+" added with success.");
     }
 
     private static void setTax() throws StoreException {
@@ -167,7 +167,9 @@ public class App {
         System.out.println("You added a store at the address"+address+".");
     }
 
-    private static void fillInventory() throws StoreException, AlreadyExistException, BadQuantityException {
+    private static void fillInventory() throws StoreException, AlreadyExistException, BadQuantityException, CatalogException {
+        COD.printStores();
+        COD.printCatalog();
         System.out.println("Enter the id of a store :");
         String idStore = SCANNER.nextLine();
         Store store = COD.getStore(Integer.parseInt(idStore));
@@ -175,8 +177,8 @@ public class App {
         String name = SCANNER.nextLine();
         System.out.println("How much do you want to add ?");
         String amount = SCANNER.nextLine();
-        //Pb d'ingredient, pas sûre de comprendre comment l'utiliser
-        store.addIngredients(new Ingredient(name, 0.0), Integer.parseInt(amount));
+        Ingredient ingredient = COD.getIngredientCatalog(name);
+        store.addIngredients(ingredient, Integer.parseInt(amount));
         System.out.println("You added "+amount+" "+name+" in the store "+idStore+".");
     }
 
@@ -262,11 +264,11 @@ public class App {
     }
 
     private static void passOrder(Client client) throws StoreException, CookieException, OrderException, PaymentException, CookException, BadQuantityException {
-        printStores();
+        COD.printStores();
         System.out.println("Enter the id of a store :");
         String idStore = SCANNER.nextLine();
         Store store = COD.getStore(Integer.parseInt(idStore));
-        printRecipes(store);
+        COD.printRecipes(store);
         System.out.println("Choose a recipe :");
         String name = SCANNER.nextLine();
         System.out.println("Choose an amount :");

@@ -29,6 +29,7 @@ public class ChoosePickupTimeStepDefs {
     @Before
     public void setUp() {
         cod = new COD();
+        cod.initializationCod();
         client = new UnregisteredClient("0123456789");
         store = cod.getStores().get(0);
         String instantExpected = "2022-11-07T09:15:00Z";
@@ -59,7 +60,7 @@ public class ChoosePickupTimeStepDefs {
     }
 
     @When("the client chooses a pickup time that is not in the valid pickup time list")
-    public void theClientChoosesAPickupTimeThatIsNotInTheValidPickupTimeList() throws InvalidPickupTimeException {
+    public void theClientChoosesAPickupTimeThatIsNotInTheValidPickupTimeList() {
         List<LocalTime> possiblePickupTimes = cod.getPickupTimes(client.getCart(), store);
         LocalTime invalidPickupTime = possiblePickupTimes.get(0).minusMinutes(1);
         assertThrows(InvalidPickupTimeException.class, () -> cod.choosePickupTime(client.getCart(), store, invalidPickupTime));

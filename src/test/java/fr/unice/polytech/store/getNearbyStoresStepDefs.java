@@ -27,6 +27,7 @@ public class getNearbyStoresStepDefs {
     @Given("^stores with locations$")
     public void givenTheFollowingStores(List<String> addresses) {
         cod = new COD();
+        cod.initializationCod();
         for (String address : addresses) {
             Store store = mock(Store.class);
             when(store.getAddress()).thenReturn(address);

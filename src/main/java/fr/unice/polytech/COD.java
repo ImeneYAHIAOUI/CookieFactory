@@ -41,17 +41,20 @@ public class COD {
     private int idStore = 0;
     @Setter
     private LocationServer locationServer;
+    private final Catalog catalog;
 
-
-
-    public COD() {
+    public COD(){
         this.recipes = new ArrayList<>();
         this.stores = new ArrayList<>();
         this.orders = new ArrayList<>();
         this.suggestedRecipes = new ArrayList<>();
         this.clients = new ArrayList<>();
         this.connectedClients = new ArrayList<>();
+        this.catalog = new Catalog();
+        locationServer = new LocationServer();
+    }
 
+    public void initializationCod(){
         //Initialisation with 1 store + 1 recipe
         recipes.add(new Cookie(
                 "chocolala",
@@ -64,7 +67,6 @@ public class COD {
                 List.of(new Topping("chocolate chips", 1))
         ));
         addStore(2, "30 Rte des Colles, 06410 Biot", "08:00", "20:00", 10.3);
-        locationServer = new LocationServer();
     }
 
     public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException, PaymentException {
@@ -144,6 +146,14 @@ public class COD {
         }
         cart.addItem(new Item(amount, cookie));
 
+    }
+
+    public void suggestRecipe(String name, double price, int time, Cooking cooking_chosen, Mix mix_chosen, Ingredient doughIngredient, Ingredient flavourIngredient) throws CatalogException {
+        if(doughIngredient.getIngredientType().equals(IngredientType.DOUGH)
+                && flavourIngredient.getIngredientType().equals(IngredientType.FLAVOUR))
+            suggestRecipe(new Cookie(name, price, time, cooking_chosen, mix_chosen, (Dough) doughIngredient, (Flavour) flavourIngredient, new ArrayList<>()));
+        else
+            throw new CatalogException("Bad Ingredient type");
     }
 
 
@@ -310,6 +320,39 @@ public class COD {
             }
         }
         return nearbyStores;
+    }
+
+    public void addIngredientCatalog(String name, double price, IngredientType ingredientType) throws CatalogException {
+        catalog.addIngredient(name, price, ingredientType);
+    }
+
+    public Ingredient getIngredientCatalog(String name) throws CatalogException {
+        return catalog.getIngredient(name);
+    }
+
+    public void printStores(){
+        System.out.println("Stores:");
+        for (Store s: this.stores) {
+            System.out.println(s);
+        }
+    }
+
+    public void printRecipes(){
+        System.out.println("Recipes:");
+        for (Cookie c: this.recipes) {
+            System.out.println(c);
+        }
+    }
+
+    public void printRecipes(Store s){
+        System.out.println("Recipes Store "+s);
+        for (Cookie c: s.getRecipes()) {
+            System.out.println(c);
+        }
+    }
+
+    public void printCatalog(){
+        System.out.println(catalog);
     }
 
 }

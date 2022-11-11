@@ -5,6 +5,7 @@ import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.recipe.Cookie;
 import fr.unice.polytech.recipe.Ingredient;
+import fr.unice.polytech.recipe.IngredientType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -82,7 +83,7 @@ public class StoreStepDefs {
 
     @And("A price of {double}")
     public void andGivenPrice(double price) {
-        ingredient = new Ingredient(tmp, price);
+        ingredient = new Ingredient(tmp, price, IngredientType.DOUGH);
     }
 
     @And("a quantity of {int}")
