@@ -7,10 +7,12 @@ import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.services.LocationService;
 import fr.unice.polytech.services.PaymentService;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Occasion;
+
 import fr.unice.polytech.store.Store;
 
 import lombok.Getter;
@@ -41,7 +43,8 @@ public class COD {
     private int idCook = 0;
     private int idStore = 0;
     @Setter
-    private LocationServer locationServer;
+    private LocationService locationService;
+
     private final Catalog catalog;
 
     public COD(){
@@ -52,7 +55,7 @@ public class COD {
         this.clients = new ArrayList<>();
         this.connectedClients = new ArrayList<>();
         this.catalog = new Catalog();
-        locationServer = new LocationServer();
+        locationService = new LocationService();
     }
 
     public void initializationCod(){
@@ -67,6 +70,7 @@ public class COD {
                 new Flavour("chocolate", 1),
                 List.of(new Topping("chocolate chips", 1))
         ));
+        locationService = new LocationService();
 
         Occasion occasion=new Occasion("birthday");
         addStore(2, "30 Rte des Colles, 06410 Biot", "08:00",
@@ -306,7 +310,7 @@ public class COD {
 
         for (Store store : stores) {
             String storeAddress = store.getAddress();
-            double distance = locationServer.distance(address, storeAddress);
+            double distance = locationService.distance(address, storeAddress);
             if (distance <= 3) {
                 nearbyStores.add(store);
             }
@@ -321,7 +325,7 @@ public class COD {
 
         for (Store store : stores) {
             String storeAddress = store.getAddress();
-            double distance = locationServer.distance(address,storeAddress,unit);
+            double distance = locationService.distance(address,storeAddress,unit);
             if (distance <= proximity) {
                 nearbyStores.add(store);
             }
@@ -363,5 +367,3 @@ public class COD {
     }
 
 }
-
-

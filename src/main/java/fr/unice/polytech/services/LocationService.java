@@ -1,19 +1,21 @@
-package fr.unice.polytech;
+package fr.unice.polytech.services;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LocationServer {
+public class LocationService {
 
-    private String getRequest(String url) throws Exception {
+    private String getRequest(String url) throws IOException {
 
         final URL obj = new URL(url);
         final HttpURLConnection con = (HttpURLConnection) obj.openConnection();

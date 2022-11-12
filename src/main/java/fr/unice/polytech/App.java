@@ -7,6 +7,7 @@ import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
+
 import fr.unice.polytech.store.Occasion;
 import fr.unice.polytech.store.Store;
 
@@ -22,6 +23,7 @@ public class App {
     static COD COD = new COD();
     public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException {
         welcomeInterface();
+
     }
 
     private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException {

@@ -1,5 +1,6 @@
 package fr.unice.polytech.services;
 
+
 /**
  * Service that sends SMS to the user when the status of the order changes
  * It is a singleton
@@ -7,7 +8,6 @@ package fr.unice.polytech.services;
 public class SMSService {
 
     private static SMSService INSTANCE = null;
-
     public static SMSService getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new SMSService();
@@ -15,7 +15,11 @@ public class SMSService {
         return INSTANCE;
     }
 
-    public void notifyClient(String clientPhoneNumber) {
+    public void notifyClient(String clientPhoneNumber,String message) {
         System.out.println("Sending SMS to " + clientPhoneNumber);
+        System.out.println("Message : " + message);
     }
+
+
+
 }

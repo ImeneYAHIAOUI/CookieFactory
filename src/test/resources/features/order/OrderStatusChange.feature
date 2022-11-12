@@ -42,9 +42,6 @@ Feature: Order Status Change
     When order status is "PAYED"
     Then the order can not be set to "PAYED"
 
-  Scenario: order status is already "READY" and we want to pass it to "READY"
-    When order status is "READY"
-    Then the order can not be set to "READY"
 
 # allowed set status changes
 

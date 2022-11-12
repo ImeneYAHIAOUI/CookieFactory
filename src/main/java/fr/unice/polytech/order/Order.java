@@ -4,6 +4,7 @@ import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.services.SMSService;
+import fr.unice.polytech.services.StatusScheduler;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
 import fr.unice.polytech.store.TimeSlot;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,7 +62,7 @@ public class Order {
             throw new OrderException("This order's status is already "+status);
         }
         if (status.equals(OrderStatus.READY)) {
-            SMSService.getInstance().notifyClient(this.client.getPhoneNumber());
+            StatusScheduler.getInstance().statusSchedulerTask(this, client.getPhoneNumber());
         }
         this.status = status;
         this.history.put(status, new Date());

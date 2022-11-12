@@ -2,18 +2,22 @@ package fr.unice.polytech.order;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.NotificationMessage;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.services.SMSService;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.time.LocalTime;
 
@@ -25,6 +29,7 @@ public class MakeOrderStepDefs {
     SMSService smsService;
     COD cod;
     Store store;
+    private ByteArrayOutputStream outContent ;
 
     @Before
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
@@ -36,6 +41,8 @@ public class MakeOrderStepDefs {
         Field instance = SMSService.class.getDeclaredField("INSTANCE");
         instance.setAccessible(true);
         instance.set(instance, smsService);
+        outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
     }
 
     @Given("a client")
@@ -71,6 +78,13 @@ public class MakeOrderStepDefs {
 
     @Then("the client is notified")
     public void thenTheClientIsNotified() {
-        verify(smsService, times(1)).notifyClient(client.getPhoneNumber());
+        verify(smsService, times(1)).notifyClient(client.getPhoneNumber(), NotificationMessage.COMMAND_READY.getMessage());
+    }
+
+    @After
+    public void restoreStreams()
+    {
+        System.setOut(System.out);
+
     }
 }
