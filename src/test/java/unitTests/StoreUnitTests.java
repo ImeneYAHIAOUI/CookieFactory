@@ -56,7 +56,8 @@ public class StoreUnitTests {
         cookies.add(cookie2);
         cookies.add(cookie3);
         store = new Store(List.of(cook),cookies,"adresse",LocalTime.parse("10:00")
-                ,LocalTime.parse("18:00"),1, inventory,7.0);
+                ,LocalTime.parse("18:00"),
+                1, inventory,7.0, new ArrayList<>());
     }
 
     @Test

@@ -10,6 +10,7 @@ import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.services.PaymentService;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
+import fr.unice.polytech.store.Occasion;
 import fr.unice.polytech.store.Store;
 
 import lombok.Getter;
@@ -66,7 +67,11 @@ public class COD {
                 new Flavour("chocolate", 1),
                 List.of(new Topping("chocolate chips", 1))
         ));
-        addStore(2, "30 Rte des Colles, 06410 Biot", "08:00", "20:00", 10.3);
+
+        Occasion occasion=new Occasion("birthday");
+        addStore(2, "30 Rte des Colles, 06410 Biot", "08:00",
+                "20:00",10.3,List.of(occasion));
+
     }
 
     public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException, PaymentException {
@@ -275,11 +280,13 @@ public class COD {
         cart.setPickupTime(pickupTime);
     }
 
-    public void addStore(int nbCooks, String address, String openingTime, String endingTime, double tax){
+
+
+    public void addStore(int nbCooks, String address, String openingTime, String endingTime, double tax,List<Occasion>occasions){
         List<Cook> cooks = new ArrayList<>();
         for (int i =0; i<nbCooks; i++)
             cooks.add(new Cook(idCook++));
-        stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>()),tax));
+        stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>()),tax,occasions));
     }
 
     public void addCook(int idStore) throws StoreException {

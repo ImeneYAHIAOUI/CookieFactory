@@ -42,7 +42,9 @@ public class TimeSlotAttributionStepDefs {
         cooks.add(cook);
         List<Cookie> cookies = new ArrayList<>();
         cookies.add(cookie);
-        store = new Store(cooks, cookies, "", LocalTime.parse(openingHour), LocalTime.parse(endingHour), 1, new Inventory(new ArrayList<>()),4.3);
+        store = new Store(cooks, cookies, "", LocalTime.parse(openingHour),
+                LocalTime.parse(endingHour),
+                1, new Inventory(new ArrayList<>()),4.3, new ArrayList<>());
     }
 
     @When("a cart with {int} of the recipe")

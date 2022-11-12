@@ -34,8 +34,10 @@ public class Store {
     @Getter
     @Setter
     private  Double tax;
-    public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime, int id, Inventory inventory,double tax) {
-
+    @Getter
+    private  final List<Occasion> occasionList;
+    public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime, int id, Inventory inventory,double tax,List<Occasion> occasions) {
+        occasionList =new ArrayList<>();
         this.cooks = cooks;
         this.recipes = recipes;
         this.address = address;
@@ -50,14 +52,26 @@ public class Store {
         }
         this.id = id;
         this.inventory = inventory;
+        if( occasions != null){
+            occasions.forEach(occasion ->{
+                if(!this.occasionList.contains(occasion)){
+                    this.occasionList.add(occasion);
+                }
+            } );
+        }
+
     }
-
-
     public void setHours(LocalTime openingTime, LocalTime closingTime) {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
     }
-
+    public void addOccasion(Occasion occasionToAdd){
+        this.occasionList.forEach(occasion ->{
+            if(!this.occasionList.contains(occasionToAdd)){
+                this.occasionList.add(occasionToAdd);
+            }
+        } );
+    }
     @Override
     public String toString() {
         return "Store{" +

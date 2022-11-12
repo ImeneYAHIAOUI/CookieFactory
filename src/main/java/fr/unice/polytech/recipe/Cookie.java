@@ -1,41 +1,33 @@
 package fr.unice.polytech.recipe;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
 @ToString
-@AllArgsConstructor
-public class Cookie {
+public class Cookie extends Recipe{
     @Getter
     @Setter
-    private String name;
-    @Getter
-    @Setter
-    private Double price;
-    @Getter
-    @Setter
-    private int cookingTime;
-    @Getter
-    @Setter
-    private Cooking cooking;
-    @Getter
-    @Setter
-    private Mix mix;
-    @Getter
-    @Setter
-    private Dough dough;
-    @Getter
-    @Setter
-    private Flavour flavour;
-    @Getter
-    @Setter
-    private List<Topping> toppings;
+    private Size size;
+    public Cookie(String name,Double price, int cookingTime,Cooking cooking, Mix mix,Dough dough, Flavour flavour,List<Topping> toppings){
+        super( name, price,  cookingTime, cooking,  mix, dough,  flavour, toppings);
+    }
+    public void setSize(Size size){
+        this.size=size;
+        switch(size){
+            case L:
+                setPrice(getPrice()*4);
+                break;
 
-    public void addTopping(Topping topping) {
-        toppings.add(topping);
+            case XL:
+                setPrice(getPrice()*5);
+                break;
+
+            case XXL:
+                setPrice(getPrice()*6);
+                break;
+            default:
+                break;
+        }
     }
 }

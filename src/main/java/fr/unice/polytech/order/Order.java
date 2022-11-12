@@ -32,7 +32,6 @@ public class Order {
     private final TimeSlot timeSlot;
     private LocalTime pickupTime;
 
-
     public Order(String id, Client client, Cook cook, Store store) {
         this.id = id;
         this.client = client;

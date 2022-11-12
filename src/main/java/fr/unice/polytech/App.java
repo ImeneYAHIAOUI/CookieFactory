@@ -7,9 +7,14 @@ import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.store.Occasion;
 import fr.unice.polytech.store.Store;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.time.LocalTime;
+
 import java.util.Scanner;
 
 public class App {
@@ -163,8 +168,12 @@ public class App {
         String end = SCANNER.nextLine();
         System.out.println("Enter the tax :");
         String tax = SCANNER.nextLine();
-        COD.addStore(Integer.parseInt(nbCook), address, open, end, Double.parseDouble(tax));
+        System.out.println("Enter an occasion :"); // à modifier plus tard pour ajouter plusieurs occasions
+        String occasion = SCANNER.nextLine();
+        COD.addStore(Integer.parseInt(nbCook), address, open, end, Double.parseDouble(tax), List.of(new Occasion((occasion))));
         System.out.println("You added a store at the address"+address+".");
+
+
     }
 
     private static void fillInventory() throws StoreException, AlreadyExistException, BadQuantityException, CatalogException {
