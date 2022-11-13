@@ -12,8 +12,11 @@ import fr.unice.polytech.store.Occasion;
 import fr.unice.polytech.store.Store;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import static java.lang.Math.min;
 
 public class App {
     static Scanner SCANNER = new Scanner(System.in);
@@ -29,7 +32,7 @@ public class App {
         COD.printStores();
         COD.printRecipes();
 
-        System.out.println("Are you a Client (Cl), a Cook (Co), an admin (A) or do ypu want to Quit (Q) ?");
+        System.out.println("Are you a Client (Cl), a Cook (Co), an admin (A) or do you want to Quit (Q) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
             case "Cl" -> authenticationInterface();
@@ -63,21 +66,29 @@ public class App {
         String time = SCANNER.nextLine();
         System.out.println("Do you want a Cooking Crunchy (Cr) or Chewy (Ch) ? ");
         String cooking = SCANNER.nextLine();
-        System.out.println("Do you want a mix Mixed (M) or Topped (T)? ");
+        System.out.println("Do you want a Mix Mixed (M) or Topped (T)? ");
         String mix = SCANNER.nextLine();
         System.out.println("Choose a dough :");
         String dough = SCANNER.nextLine();
-        System.out.println("Choose a flavor :");
+        Ingredient doughIngredient = COD.getIngredientCatalog(dough);
+        System.out.println("Choose a flavour :");
         String flavour = SCANNER.nextLine();
+        Ingredient flavourIngredient = COD.getIngredientCatalog(flavour);
         Mix mix_chosen = Mix.MIXED;
         if(mix.equals("T"))
             mix_chosen = Mix.TOPPED;
         Cooking cooking_chosen = Cooking.CHEWY;
         if(cooking.equals("Cr"))
             cooking_chosen = Cooking.CRUNCHY;
-        Ingredient doughIngredient = COD.getIngredientCatalog(dough);
-        Ingredient flavourIngredient = COD.getIngredientCatalog(flavour);
-        COD.suggestRecipe(name, Double.parseDouble(price), Integer.parseInt(time), cooking_chosen, mix_chosen, doughIngredient, flavourIngredient);
+        System.out.println("How many toppings do you want ?");
+        String nbTopping = SCANNER.nextLine();
+        List<Ingredient> toppingList = new ArrayList<>();
+        for (int i = 0; i<min(Integer.parseInt(nbTopping), 3); i++){
+            System.out.println("Choose a topping :");
+            String t = SCANNER.nextLine();
+            toppingList.add(COD.getIngredientCatalog(t));
+        }
+        COD.suggestRecipe(name, Double.parseDouble(price), Integer.parseInt(time), cooking_chosen, mix_chosen, doughIngredient, flavourIngredient, toppingList);
         System.out.println("You suggested the recipe "+name+".");
     }
 
@@ -110,9 +121,18 @@ public class App {
             case "H" -> setHours();
             case "C" -> addCook();
             case "R" -> validateRecipes();
-            case "IC" -> addIngredientCatalog();
+            case "IC" -> addIngredientCatalogLoop();
             default -> adminInterface();
         }
+    }
+
+    private static void addIngredientCatalogLoop() throws CatalogException {
+        COD.printCatalog();
+        System.out.println("How many ingredients do you want to add to the catalog ?");
+        String nb = SCANNER.nextLine();
+        for(int i = 0; i<Integer.parseInt(nb); i++)
+            addIngredientCatalog();
+        COD.printCatalog();
     }
 
     private static void addIngredientCatalog() throws CatalogException {
@@ -121,7 +141,7 @@ public class App {
         String name = SCANNER.nextLine();
         System.out.println("Enter the price of the ingredient :");
         String price = SCANNER.nextLine();
-        System.out.println("Is your ingredient a Flavour (F), a Dough (D), or a Topping ?");
+        System.out.println("Is your ingredient a Flavour (F), a Dough (D), or a Topping (T) ?");
         String rep = SCANNER.nextLine();
         IngredientType ingredientType;
         switch (rep) {
@@ -182,12 +202,13 @@ public class App {
         System.out.println("Enter the id of a store :");
         String idStore = SCANNER.nextLine();
         Store store = COD.getStore(Integer.parseInt(idStore));
+        System.out.println(store.getInventory());
         System.out.println("What is the name of the ingredient you want to add ?");
         String name = SCANNER.nextLine();
         System.out.println("How much do you want to add ?");
         String amount = SCANNER.nextLine();
         Ingredient ingredient = COD.getIngredientCatalog(name);
-        store.addIngredients(ingredient, Integer.parseInt(amount));
+        COD.addInventory(store, ingredient, Integer.parseInt(amount));
         System.out.println("You added "+amount+" "+name+" in the store "+idStore+".");
     }
 

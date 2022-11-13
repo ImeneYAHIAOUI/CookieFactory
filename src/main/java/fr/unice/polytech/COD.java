@@ -29,7 +29,6 @@ import java.util.UUID;
 public class COD {
     @Getter
     private final List<Cookie> recipes;
-    @Getter
     private final List<Cookie> suggestedRecipes;
     @Getter
     private final List<RegisteredClient> connectedClients;
@@ -161,12 +160,24 @@ public class COD {
 
     }
 
-    public void suggestRecipe(String name, double price, int time, Cooking cooking_chosen, Mix mix_chosen, Ingredient doughIngredient, Ingredient flavourIngredient) throws CatalogException {
+    public void suggestRecipe(String name, double price, int time, Cooking cooking_chosen, Mix mix_chosen, Ingredient doughIngredient, Ingredient flavourIngredient, List<Ingredient> toppings) throws CatalogException {
+        List<Topping> toppingList = new ArrayList<>();
+        for (Ingredient i: toppings) {
+            if(i.getIngredientType().equals(IngredientType.TOPPING)
+                    && i.equals(catalog.getIngredient(i.getName()))
+            )
+                toppingList.add((Topping) i);
+            else
+                throw new CatalogException("Bad Ingredient Type");
+        }
         if(doughIngredient.getIngredientType().equals(IngredientType.DOUGH)
-                && flavourIngredient.getIngredientType().equals(IngredientType.FLAVOUR))
-            suggestRecipe(new Cookie(name, price, time, cooking_chosen, mix_chosen, (Dough) doughIngredient, (Flavour) flavourIngredient, new ArrayList<>()));
+                && flavourIngredient.getIngredientType().equals(IngredientType.FLAVOUR)
+                && doughIngredient.equals(catalog.getIngredient(doughIngredient.getName()))
+                && flavourIngredient.equals(catalog.getIngredient(flavourIngredient.getName()))
+        )
+            suggestRecipe(new Cookie(name, price, time, cooking_chosen, mix_chosen, (Dough) doughIngredient, (Flavour) flavourIngredient, toppingList));
         else
-            throw new CatalogException("Bad Ingredient type");
+            throw new CatalogException("Bad Ingredient Type");
     }
 
 
@@ -182,6 +193,10 @@ public class COD {
             recipes.add(cookie);
             cookie.setPrice(price);
             suggestedRecipes.remove(cookie);
+            for (Store s: this.stores) {
+                if(s.canAddCookieToStore(cookie))
+                    s.addCookies(List.of(cookie));
+            }
         }
     }
 
@@ -208,6 +223,14 @@ public class COD {
             store.getInventory().addIngredient(item.getCookie().getFlavour(), numberOfCookie);
             //topping
             cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie));
+        }
+    }
+
+    public void addInventory(Store s, Ingredient ingredient, int amount) throws AlreadyExistException, BadQuantityException {
+        s.addIngredients(ingredient, amount);
+        for (Cookie c: this.recipes) {
+            if(s.canAddCookieToStore(c))
+                s.addCookies(List.of(c));
         }
     }
 
@@ -369,4 +392,7 @@ public class COD {
         System.out.println(catalog);
     }
 
+    public List<Cookie> getSuggestedRecipes(){
+        return List.copyOf(this.suggestedRecipes);
+    }
 }

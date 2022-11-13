@@ -75,8 +75,8 @@ public class Store {
     @Override
     public String toString() {
         return "Store{" +
-                "address='" + address + '\'' +
-                ", storeId=" + id +
+                "storeId=" + id +
+                ", address='" + address + '\'' +
                 ", openingTime=" + openingTime +
                 ", closingTime=" + closingTime +
                 '}';
@@ -161,6 +161,20 @@ public class Store {
     }
     public void addCook(Cook c){
         cooks.add(c);
+    }
+
+    public boolean canAddCookieToStore(Cookie cookie){
+        if(!inventory.hasIngredient(cookie.getDough()) || !inventory.hasIngredient(cookie.getFlavour()))
+            return false;
+        if(inventory.get(cookie.getDough()) == 0 || inventory.get(cookie.getFlavour()) == 0)
+            return false;
+        for (Topping t: cookie.getToppings()) {
+            if(!inventory.hasIngredient(t))
+                return false;
+            if(inventory.get(t) ==0)
+                return false;
+        }
+        return true;
     }
 
 }

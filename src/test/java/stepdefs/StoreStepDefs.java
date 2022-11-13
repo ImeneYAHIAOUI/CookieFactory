@@ -4,6 +4,7 @@ import fr.unice.polytech.COD;
 import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.recipe.Cookie;
+import fr.unice.polytech.recipe.Dough;
 import fr.unice.polytech.recipe.Ingredient;
 import fr.unice.polytech.recipe.IngredientType;
 import fr.unice.polytech.store.Cook;
@@ -88,7 +89,7 @@ public class StoreStepDefs {
 
     @And("A price of {double}")
     public void andGivenPrice(double price) {
-        ingredient = new Ingredient(tmp, price, IngredientType.DOUGH);
+        ingredient = new Dough(tmp, price);
     }
 
     @And("a quantity of {int}")

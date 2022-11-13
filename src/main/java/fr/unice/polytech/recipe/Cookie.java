@@ -4,10 +4,9 @@ import lombok.*;
 
 import java.util.List;
 
-@ToString
+
 public class Cookie extends Recipe{
     @Getter
-    @Setter
     private Size size;
     public Cookie(String name,Double price, int cookingTime,Cooking cooking, Mix mix,Dough dough, Flavour flavour,List<Topping> toppings){
         super( name, price,  cookingTime, cooking,  mix, dough,  flavour, toppings);
@@ -29,5 +28,19 @@ public class Cookie extends Recipe{
             default:
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Cookie {" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", cookingTime=" + cookingTime +
+                ", cooking=" + cooking +
+                ", mix=" + mix +
+                ", dough=" + dough +
+                ", flavour=" + flavour +
+                ", toppings=" + toppings +
+                '}';
     }
 }

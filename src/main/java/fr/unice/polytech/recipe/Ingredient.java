@@ -6,13 +6,11 @@ import lombok.ToString;
 
 @ToString
 @RequiredArgsConstructor
-public class Ingredient {
+public abstract class Ingredient {
     @Getter
-    private final String name;
+    protected final String name;
     @Getter
-    private final double price;
-    @Getter
-    private final IngredientType ingredientType;
+    protected final double price;
 
     @Override
     public boolean equals(Object o) {
@@ -26,4 +24,6 @@ public class Ingredient {
     public int hashCode() {
         return name.hashCode();
     }
+
+    public abstract IngredientType getIngredientType();
 }

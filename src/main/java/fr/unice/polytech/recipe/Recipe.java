@@ -10,28 +10,28 @@ import java.util.List;
 public  class Recipe {
     @Getter
     @Setter
-    private String name;
+    protected String name;
     @Getter
     @Setter
-    private Double price;
+    protected Double price;
     @Getter
     @Setter
-    private int cookingTime;
+    protected int cookingTime;
     @Getter
     @Setter
-    private Cooking cooking;
+    protected Cooking cooking;
     @Getter
     @Setter
-    private Mix mix;
+    protected Mix mix;
     @Getter
     @Setter
-    private Dough dough;
+    protected Dough dough;
     @Getter
     @Setter
-    private Flavour flavour;
+    protected Flavour flavour;
     @Getter
     @Setter
-    private List<Topping> toppings;
+    protected List<Topping> toppings;
 
     public void addTopping(Topping topping) {
         toppings.add(topping);
