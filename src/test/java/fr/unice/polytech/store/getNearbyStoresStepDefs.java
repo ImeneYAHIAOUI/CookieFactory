@@ -7,6 +7,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -37,7 +38,7 @@ public class getNearbyStoresStepDefs {
     }
 
     @And("client located at {string}")
-    public void andTheClientIsLocatedAt(String address) {
+    public void andTheClientIsLocatedAt(String address) throws IOException {
         locationService = mock(LocationService.class);
         location = address;
         for(int i=1;i<cod.getStores().size();i++){
@@ -61,12 +62,12 @@ public class getNearbyStoresStepDefs {
     }
 
     @When("The client wants to retrieve nearby stores")
-    public void whenTheClientWantsToRetrieveNearbyStores()  {
+    public void whenTheClientWantsToRetrieveNearbyStores() throws IOException {
         nearbyStores = cod.getNearbyStores(location);
     }
 
     @When("The client wants to retrieve stores {int} {string} away")
-    public void whenTheClientWantsToRetrieveStoresADistanceAway(int distance, String unit)  {
+    public void whenTheClientWantsToRetrieveStoresADistanceAway(int distance, String unit) throws IOException {
         nearbyStores = cod.getNearbyStores(location, distance, unit);
     }
 

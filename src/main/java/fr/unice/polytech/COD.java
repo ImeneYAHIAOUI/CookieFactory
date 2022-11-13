@@ -18,6 +18,7 @@ import fr.unice.polytech.store.Store;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -308,7 +309,7 @@ public class COD {
             throw new StoreException("The store "+idStore+" does not exist.");
     }
 
-    public List<Store> getNearbyStores(String address)  {
+    public List<Store> getNearbyStores(String address) throws IOException {
         List<Store> nearbyStores = new ArrayList<>();
 
         for (Store store : stores) {
@@ -322,8 +323,7 @@ public class COD {
 
     }
 
-    public List<Store> getNearbyStores(String address, int proximity, String unit)
-    {
+    public List<Store> getNearbyStores(String address, int proximity, String unit) throws IOException {
         List<Store> nearbyStores = new ArrayList<>();
 
         for (Store store : stores) {

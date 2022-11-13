@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class LocationService {
 
-    private String getRequest(String url) throws IOException {
+    public String getRequest(String url) throws IOException {
 
         final URL obj = new URL(url);
         final HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -40,10 +40,8 @@ public class LocationService {
         return response.toString();
     }
 
-    public Map<String, Double> getCoordinates(String address) {
-        Map<String, Double> res = new HashMap<String, Double>();
+    public String buildURL(String address) {
         StringBuffer query= new StringBuffer();
-        String queryResult = null;
         String[] split = address.split(",");
         query.append("https://nominatim.openstreetmap.org/search?q=");
         for (int i = 0; i < split.length; i++) {
@@ -59,16 +57,17 @@ public class LocationService {
             }
         }
         query.append("&format=json&addressdetails=1");
+        return query.toString();
+    }
+    public Map<String, Double> getCoordinates(String address) throws IOException {
+        Map<String, Double> res = new HashMap<String, Double>();
+        String query = buildURL(address);
+        String queryResult = null;
 
-        try {
-            queryResult = getRequest(query.toString());
+        queryResult = getRequest(query);
 
-        } catch (Exception e) {
-            System.err.println(e);
-        }
         Object obj = JSONValue.parse(queryResult);
-        if (obj instanceof JSONArray) {
-            JSONArray array = (JSONArray) obj;
+        if (obj instanceof JSONArray array) {
             if (array.size() > 0) {
                 JSONObject jsonObject = (JSONObject) array.get(0);
 
@@ -82,16 +81,14 @@ public class LocationService {
         return res;
     }
 
-    public double distance(String address1, String address2)
-    {
+    public double distance(String address1, String address2) throws IOException {
         Map<String,Double> cord1 = getCoordinates(address1);
         Map<String,Double> cord2 = getCoordinates(address2);
         return distance(cord1.get("lat"),cord1.get("lon"),cord2.get("lat"),cord2.get("lon"),"km");
 
     }
 
-    public double distance(String address1, String address2, String unit)
-    {
+    public double distance(String address1, String address2, String unit) throws IOException {
         Map<String,Double> cord1 = getCoordinates(address1);
         Map<String,Double> cord2 = getCoordinates(address2);
         return distance(cord1.get("lat"),cord1.get("lon"),cord2.get("lat"),cord2.get("lon"),unit);
@@ -109,10 +106,10 @@ public class LocationService {
             dist = Math.acos(dist);
             dist = Math.toDegrees(dist);
             dist = dist * 60 * 1.1515;
-            if (unit.equals("Km")) {
-                dist = dist * 1.609344;
+            if (unit.equals("km")) {
+                dist =  dist * 1.609344;
             } else if (unit.equals("m")) {
-                dist = dist * 1.609344 * 1000;
+                dist =  dist * 1.609344 * 1000;
             }
             return (dist);
         }
