@@ -5,6 +5,7 @@ import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.CookieException;
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
@@ -54,8 +55,11 @@ public class ChooseCookieStepDefs {
 
     Order mockOrder2;
 
+    public ChooseCookieStepDefs() throws InvalidPhoneNumberException {
+    }
+
     @And("A client with phone number {string}")
-    public void givenAClient(String number) {
+    public void givenAClient(String number) throws InvalidPhoneNumberException {
         client = new UnregisteredClient(number);
     }
 

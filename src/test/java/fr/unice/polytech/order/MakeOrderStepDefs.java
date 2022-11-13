@@ -4,6 +4,7 @@ import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.NotificationMessage;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.services.SMSService;
@@ -46,7 +47,7 @@ public class MakeOrderStepDefs {
     }
 
     @Given("a client")
-    public void givenAClient() {
+    public void givenAClient() throws InvalidPhoneNumberException {
         client = new UnregisteredClient("0123456789");
     }
 

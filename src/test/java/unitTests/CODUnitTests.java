@@ -5,10 +5,7 @@ import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
-import fr.unice.polytech.exception.CookieException;
-import fr.unice.polytech.exception.InvalidInputException;
-import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.exception.RegistrationException;
+import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
@@ -44,8 +41,9 @@ public class CODUnitTests {
     Cookie cookie1;
 
     Inventory inventory;
+
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InvalidPhoneNumberException {
         cod = new COD();
         client = new UnregisteredClient("0606060606");
 

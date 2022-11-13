@@ -3,6 +3,7 @@ package fr.unice.polytech.order;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.recipe.Dough;
 import fr.unice.polytech.recipe.Flavour;
@@ -27,7 +28,7 @@ public class ChoosePickupTimeStepDefs {
     Store store;
 
     @Before
-    public void setUp() {
+    public void setUp() throws InvalidPhoneNumberException {
         cod = new COD();
         cod.initializationCod();
         client = new UnregisteredClient("0123456789");

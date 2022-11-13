@@ -1,6 +1,7 @@
 package fr.unice.polytech.client;
 
 import fr.unice.polytech.COD;
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.*;
@@ -28,7 +29,7 @@ public class RetrievePastOrdersStepDef {
     List<Order> pastOrders = new ArrayList<>();
 
     @Given("a Registered client with id {string} and phone number {string}")
-    public void givenARegisteredClient(String id, String number) {
+    public void givenARegisteredClient(String id, String number) throws InvalidPhoneNumberException {
         client = new RegisteredClient(id, "*******", number);
     }
 

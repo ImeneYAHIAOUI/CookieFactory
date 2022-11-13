@@ -1,5 +1,6 @@
 package fr.unice.polytech.client;
 
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
@@ -27,7 +28,7 @@ public class RegisteredClient extends Client {
     @Getter
     private boolean eligibleForDiscount;
 
-    public RegisteredClient(String id, String password, String phoneNumber) {
+    public RegisteredClient(String id, String password, String phoneNumber) throws InvalidPhoneNumberException {
         super(phoneNumber);
         this.id = id;
         this.password = password;

@@ -1,4 +1,5 @@
 package fr.unice.polytech;
+
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
@@ -14,13 +15,15 @@ import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Occasion;
 
 import fr.unice.polytech.store.Store;
-
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Clock;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class COD {
     @Getter
@@ -92,7 +95,7 @@ public class COD {
         return order.getId();
     }
 
-    public void register(String id, String password, String phoneNumber) throws RegistrationException {
+    public void register(String id, String password, String phoneNumber) throws RegistrationException, InvalidPhoneNumberException {
         if (clients.stream().anyMatch(client -> client.getId().equals(id)))
             throw new RegistrationException("User " + id + " is already registered.");
         clients.add(new RegisteredClient(id, password, phoneNumber));

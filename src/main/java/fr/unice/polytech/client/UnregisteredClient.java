@@ -1,7 +1,9 @@
 package fr.unice.polytech.client;
 
-public class UnregisteredClient extends Client{
-    public UnregisteredClient(String phoneNumber) {
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
+
+public class UnregisteredClient extends Client {
+    public UnregisteredClient(String phoneNumber) throws InvalidPhoneNumberException {
         super(phoneNumber);
     }
 }

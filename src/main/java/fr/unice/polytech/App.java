@@ -11,22 +11,20 @@ import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Occasion;
 import fr.unice.polytech.store.Store;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import java.time.LocalTime;
-
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
     static Scanner SCANNER = new Scanner(System.in);
     static COD COD = new COD();
-    public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException {
+
+    public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException {
         welcomeInterface();
 
     }
 
-    private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException {
+    private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException {
         System.out.println("Welcome in the Cookie On Demand System !");
         COD.printStores();
         COD.printRecipes();
@@ -221,13 +219,13 @@ public class App {
         }
     }
 
-    private static void authenticationInterface() throws RegistrationException, InvalidInputException, OrderException, StoreException, CookieException, PaymentException, CookException, BadQuantityException{
+    private static void authenticationInterface() throws RegistrationException, InvalidInputException, OrderException, StoreException, CookieException, PaymentException, CookException, BadQuantityException, InvalidPhoneNumberException {
         Client client;
         System.out.println("Client Interface : ");
 
         //Authentication
-        if(askIfRegister()){
-            if(!askIfAccount()){
+        if (askIfRegister()) {
+            if (!askIfAccount()) {
                 System.out.println("Let's create your account ! Enter your userName :");
                 String un = SCANNER.nextLine();
                 System.out.println("Enter your password :");

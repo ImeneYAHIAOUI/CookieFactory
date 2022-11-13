@@ -2,10 +2,7 @@ package fr.unice.polytech.order;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.RegisteredClient;
-import fr.unice.polytech.exception.BadQuantityException;
-import fr.unice.polytech.exception.CookException;
-import fr.unice.polytech.exception.InvalidPickupTimeException;
-import fr.unice.polytech.exception.PaymentException;
+import fr.unice.polytech.exception.*;
 import fr.unice.polytech.recipe.Dough;
 import fr.unice.polytech.recipe.Flavour;
 import fr.unice.polytech.recipe.Topping;
@@ -52,7 +49,7 @@ public class GetDiscountStepDefs {
     }
 
     @Given("a registered client")
-    public void givenARegisteredClient() {
+    public void givenARegisteredClient() throws InvalidPhoneNumberException {
         RegisteredClient realClient = new RegisteredClient("id", "password", "0123456789");
         client = spy(realClient);
     }

@@ -35,14 +35,14 @@ public class PayOrderStepDefs {
 
 
     @Given("an empty cod and a unregistered client with phone number {string}")
-    public void givenACODAndUnregisteredClient(String phoneNumber) {
+    public void givenACODAndUnregisteredClient(String phoneNumber) throws InvalidPhoneNumberException {
         cod = new COD();
         Client realClient = new UnregisteredClient(phoneNumber);
         client = spy(realClient);
         cooks.add(new Cook(0));
         store = new Store(cooks, recipes, "address",
                 LocalTime.parse("08:00"), LocalTime.parse("20:00"),
-                1, inventory,7.0, new ArrayList<>());
+                1, inventory, 7.0, new ArrayList<>());
         cod.addStore(store);
 
     }

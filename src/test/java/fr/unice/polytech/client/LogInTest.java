@@ -1,6 +1,7 @@
 package fr.unice.polytech.client;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.exception.InvalidInputException;
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.RegistrationException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -21,7 +22,7 @@ public class LogInTest {
             cod.register(id, password, phoneNumber);
             this.id = id;
             this.password = password;
-        } catch (RegistrationException exception) {
+        } catch (RegistrationException | InvalidPhoneNumberException ignored) {
 
         }
     }

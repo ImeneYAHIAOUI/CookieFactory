@@ -1,6 +1,7 @@
 package unitTests;
 
 import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ public class RegisteredClientUnitTests {
 
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InvalidPhoneNumberException {
         registeredClient = new RegisteredClient("1", "****", "0606060606");
         order1 = mock(Order.class);
         order2 = mock(Order.class);

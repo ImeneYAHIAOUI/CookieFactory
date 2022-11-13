@@ -2,6 +2,7 @@ package fr.unice.polytech.store;
 
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.exception.CookException;
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.PickupTimeNotSetException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
@@ -48,7 +49,7 @@ public class TimeSlotAttributionStepDefs {
     }
 
     @When("a cart with {int} of the recipe")
-    public void andCart(int i) {
+    public void andCart(int i) throws InvalidPhoneNumberException {
         client = new RegisteredClient("", "", "0123456789");
         client.getCart().setTax(.1);
         client.getCart().addItem(new Item(i, cookie));
@@ -56,7 +57,7 @@ public class TimeSlotAttributionStepDefs {
     }
 
     @And("an order with {int} of the recipe")
-    public void andOrder(int i) {
+    public void andOrder(int i) throws InvalidPhoneNumberException {
         client = new RegisteredClient("", "", "0123456789");
         client.getCart().setTax(.1);
         client.getCart().addItem(new Item(i, cookie));

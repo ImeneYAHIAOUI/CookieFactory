@@ -4,6 +4,7 @@ package fr.unice.polytech.order;
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.store.Cook;
@@ -30,7 +31,7 @@ public class OrderStepDefs {
             LocalTime.parse("08:00"), LocalTime.parse("20:00"),
             1, new Inventory(new ArrayList<>()),5.0,new ArrayList<>());
 
-    public OrderStepDefs() {
+    public OrderStepDefs() throws InvalidPhoneNumberException {
     }
 
     @Given("an order with id {string}")

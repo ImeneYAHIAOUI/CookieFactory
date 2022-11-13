@@ -1,40 +1,27 @@
 package fr.unice.polytech.client;
 
+import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.services.SMSService;
 import fr.unice.polytech.services.StatusScheduler;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
 
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 public class notifyClientStepDefs {
@@ -47,9 +34,8 @@ public class notifyClientStepDefs {
     Order order ;
 
 
-
     @Given("a client with phone number {string}")
-    public void aClientWithPhoneNumber(String phoneNumber) {
+    public void aClientWithPhoneNumber(String phoneNumber) throws InvalidPhoneNumberException {
         client = new UnregisteredClient(phoneNumber);
 
 
