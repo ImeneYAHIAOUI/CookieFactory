@@ -1,4 +1,4 @@
-package fr.unice.polytech.cookie;
+package stepdefs;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;

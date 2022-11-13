@@ -1,13 +1,10 @@
-package unitTests;
+package fr.unice.polytech.store;
 
 
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Inventory;
-import fr.unice.polytech.store.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class StoreUnitTests {
+public class StoreTest {
 
     Store store;
     Order order;

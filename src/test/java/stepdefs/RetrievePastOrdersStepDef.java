@@ -1,6 +1,7 @@
-package fr.unice.polytech.client;
+package stepdefs;
 
 import fr.unice.polytech.COD;
+import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;

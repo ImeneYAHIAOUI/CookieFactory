@@ -1,8 +1,10 @@
-package fr.unice.polytech.order;
+package stepdefs;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.exception.*;
+import fr.unice.polytech.order.Item;
+import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.Dough;
 import fr.unice.polytech.recipe.Flavour;
 import fr.unice.polytech.recipe.Topping;

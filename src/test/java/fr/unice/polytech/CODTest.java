@@ -1,6 +1,5 @@
-package unitTests;
+package fr.unice.polytech;
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
@@ -23,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CODUnitTests {
-    
+public class CODTest {
+
     COD cod;
     Order order;
 

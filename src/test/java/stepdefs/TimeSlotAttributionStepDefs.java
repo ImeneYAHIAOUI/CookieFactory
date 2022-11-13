@@ -1,4 +1,4 @@
-package fr.unice.polytech.store;
+package stepdefs;
 
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.exception.CookException;
@@ -7,6 +7,9 @@ import fr.unice.polytech.exception.PickupTimeNotSetException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.Cookie;
+import fr.unice.polytech.store.Cook;
+import fr.unice.polytech.store.Inventory;
+import fr.unice.polytech.store.Store;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

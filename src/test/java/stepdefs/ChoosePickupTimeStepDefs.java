@@ -1,10 +1,11 @@
-package fr.unice.polytech.order;
+package stepdefs;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
+import fr.unice.polytech.order.Item;
 import fr.unice.polytech.recipe.Dough;
 import fr.unice.polytech.recipe.Flavour;
 import fr.unice.polytech.recipe.Topping;

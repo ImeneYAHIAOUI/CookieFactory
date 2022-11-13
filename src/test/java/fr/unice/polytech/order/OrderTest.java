@@ -1,10 +1,8 @@
-package unitTests;
+package fr.unice.polytech.order;
 
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,13 +13,15 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-public class OrderUnitTests {
+
+public class OrderTest {
 
     Order order;
 
     Client client;
 
     Cook cook;
+
     @BeforeEach
     public void setUp() {
         client = mock(Client.class);

@@ -1,6 +1,8 @@
-package fr.unice.polytech.client;
+package stepdefs;
 
 import fr.unice.polytech.COD;
+import fr.unice.polytech.client.Client;
+import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.*;

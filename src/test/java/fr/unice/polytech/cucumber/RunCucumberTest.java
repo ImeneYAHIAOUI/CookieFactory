@@ -1,4 +1,4 @@
-package fr.unice.polytech;
+package fr.unice.polytech.cucumber;
 
 import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
@@ -12,9 +12,8 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "fr.unice.polytech")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "stepdefs")
 @ConfigurationParameter(key = "cucumber.publish.quiet", value = "true")
-
 public class RunCucumberTest {
     // will run all features found on the classpath
     // in the same package as this class

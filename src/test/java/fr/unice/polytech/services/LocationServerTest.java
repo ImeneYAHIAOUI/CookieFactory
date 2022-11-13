@@ -1,6 +1,5 @@
-package unitTests;
+package fr.unice.polytech.services;
 
-import fr.unice.polytech.services.LocationService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 
@@ -8,10 +7,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class LocationServerUnitTests {
+public class LocationServerTest {
 
     @Spy
     LocationService locationService = spy(LocationService.class);

@@ -1,5 +1,7 @@
-package fr.unice.polytech.client;
+package stepdefs;
+
 import fr.unice.polytech.COD;
+import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.exception.InvalidInputException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.RegistrationException;
@@ -10,7 +12,7 @@ import io.cucumber.java.en.When;
 
 import static org.junit.Assert.*;
 
-public class LogInTest {
+public class LogInStepDefs {
     COD cod;
     String id;
     String password;

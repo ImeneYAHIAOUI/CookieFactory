@@ -1,6 +1,5 @@
-package unitTests;
+package fr.unice.polytech.client;
 
-import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
@@ -17,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class RegisteredClientUnitTests {
+public class RegisteredClientTest {
 
     RegisteredClient registeredClient;
 

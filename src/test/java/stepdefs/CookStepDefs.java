@@ -1,7 +1,8 @@
-package fr.unice.polytech.store;
+package stepdefs;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.recipe.Cookie;
+import fr.unice.polytech.store.Cook;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
