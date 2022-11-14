@@ -160,4 +160,47 @@ public class CODTest {
                 "The password you entered is not valid. ");
     }
 
+    @Test
+    public void searchOrderThatDoesntExist() {
+        assertThrows(OrderException.class, () -> cod.getOrder("10"));
+    }
+    @Test
+    public void searchOrderThatExist() throws OrderException {
+        cod.addOrder(order);
+        assertEquals(order, cod.getOrder("1"));
+    }
+    @Test
+    public void addCookToStore() throws StoreException {
+        cod.addStore(store);
+        cod.addCook(store.getId());
+        assertEquals(2, store.getCooks().size());
+    }
+
+    @Test
+    public void getStoreThatDoesntExist() {
+        assertThrows(StoreException.class, () -> cod.getStore(10));
+    }
+
+    @Test
+    public void acceptNewRecipe() {
+        cod.addStore(store);
+        List<Topping> toppingList = new ArrayList<>();
+        Cookie cookie = new Cookie("IncredibleCookie",10.0,10,Cooking.CHEWY,Mix.MIXED,new Dough("Yum",2),new Flavour("Yummy",6),toppingList);
+        cod.suggestRecipe(cookie);
+        cod.acceptRecipe(cookie,10.1);
+        assertEquals(1,store.getRecipes().size());
+    }
+
+    @Test
+    public void addIngredientToCatalog() throws CatalogException {
+        cod.addIngredientCatalog("Sugar", 10.0,IngredientType.FLAVOUR);
+        assertEquals(IngredientType.FLAVOUR, cod.getIngredientCatalog("Sugar").getIngredientType());
+    }
+    @Test
+    public void addIngredientAlreadyInCatalog() throws CatalogException {
+        cod.addIngredientCatalog("Orange", 10.0,IngredientType.FLAVOUR);
+        assertThrows(CatalogException.class, () -> cod.addIngredientCatalog("Orange", 10.0,IngredientType.FLAVOUR));
+    }
+
+
 }

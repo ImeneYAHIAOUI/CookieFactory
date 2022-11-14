@@ -15,6 +15,7 @@ public class Cookie extends Recipe{
         super( name, price,  cookingTime, cooking,  mix, dough,  flavour, toppings);
         this.size=CookieSize.BASIC;
     }
+
     public void setSize(CookieSize size){
         switch(size){
             case L:
@@ -53,6 +54,7 @@ public class Cookie extends Recipe{
         }
         return priceCookie;
     }
+
 
     @Override
     public String toString() {

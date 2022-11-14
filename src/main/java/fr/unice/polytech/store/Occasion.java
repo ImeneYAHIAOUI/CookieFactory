@@ -17,8 +17,4 @@ public class Occasion {
         this.name=name;
         recipeList=new ArrayList<>();
     }
-    public void addRecipe(Recipe recipe){
-        this.recipeList.add(recipe);
-    }
-
 }

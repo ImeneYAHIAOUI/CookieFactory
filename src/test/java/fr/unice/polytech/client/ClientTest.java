@@ -1,6 +1,7 @@
 package fr.unice.polytech.client;
 
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
+import fr.unice.polytech.exception.PickupTimeNotSetException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -125,4 +126,20 @@ public class ClientTest {
     public void createClientPhoneNumberWithRegionCodeAndSpecialCharacters() {
         assertThrows(InvalidPhoneNumberException.class, () -> client = new UnregisteredClient("+3360606060*"));
     }
+
+    @Test
+    public void getEstimatedTimeSlotWithNoPickUpTime() throws InvalidPhoneNumberException {
+        client = new UnregisteredClient("0606060606");
+        assertThrows(PickupTimeNotSetException.class, () -> client.getCart().getEstimatedTimeSlot());
+    }
+
+    @Test
+    public void isRegisteredCheck() throws InvalidPhoneNumberException {
+        Client client1 = new UnregisteredClient("0606060606");
+        Client client2 = new RegisteredClient("1","pwd","0606060606");
+        assert(!client1.isRegistered());
+        assert(client2.isRegistered());
+    }
+
+
 }

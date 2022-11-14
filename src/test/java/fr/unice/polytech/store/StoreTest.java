@@ -3,6 +3,8 @@ package fr.unice.polytech.store;
 
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.exception.AlreadyExistException;
+import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,7 +102,39 @@ public class StoreTest {
 
     }
 
+    @Test
+    public void newStoreClosingBeforeOpening(){
+        Store store1 = new Store(new ArrayList<>(), new ArrayList<>(), "30 Rte des Colles, 06410 Biot", LocalTime.parse("20:00"), LocalTime.parse("08:00"), 1, new Inventory(new ArrayList<>()), 4.2, new ArrayList<>());
+        assertEquals(LocalTime.parse("08:00"),store1.getOpeningTime());
+        assertEquals(LocalTime.parse("20:00"),store1.getClosingTime());
+    }
 
+    @Test
+    public void addNegativeIngredients(){
+        assertThrows(BadQuantityException.class, () -> store.addIngredients(new Dough("chocolate", 1),-4));
+    }
+
+    @Test
+    public void cannotAddCookieToStoreBecauseDoesntHaveDough(){
+        Dough dough = new Dough("whiteChocolate", 1);
+        Cookie cookie = new Cookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, dough, flavours.get(0), List.of(toppings.get(0)));
+        assertFalse(store.canAddCookieToStore(cookie));
+    }
+
+    @Test
+    public void cannotAddCookieToStoreBecauseDoesntHaveFlavour(){
+        Flavour flavour = new Flavour("whiteChocolate", 1);
+        Cookie cookie = new Cookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavour, List.of(toppings.get(0)));
+        assertFalse(store.canAddCookieToStore(cookie));
+    }
+
+    @Test
+    public void cannotAddCookieToStoreBecauseZeroChosenFlavour() throws AlreadyExistException, BadQuantityException {
+        Flavour flavour = new Flavour("whiteChocolate", 1);
+        store.addIngredients(flavour, 0);
+        Cookie cookie = new Cookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavour, List.of(toppings.get(0)));
+        assertFalse(store.canAddCookieToStore(cookie));
+    }
 
 
 

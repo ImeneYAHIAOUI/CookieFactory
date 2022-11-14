@@ -21,7 +21,6 @@ public class RegisteredClient extends Client {
     @Setter
     @Getter
     private List<Order> pastOrders;
-    @Getter
     private int nbCookie;
     @Getter
     private String remainingBanTime;
@@ -66,15 +65,24 @@ public class RegisteredClient extends Client {
         Order lastOrder = cancelledOrders.get(cancelledOrders.size() - 1);
         Order beforeLastOrder = cancelledOrders.get(cancelledOrders.size() - 2);
 
+        return calculateTimeBetweenTwoLastOrders(lastOrder, beforeLastOrder);
+    }
 
+    /**
+     * Calculate the time between the two last cancelled orders
+     * @param lastOrder the last order cancelled
+     * @param beforeLastOrder the order cancelled before the last one
+     * @return true if the time between the two last orders is less than 8 minutes
+     */
+    private boolean calculateTimeBetweenTwoLastOrders(Order lastOrder, Order beforeLastOrder) {
         Date lastOrderDate = lastOrder.getHistory().get(OrderStatus.CANCELLED);
         Date beforeLastOrderDate = beforeLastOrder.getHistory().get(OrderStatus.CANCELLED);
         long differenceInMillies = Math.abs(lastOrderDate.getTime() - beforeLastOrderDate.getTime());
         long differenceInMinutes = (differenceInMillies/1000) / 60 ;
 
         long remainingBanTimeInmilis = Math.abs(System.currentTimeMillis() - lastOrderDate.getTime());
-                this.remainingBanTime = String.format("%02d minutes and %02d seconds",
-                        (remainingBanTimeInmilis / 1000) / 60, (remainingBanTimeInmilis) / 1000 % 60);
+        this.remainingBanTime = String.format("%02d minutes and %02d seconds",
+                (remainingBanTimeInmilis / 1000) / 60, (remainingBanTimeInmilis) / 1000 % 60);
 
         return differenceInMinutes < 8;
     }

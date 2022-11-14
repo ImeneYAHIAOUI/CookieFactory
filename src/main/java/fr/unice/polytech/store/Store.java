@@ -22,7 +22,7 @@ public class Store {
     @Getter
     private final List<Cookie> recipes;
     @Getter
-    private final List<Cook> cooks;
+    private List<Cook> cooks;
     @Getter
     public LocalTime openingTime;
     @Getter
@@ -38,7 +38,7 @@ public class Store {
     private  final List<Occasion> occasionList;
     public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime, int id, Inventory inventory,double tax,List<Occasion> occasions) {
         occasionList =new ArrayList<>();
-        this.cooks = cooks;
+        this.cooks = new ArrayList<>(cooks);
         this.recipes = recipes;
         this.address = address;
         this.tax=tax;
@@ -64,13 +64,6 @@ public class Store {
     public void setHours(LocalTime openingTime, LocalTime closingTime) {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
-    }
-    public void addOccasion(Occasion occasionToAdd){
-        this.occasionList.forEach(occasion ->{
-            if(!this.occasionList.contains(occasionToAdd)){
-                this.occasionList.add(occasionToAdd);
-            }
-        } );
     }
     @Override
     public String toString() {

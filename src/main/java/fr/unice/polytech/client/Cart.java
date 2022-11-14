@@ -41,7 +41,11 @@ public class Cart {
         } else {
             items.add(item);
         }
-        subtotal+=item.getCookie().getPrice()*item.getQuantity();
+        calculateAccordingPrice(item);
+    }
+
+    private void calculateAccordingPrice(Item item) {
+        subtotal+= item.getCookie().getPrice()* item.getQuantity();
         int factor = calculateFactorDependingOnSize(item.getCookie().getSize());
         total =subtotal*(1+tax)*factor;
     }
