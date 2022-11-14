@@ -1,5 +1,5 @@
 package fr.unice.polytech.recipe;
 
 public enum CookieSize {
-    L,XL, XXL
+    BASIC,L,XL, XXL
 }

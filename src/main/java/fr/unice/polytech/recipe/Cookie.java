@@ -13,24 +13,45 @@ public class Cookie extends Recipe{
 
     public Cookie(String name,Double price, int cookingTime,Cooking cooking, Mix mix,Dough dough, Flavour flavour,List<Topping> toppings){
         super( name, price,  cookingTime, cooking,  mix, dough,  flavour, toppings);
+        this.size=CookieSize.BASIC;
     }
     public void setSize(CookieSize size){
-        this.size=size;
         switch(size){
             case L:
-                setPrice(getPrice()*4);
+                setPrice(getBasicPrice()*4);
                 break;
-
             case XL:
-                setPrice(getPrice()*5);
+                setPrice(getBasicPrice()*5);
                 break;
-
             case XXL:
-                setPrice(getPrice()*6);
+                setPrice(getBasicPrice()*6);
                 break;
             default:
                 break;
         }
+        this.size=size;
+
+    }
+    public Double getBasicPrice(){
+        Double priceCookie;
+        switch(size){
+            case L:
+                priceCookie=price/4;
+                break;
+
+            case XL:
+                priceCookie=price/5;
+                break;
+
+            case XXL:
+                priceCookie=price/6;
+                break;
+            default:
+                priceCookie=price;
+                ;
+                break;
+        }
+        return priceCookie;
     }
 
     @Override

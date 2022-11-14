@@ -84,13 +84,12 @@ public class Cart {
     }
 
     private int calculateFactorDependingOnSize(CookieSize cookieSize){
-        int factor=1;
-        if (cookieSize==null)
-            return factor;
+        int factor;
         factor = switch (cookieSize) {
             case L -> 4;
             case XL -> 5;
             case XXL -> 6;
+            case  BASIC -> 1;
         };
         return factor;
     }
