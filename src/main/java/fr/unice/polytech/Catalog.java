@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Catalog {
-    private static final List<Ingredient> INGREDIENTS = new ArrayList<>();
+    private static List<Ingredient> INGREDIENTS = new ArrayList<>();
 
-    public Catalog(){}
+    public Catalog(){
+        INGREDIENTS = new ArrayList<>();
+    }
 
     public boolean contains(String name){
         for (Ingredient i: INGREDIENTS) {
