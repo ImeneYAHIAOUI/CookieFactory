@@ -130,14 +130,14 @@ public class Store {
         }
     }
 
-    public int getMaxCookieAmount(Cookie cookie) {
+    public int getMaxCookieAmount(Cookie cookie,int amountFactor) {
         List<Integer> ingredientAmounts = new ArrayList<>();
-        ingredientAmounts.add(inventory.get(cookie.getDough()));
-        ingredientAmounts.add(inventory.get(cookie.getFlavour()));
+        ingredientAmounts.add(inventory.get(cookie.getDough())*amountFactor);
+        ingredientAmounts.add(inventory.get(cookie.getFlavour())*amountFactor);
         List<Topping> toppingList = cookie.getToppings();
 
         for (Topping topping : toppingList) {
-            ingredientAmounts.add(inventory.get(topping));
+            ingredientAmounts.add(inventory.get(topping)*amountFactor);
         }
         return Collections.min(ingredientAmounts);
     }

@@ -4,12 +4,14 @@ import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.*;
 import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
 import io.cucumber.datatable.DataTable;
@@ -18,11 +20,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -54,6 +56,7 @@ public class ChooseCookieStepDefs {
     Order mockOrder1;
 
     Order mockOrder2;
+    String size;
 
     public ChooseCookieStepDefs() throws InvalidPhoneNumberException {
     }
@@ -72,8 +75,6 @@ public class ChooseCookieStepDefs {
         codIngredients.add(new Flavour("strawberryFlavour", 1));
         codIngredients.add(new Flavour("chocolateFlavour", 1));
         codIngredients.add(new Topping("white chocolate chips", 1));
-
-
     }
 
 
@@ -99,11 +100,9 @@ public class ChooseCookieStepDefs {
     @And("a store with id {int}")
     public void givenStore(Integer id)
     {
-
-
-        store = new Store(new ArrayList<>(), new ArrayList<>(),
-                "address", LocalTime.parse("08:30"), LocalTime.parse("16:00"), id,
-                inventory,4.0,new ArrayList<>());
+        List<Cook> cooks = new ArrayList<>();
+        cooks.add(new Cook(0));
+        store = new Store(cooks, new ArrayList<>(), "address", LocalTime.parse("08:30"), LocalTime.parse("16:00"), id, inventory,4.0,null);
     }
 
 
@@ -129,6 +128,13 @@ public class ChooseCookieStepDefs {
 
         store.addCookies(cookieList);
 
+    }
+
+    @And("a specific time of the day")
+    public void aSpecificTimeOfTheDay() {
+        String instantExpected = "2022-11-07T09:15:00Z";
+        Clock clock = Clock.fixed(Instant.parse(instantExpected), ZoneId.of("UTC"));
+        COD.setCLOCK(clock);
     }
 
 
@@ -162,7 +168,7 @@ public class ChooseCookieStepDefs {
 
 
     @And("A registered client has canceled two orders in the last 10 minutes")
-    public void AndRegisteredClientCancelOrder() {
+    public void andRegisteredClientCancelOrder() {
 
         mockOrder1 = mock(Order.class);
         mockOrder2 = mock(Order.class);
@@ -185,7 +191,7 @@ public class ChooseCookieStepDefs {
     }
 
     @And("A registered client has canceled two orders in more than 10 minutes")
-    public void AndRegisteredClientCancel2Ordermore10() {
+    public void andRegisteredClientCancel2Ordermore10() {
 
         mockOrder1 = mock(Order.class);
         mockOrder2 = mock(Order.class);
@@ -232,7 +238,7 @@ public class ChooseCookieStepDefs {
     }
 
     @And("A registered client has canceled two orders in within more than 8 minutes")
-    public void AndRegisteredClientCancel2Ordermore8() {
+    public void andRegisteredClientCancel2Ordermore8() {
 
         mockOrder1 = mock(Order.class);
         mockOrder2 = mock(Order.class);
@@ -254,7 +260,7 @@ public class ChooseCookieStepDefs {
     }
 
     @And("A registered client hasn't canceled any orders in the last 10 minutes")
-    public void AndRegisteredClienthasntcanceledOrders() {
+    public void andRegisteredClienthasntcanceledOrders() {
 
 
         mockOrder1 = mock(Order.class);
@@ -282,6 +288,115 @@ public class ChooseCookieStepDefs {
         for (String cookie : cookies) {
             assertFalse(store.getRecipes().stream().anyMatch(r -> r.getName().equals(cookie)));
         }
+    }
+
+
+    @And("size {string}")
+    public void size(String size) {
+        this.size = size;
+    }
+
+    @And("the clients cart contains {int} party cookie\\(s) of type {string} and size {string}")
+    public void theClientsCartContainsPartyCookieSOfTypeAndSize(int nbOfCookie, String cookieName, String cookieSize) {
+        assertEquals(this.client.getCart().getItems().get(0).getQuantity(), nbOfCookie);
+        assertEquals(this.client.getCart().getItems().get(0).getCookie().getName(), cookieName);
+        assertEquals(this.client.getCart().getItems().get(0).getCookie().getClass(), PartyCookie.class);
+        assertEquals(( this.client.getCart().getItems().get(0).getCookie()).getSize().name(), cookieSize);
+    }
+
+    @When("Client chooses party cookies of type {string} and size {string}")
+    public void clientChoosesPartyCookiesOfTypeAndSize(String cookieName, String cookieSize) {
+        cookie = cookieList.stream().filter(c -> c.getName().equals(cookieName)).filter(cookie1-> cookie1.getClass() == PartyCookie.class).filter(cookie1 -> cookie1.getSize().toString().equals(cookieSize)).findFirst().orElse(null);
+    }
+
+    @And("^the store has party cookies and all available size$")
+    public void andGivenPartyCookies(DataTable table) {
+        List<List<String>> rows = table.asLists(String.class);
+
+        for (List<String> row : rows) {
+            List<Topping> toppings = new ArrayList<>();
+
+
+            Dough dough = (Dough) codIngredients.stream().filter(i -> i.getName().equals(row.get(1))).findFirst().orElse(null);
+
+            Flavour flavor = (Flavour) codIngredients.stream().filter(i -> i.getName().equals(row.get(2))).findFirst().orElse(null);
+
+            for (int j = 3; j < row.size(); j++) {
+                int finalJ = j;
+                toppings.add(((Topping) codIngredients.stream().filter(i -> i.getName().equals(row.get(finalJ))).findFirst().orElse(null)));
+            }
+
+            for (CookieSize cookieSize : CookieSize.values()) {
+                Cookie cookie = new PartyCookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings,cookieSize,null);
+                cookieList.add(cookie);
+            }
+
+        }
+
+        store.addCookies(cookieList);
+
+    }
+
+    @And("the clients cart is empty")
+    public void theClientsCartIsEmpty() {
+        assertTrue(this.client.getCart().getItems().isEmpty());
+        assertNull(this.cookie);
+    }
+
+
+    @Then("the inventory has no ingredients left")
+    public void theInventoryHasNoIngredientsLeft() {
+        for (Map.Entry mapentry : store.getInventory().entrySet()) {
+            assertEquals(0,mapentry.getValue());
+        }
+    }
+
+    @And("client finalize his order")
+    public void clientFinalizeHisOrder() throws PaymentException, CookException, BadQuantityException, InvalidPickupTimeException, CookieException, OrderException {
+        cod.choosePickupTime(client.getCart(), store, LocalTime.parse("11:30"));
+        cod.chooseCookie(client, store, cookie, amount);
+        this.cod.finalizeOrder(client,store);
+    }
+
+    @Then("this order cannot be purchased because the cookie doesn't exist")
+    public void thisOrderCannotBePurchasedBecauseTheCookieDoesntExist() {
+        assertThrows(CookieException.class, ()-> cod.chooseCookie(client, store, cookie, amount));
+    }
+    @And("^the store has party cookies with all size and all themes$")
+    public void theStoreHasPartyCookiesWithAllSizeAndAllThemes(DataTable table) {
+        List<List<String>> rows = table.asLists(String.class);
+        for (List<String> row : rows) {
+            List<Topping> toppings = new ArrayList<>();
+            Dough dough = (Dough) codIngredients.stream().filter(i -> i.getName().equals(row.get(1))).findFirst().orElse(null);
+            Flavour flavor = (Flavour) codIngredients.stream().filter(i -> i.getName().equals(row.get(2))).findFirst().orElse(null);
+            for (int j = 3; j < row.size(); j++) {
+                int finalJ = j;
+                toppings.add(((Topping) codIngredients.stream().filter(i -> i.getName().equals(row.get(finalJ))).findFirst().orElse(null)));
+            }
+            for (CookieSize cookieSize : CookieSize.values()) {
+                for (Theme theme : Theme.values()) {
+                Cookie cookie = new PartyCookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings,cookieSize,theme);
+                cookieList.add(cookie);
+                }
+            }
+        }
+        store.addCookies(cookieList);
+
+    }
+
+    @When("Client chooses party cookies of type {string} and size {string} and theme {string}")
+    public void clientChoosesPartyCookiesOfTypeAndSizeAndTheme(String cookieName, String cookieSize, String cookieTheme) {
+        cookie = cookieList.stream()
+                .filter(c -> c.getName().equals(cookieName))
+                .filter(cookie1-> cookie1.getClass() == PartyCookie.class)
+                .filter(cookie1 -> cookie1.getSize().toString().equals(cookieSize))
+                .filter(cookie1 -> cookie1.getTheme().toString().equals(cookieTheme))
+                .findFirst().orElse(null);
+    }
+
+    @Then("the price of the order is {double}")
+    public void thePriceOfTheOrderIs(double expectedPrice) {
+        assertEquals(expectedPrice, cod.getOrders().get(0).getPrice(), 0.0);
     }
 }
 

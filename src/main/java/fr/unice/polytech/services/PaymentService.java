@@ -12,7 +12,7 @@ public class PaymentService {
         return INSTANCE;
     }
 
-    public void performPayment(double amount) throws PaymentException {
+    public void performPayment(double amount) {
         System.out.println("Payment of " + amount + " performed");
     }
 }

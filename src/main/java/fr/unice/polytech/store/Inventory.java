@@ -18,9 +18,6 @@ public class Inventory extends HashMap<Ingredient, Integer> {
         this.put(ingredient, quantity);
     }
 
-    public void removeIngredient(Ingredient ingredient) {
-        this.remove(ingredient);
-    }
 
     public boolean hasIngredient(Ingredient ingredient) {
         return this.containsKey(ingredient);
@@ -34,6 +31,7 @@ public class Inventory extends HashMap<Ingredient, Integer> {
         if (this.get(ingredient) - quantity >= 0) {
             this.replace(ingredient, this.get(ingredient) - quantity);
         } else {
+            System.out.println(this.get(ingredient) - quantity);
             throw new BadQuantityException("Negative quantity not allow");
         }
 

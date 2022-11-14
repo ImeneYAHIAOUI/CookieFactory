@@ -81,11 +81,18 @@ public class COD {
 
     }
 
-    public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException, PaymentException {
+    /**
+     * Allow to create the order if a Cook is available in the chosen store then call method to pay the order
+     * @param client the client who wants to pay
+     * @param store the store where the client wants to get his order
+     * @return the order ID of the client
+     * @throws BadQuantityException if the quantity of the item is not valid
+     * @throws CookException if the cook is not available
+     */
+    public String finalizeOrder(Client client, Store store) throws BadQuantityException, CookException {
         Cook cook = store.getFreeCook(client.getCart());
-        Order order;
         String id = UUID.randomUUID().toString();
-        order = new Order(id, client, cook, store);
+        Order order = new Order(id, client, cook, store);
         createOrderItem(client.getCart(), order);
         client.validateOrder(order);
         PaymentService.getInstance().performPayment(order.getPrice());
@@ -144,11 +151,10 @@ public class COD {
 
         if (client instanceof RegisteredClient && ((RegisteredClient) client).isBanned())
             throw new OrderException("You have cancelled two orders in 8 minutes or less, you are banned for 10 minutes.\n Remaining time : " + ((RegisteredClient) client).getRemainingBanTime());
-
         if (!store.getRecipes().contains(cookie)) {
             throw new CookieException("this cookie is not available in this store");
         }
-        int maxCookieAmount = store.getMaxCookieAmount(cookie);
+        int maxCookieAmount = calculateMaxCookieAmount(cookie,store);
         if (maxCookieAmount < amount) {
             throw new CookieException("this store can't make this amount of cookies");
         }
@@ -160,7 +166,21 @@ public class COD {
 
     }
 
-    public void suggestRecipe(String name, double price, int time, Cooking cooking_chosen, Mix mix_chosen, Ingredient doughIngredient, Ingredient flavourIngredient, List<Ingredient> toppings) throws CatalogException {
+    /**
+     * Calls the right method to calculate the max amount of cookies that can be made in the store
+     * @param cookie the chosen cookie
+     * @param store the chosen store
+     * @return the maximum amount of cookies that can be made in the store
+     */
+    public int calculateMaxCookieAmount(Cookie cookie,Store store){
+        if (cookie.getClass() == PartyCookie.class){
+            return choosePartyCookie(store,(PartyCookie) cookie);
+        }
+        else {
+            return store.getMaxCookieAmount(cookie,1);
+        }
+    }
+    public void suggestRecipe(String name, double price, int time, Cooking cooking_chosen, Mix mix_chosen, Ingredient doughIngredient, Ingredient flavourIngredient,List<Ingredient> toppings) throws CatalogException {
         List<Topping> toppingList = new ArrayList<>();
         for (Ingredient i: toppings) {
             if(i.getIngredientType().equals(IngredientType.TOPPING)
@@ -212,11 +232,25 @@ public class COD {
             throw new OrderException("The order "+idOrder+" does not exist.");
     }
 
+    /**
+     * Set order status to CANCELLED, cancel the cook and call method to put back the ingredients in the store
+     * @param order the order to cancel
+     * @throws OrderException if the order does not exist
+     */
     public void cancelOrder(Order order) throws OrderException {
         order.setStatus(OrderStatus.CANCELLED);
         order.getCook().cancelOrder(order);
         Store store = order.store;
-        for (Item item : order.getItems()) {
+        putBackIngredientsInInventory(order.getItems(), store);
+    }
+
+    /**
+     * Put back the ingredients in the store inventory
+     * @param items the items of the cancelled order
+     * @param store the store where the order was made
+     */
+    private static void putBackIngredientsInInventory(List<Item> items, Store store) {
+        for (Item item : items) {
             Cookie cookie = item.getCookie();
             int numberOfCookie = item.getQuantity();
             store.getInventory().addIngredient(item.getCookie().getDough(),  numberOfCookie);
@@ -247,20 +281,29 @@ public class COD {
         return client.getPastOrders();
     }
 
-    public String payOrder(Client client, Store store) throws BadQuantityException, CookException, PaymentException {
+    /**
+     *
+     * @param client the client who wants to pay his current order
+     * @param store the store chosen by the client
+     * @return the ID of the order
+     * @throws BadQuantityException if not enough ingredients in the store's inventory
+     * @throws CookException if no cook is not available
+     */
+    public String payOrder(Client client, Store store) throws BadQuantityException, CookException {
         return finalizeOrder(client, store);
     }
 
+    /**
+     * Add cookie to the order and modify the price if the client is a registered client and eligible for a discount
+     * @param cart the cart of the client
+     * @param order the order we are creating
+     * @throws BadQuantityException if the quantity of an ingredient is not enough
+     */
 
     private void createOrderItem(Cart cart, Order order) throws BadQuantityException {
         for (Item item : cart.getItems()) {
             Cookie cookie = item.getCookie();
-            int numberOfCookie = item.getQuantity();
-            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getDough(), numberOfCookie);
-            order.store.getInventory().decreaseIngredientQuantity(item.getCookie().getFlavour(), numberOfCookie);
-            for (Topping topping : cookie.getToppings()) {
-                order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie);
-            }
+            addCookieInOrder(item.getQuantity(),cookie,order);
         }
         if (order.getClient() instanceof RegisteredClient) {
             if (((RegisteredClient) order.getClient()).isEligibleForDiscount()) {
@@ -391,6 +434,47 @@ public class COD {
     public void printCatalog(){
         System.out.println(catalog);
     }
+
+    /**
+     * Add cookie to the order if all ingredients are available
+     * the bigger the cookie is, the more ingredients you'll need
+     * @param numberOfCookie the number of this type of cookie in the cart
+     * @param cookie the cookie to add
+     * @param order the order to add the cookie to
+     * @throws BadQuantityException if the quantity of ingredients to make the cookie is not available
+     */
+    public void addCookieInOrder(int numberOfCookie, Cookie cookie, Order order) throws BadQuantityException {
+        int ingredientsToDecreaseDueToSize =1 ;
+        if (cookie.getSize() != null) {
+            switch (cookie.getSize()) {
+                case L -> ingredientsToDecreaseDueToSize = 2;
+                case XL -> ingredientsToDecreaseDueToSize = 3;
+                case XXL -> ingredientsToDecreaseDueToSize = 4;
+            }
+        }
+        order.store.getInventory().decreaseIngredientQuantity(cookie.getDough(), numberOfCookie * ingredientsToDecreaseDueToSize);
+        order.store.getInventory().decreaseIngredientQuantity(cookie.getFlavour(), numberOfCookie * ingredientsToDecreaseDueToSize);
+        for (Topping topping : cookie.getToppings()) {
+            order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * ingredientsToDecreaseDueToSize);
+        }
+    }
+
+    /**
+     *
+     * @param store the chosen store
+     * @param cookie the chosen type of PartyCookie
+     * @return the number of this type of Party Cookie you can make with the ingredients available
+     */
+    public int choosePartyCookie(Store store, PartyCookie cookie) {
+        int amountFactor=1;
+        switch (cookie.getSize()){
+            case L -> amountFactor = 2;
+            case XL -> amountFactor = 3;
+            case XXL -> amountFactor = 4;
+        }
+        return store.getMaxCookieAmount(cookie,amountFactor);
+    }
+
 
     public List<Cookie> getSuggestedRecipes(){
         return List.copyOf(this.suggestedRecipes);

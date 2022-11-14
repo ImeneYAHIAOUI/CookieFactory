@@ -11,7 +11,6 @@ public class Occasion {
     @Getter
     public final List<Recipe> recipeList;
     @Getter
-    @Setter
     public String name;
 
     public Occasion(String name){

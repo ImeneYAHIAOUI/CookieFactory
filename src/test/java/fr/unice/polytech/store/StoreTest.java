@@ -67,9 +67,9 @@ public class StoreTest {
         when(inventory.get(flavours.get(1))).thenReturn(1);
         when(inventory.get(toppings.get(2))).thenReturn(5);
 
-        assertEquals(store.getMaxCookieAmount(cookie1), 4);
-        assertEquals(store.getMaxCookieAmount(cookie2), 2);
-        assertEquals(store.getMaxCookieAmount(cookie3), 1);
+        assertEquals(store.getMaxCookieAmount(cookie1,1), 4);
+        assertEquals(store.getMaxCookieAmount(cookie2,1), 2);
+        assertEquals(store.getMaxCookieAmount(cookie3,1), 1);
     }
 
     @Test

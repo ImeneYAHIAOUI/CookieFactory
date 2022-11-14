@@ -31,11 +31,7 @@ public class Cook {
     public boolean canTakeTimeSlot(TimeSlot timeSlot) {
         return workingTimeSlot.keySet().stream().noneMatch(timeSlot::overlaps);
     }
-    public void addTheme(Theme theme){
-        if(!themeList.contains(theme)){
-            themeList.add(theme);
-        }
-    }
+
     //Add the Order at the first time available to cook the order
     //The timeSlot list is sorted by time (to simplify th search of available times)
     public void addOrder(Order order) throws CookException {

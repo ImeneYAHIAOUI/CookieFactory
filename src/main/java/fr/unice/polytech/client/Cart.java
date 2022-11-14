@@ -2,6 +2,8 @@ package fr.unice.polytech.client;
 
 import fr.unice.polytech.exception.PickupTimeNotSetException;
 import fr.unice.polytech.order.Item;
+import fr.unice.polytech.recipe.CookieSize;
+import fr.unice.polytech.recipe.PartyCookie;
 import fr.unice.polytech.store.TimeSlot;
 import lombok.Data;
 import lombok.Getter;
@@ -31,7 +33,6 @@ public class Cart {
     }
 
     public void addItem(Item item) {
-
         if (items.stream().anyMatch(item1 -> item1.getCookie() == item.getCookie())) {
             Item existingItem = items.stream().filter(item1 -> item1.getCookie() == item.getCookie()).findFirst().orElse(null);
             assert existingItem != null;
@@ -41,7 +42,8 @@ public class Cart {
             items.add(item);
         }
         subtotal+=item.getCookie().getPrice()*item.getQuantity();
-        total =subtotal*(1+tax);
+        int factor = calculateFactorDependingOnSize(item.getCookie().getSize());
+        total =subtotal*(1+tax)*factor;
     }
 
     /**
@@ -79,5 +81,17 @@ public class Cart {
         subtotal=0.0;
         total=0.0;
         tax=0.0;
+    }
+
+    private int calculateFactorDependingOnSize(CookieSize cookieSize){
+        int factor=1;
+        if (cookieSize==null)
+            return factor;
+        factor = switch (cookieSize) {
+            case L -> 4;
+            case XL -> 5;
+            case XXL -> 6;
+        };
+        return factor;
     }
 }

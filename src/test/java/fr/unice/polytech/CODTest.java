@@ -103,7 +103,7 @@ public class CODTest {
         when(registeredClient.isBanned()).thenReturn(false,true);
         when(registeredClient.getCart()).thenReturn(new Cart(),new Cart());
         when(mockstore.getRecipes()).thenReturn(List.of(cookie1),List.of(cookie1));
-        when(mockstore.getMaxCookieAmount(cookie1)).thenReturn(1,1);
+        when(mockstore.getMaxCookieAmount(cookie1,1)).thenReturn(1,1);
         assertDoesNotThrow(() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
         assertThrows(OrderException.class,() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
     }
@@ -114,7 +114,7 @@ public class CODTest {
         when(registeredClient.isBanned()).thenReturn(false,false);
         when(registeredClient.getCart()).thenReturn(new Cart(),new Cart());
         when(mockstore.getRecipes()).thenReturn(List.of(cookie1),List.of(cookie1));
-        when(mockstore.getMaxCookieAmount(cookie1)).thenReturn(1,0);
+        when(mockstore.getMaxCookieAmount(cookie1,1)).thenReturn(1,0);
         assertDoesNotThrow(() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
         assertThrows(CookieException.class,() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
     }
@@ -125,7 +125,7 @@ public class CODTest {
         when(registeredClient.isBanned()).thenReturn(false,false);
         when(registeredClient.getCart()).thenReturn(new Cart(),new Cart());
         when(mockstore.getRecipes()).thenReturn(List.of(cookie1),List.of());
-        when(mockstore.getMaxCookieAmount(cookie1)).thenReturn(1,0);
+        when(mockstore.getMaxCookieAmount(cookie1,1)).thenReturn(1,0);
         assertDoesNotThrow(() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
         assertThrows(CookieException.class,() ->cod.chooseCookie(registeredClient,mockstore,cookie1,1));
     }

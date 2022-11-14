@@ -7,11 +7,14 @@ import java.util.List;
 
 public class Cookie extends Recipe{
     @Getter
-    private Size size;
+    private CookieSize size;
+    @Getter
+    private Theme theme;
+
     public Cookie(String name,Double price, int cookingTime,Cooking cooking, Mix mix,Dough dough, Flavour flavour,List<Topping> toppings){
         super( name, price,  cookingTime, cooking,  mix, dough,  flavour, toppings);
     }
-    public void setSize(Size size){
+    public void setSize(CookieSize size){
         this.size=size;
         switch(size){
             case L:
