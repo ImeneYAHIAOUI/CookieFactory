@@ -52,8 +52,6 @@ public class CatalogStepDefs {
 
     @Then("get the ingredient with name {string} throws exception")
     public void getCatalogException(String name){
-        catalog = new Catalog();
         assertThrows(CatalogException.class, () -> catalog.getIngredient(name));
     }
-
 }

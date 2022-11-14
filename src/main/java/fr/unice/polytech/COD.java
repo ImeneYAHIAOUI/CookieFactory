@@ -61,6 +61,9 @@ public class COD {
         locationService = new LocationService();
     }
 
+    /**
+     * Initialization of the COD with 1 store, 1 recipe and 1 occasion
+     */
     public void initializationCod(){
         //Initialisation with 1 store + 1 recipe
         recipes.add(new Cookie(
@@ -102,6 +105,14 @@ public class COD {
         return order.getId();
     }
 
+    /**
+     * Register a new Client
+     * @param id chosen by the client
+     * @param password chosen by the client
+     * @param phoneNumber chosen by the client
+     * @throws RegistrationException if user already registered
+     * @throws InvalidPhoneNumberException if phone number invalid
+     */
     public void register(String id, String password, String phoneNumber) throws RegistrationException, InvalidPhoneNumberException {
         if (clients.stream().anyMatch(client -> client.getId().equals(id)))
             throw new RegistrationException("User " + id + " is already registered.");
@@ -140,6 +151,15 @@ public class COD {
         }
     }
 
+    /**
+     * Check if the cookie exist before adding the cookie in the cart
+     * @param client the client ordering
+     * @param store the store chosen by the client
+     * @param cookieName name of the cookie to add
+     * @param amount amount of cookie to add
+     * @throws CookieException if the Cookie does not exist
+     * @throws OrderException if 2 cancelled orders in less than 8 minutes
+     */
     public void chooseCookie(Client client, Store store, String cookieName, int amount) throws CookieException, OrderException {
         Optional<Cookie> cookie = (store.getRecipes().stream().filter(c -> (c.getName().equals(cookieName))).findFirst());
         if(cookie.isEmpty())
@@ -180,6 +200,20 @@ public class COD {
             return store.getMaxCookieAmount(cookie,1);
         }
     }
+
+    /**
+     * Check if the ingredients of the recipes are in the catalog and if they are of the right Ingredient Type
+     * before adding the recipe in the suggestedRecipes List
+     * @param name of the new recipe
+     * @param price of the new recipe
+     * @param time to cook the recipe
+     * @param cooking_chosen Cooking of the recipe
+     * @param mix_chosen Mix of the recipe
+     * @param doughIngredient Dough of the recipe
+     * @param flavourIngredient Flavour of the recipe
+     * @param toppings Toppings of the recipe
+     * @throws CatalogException if one of the ingredients does not exist
+     */
     public void suggestRecipe(String name, double price, int time, Cooking cooking_chosen, Mix mix_chosen, Ingredient doughIngredient, Ingredient flavourIngredient,List<Ingredient> toppings) throws CatalogException {
         List<Topping> toppingList = new ArrayList<>();
         for (Ingredient i: toppings) {
@@ -224,6 +258,11 @@ public class COD {
         suggestedRecipes.remove(cookie);
     }
 
+    /**
+     * Check if the Order exists before cancelling the order
+     * @param idOrder which we want the Order
+     * @throws OrderException of the Order does not exist
+     */
     public void cancelOrder(String idOrder) throws OrderException {
         Optional<Order> order = (orders.stream().filter(o -> (o.getId().equals(idOrder))).findFirst());
         if(order.isPresent())
@@ -260,10 +299,20 @@ public class COD {
         }
     }
 
-    public void addInventory(Store s, Ingredient ingredient, int amount) throws AlreadyExistException, BadQuantityException {
-        s.addIngredients(ingredient, amount);
+    /**
+     * Fill the inventory of the store with the chosen ingredient and the chosen amount
+     * Check if we can add some new recipes in the store
+     * @param s chosen Store
+     * @param ingredient name of the ingredient
+     * @param amount to add in th store
+     * @throws AlreadyExistException if the ingredient is already in the Store
+     * @throws BadQuantityException if the Quantity of Ingredient become negative
+     * @throws CatalogException if the Ingredient does not exist
+     */
+    public void addInventory(Store s, String ingredient, int amount) throws AlreadyExistException, BadQuantityException, CatalogException {
+        s.addIngredients(getIngredientCatalog(ingredient), amount);
         for (Cookie c: this.recipes) {
-            if(s.canAddCookieToStore(c))
+            if(!s.getRecipes().contains(c) && s.canAddCookieToStore(c))
                 s.addCookies(List.of(c));
         }
     }
@@ -354,8 +403,15 @@ public class COD {
         cart.setPickupTime(pickupTime);
     }
 
-
-
+    /**
+     * add a store in Cod
+     * @param nbCooks nb cooks in the store
+     * @param address of the store
+     * @param openingTime of the store
+     * @param endingTime of the store
+     * @param tax of the store
+     * @param occasions occasions available in the store
+     */
     public void addStore(int nbCooks, String address, String openingTime, String endingTime, double tax,List<Occasion>occasions){
         List<Cook> cooks = new ArrayList<>();
         for (int i =0; i<nbCooks; i++)
@@ -363,10 +419,21 @@ public class COD {
         stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>()),tax,occasions));
     }
 
+    /**
+     * Add a cook to the chosen store
+     * @param idStore id Of the store we want to add a cook to
+     * @throws StoreException if the Sotre does not exist
+     */
     public void addCook(int idStore) throws StoreException {
         getStore(idStore).addCook(new Cook(idCook++));
     }
 
+    /**
+     * Return the store with the chosen idStore
+     * @param idStore which we want the Store
+     * @return the Store
+     * @throws StoreException if the store does not exist
+     */
     public Store getStore(int idStore) throws StoreException {
         Optional<Store> store = (stores.stream().filter(s -> (s.getId()==idStore)).findFirst());
         if(store.isPresent())
@@ -402,10 +469,23 @@ public class COD {
         return nearbyStores;
     }
 
+    /**
+     * Add a new ingredient to catalog
+     * @param name of the ingredient
+     * @param price of the ingredient
+     * @param ingredientType of the ingredient
+     * @throws CatalogException if an ingredient of the same name already exists
+     */
     public void addIngredientCatalog(String name, double price, IngredientType ingredientType) throws CatalogException {
         catalog.addIngredient(name, price, ingredientType);
     }
 
+    /**
+     * Return the ingredient with the chosen name
+     * @param name of the ingredient
+     * @return the ingredient
+     * @throws CatalogException if none of the ingredients in Catalog have this name
+     */
     public Ingredient getIngredientCatalog(String name) throws CatalogException {
         return catalog.getIngredient(name);
     }
@@ -474,7 +554,6 @@ public class COD {
         }
         return store.getMaxCookieAmount(cookie,amountFactor);
     }
-
 
     public List<Cookie> getSuggestedRecipes(){
         return List.copyOf(this.suggestedRecipes);

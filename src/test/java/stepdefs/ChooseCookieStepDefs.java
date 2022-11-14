@@ -153,6 +153,16 @@ public class ChooseCookieStepDefs {
         assertThrows(CookieException.class, () -> cod.chooseCookie(client, store, cookie, amount));
     }
 
+    @Then("This order can be purchased with amount {int} and cookie {string}")
+    public void thenCookiesAvailableString(int amount, String name) {
+        assertDoesNotThrow(() -> cod.chooseCookie(client, store, name, amount));
+    }
+
+    @Then("This order cannot be purchased with amount {int} and cookie {string}")
+    public void thenCookiesNotAvailableString(int amount, String name) {
+        assertThrows(CookieException.class, () -> cod.chooseCookie(client, store, name, amount));
+    }
+
     @Then("this order can be purchased")
     public void thenCookiesAvailable() {
         assertDoesNotThrow(() -> cod.chooseCookie(client, store, cookie, amount));

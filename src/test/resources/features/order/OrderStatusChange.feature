@@ -80,3 +80,8 @@ Feature: Order Status Change
   Scenario: order status is "completed" and we want to pass it to "obsolete"
     When order status is "COMPLETED"
     Then the order can be set to "OBSOLETE"
+
+    #Cancel Order
+  Scenario: order not found
+    When an order with id "1"
+    Then the order "1" can not be found and canceled

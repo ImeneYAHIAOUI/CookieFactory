@@ -13,7 +13,7 @@ public class Catalog {
         INGREDIENTS = new ArrayList<>();
     }
 
-    public boolean contains(String name){
+    private boolean contains(String name){
         for (Ingredient i: INGREDIENTS) {
             if(i.getName().equals(name))
                 return true;

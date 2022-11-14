@@ -66,6 +66,11 @@ public class OrderStepDefs {
         assertThrows(OrderException.class, () -> cod.setStatus(order,EnumStatus));
     }
 
+    @Then("the order {string} can not be found and canceled")
+    public void thenTheOrderCanNotBeFound(String idOrder) {
+        assertThrows(OrderException.class, () -> cod.cancelOrder(idOrder));
+    }
+
     public OrderStatus stringToOrderStatus(String status) {
         return switch (status) {
             case "NOT_STARTED" -> OrderStatus.NOT_STARTED;

@@ -22,7 +22,7 @@ public class Store {
     @Getter
     private final List<Cookie> recipes;
     @Getter
-    private List<Cook> cooks;
+    private final List<Cook> cooks;
     @Getter
     public LocalTime openingTime;
     @Getter
@@ -39,7 +39,7 @@ public class Store {
     public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime, int id, Inventory inventory,double tax,List<Occasion> occasions) {
         occasionList =new ArrayList<>();
         this.cooks = new ArrayList<>(cooks);
-        this.recipes = recipes;
+        this.recipes = new ArrayList<>(recipes);
         this.address = address;
         this.tax=tax;
         if (openingTime.isBefore(closingTime)) {

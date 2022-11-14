@@ -19,15 +19,15 @@ import java.util.Scanner;
 import static java.lang.Math.min;
 
 public class App {
-    static Scanner SCANNER = new Scanner(System.in);
+  /*  static Scanner SCANNER = new Scanner(System.in);
     static COD COD = new COD();
 
-    public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException {
+    public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException, InvalidPickupTimeException {
         welcomeInterface();
 
     }
 
-    private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, PaymentException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException {
+    private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException, InvalidPickupTimeException {
         System.out.println("Welcome in the Cookie On Demand System !");
         COD.printStores();
         COD.printRecipes();
@@ -207,8 +207,7 @@ public class App {
         String name = SCANNER.nextLine();
         System.out.println("How much do you want to add ?");
         String amount = SCANNER.nextLine();
-        Ingredient ingredient = COD.getIngredientCatalog(name);
-        COD.addInventory(store, ingredient, Integer.parseInt(amount));
+        COD.addInventory(store, name, Integer.parseInt(amount));
         System.out.println("You added "+amount+" "+name+" in the store "+idStore+".");
     }
 
@@ -240,7 +239,7 @@ public class App {
         }
     }
 
-    private static void authenticationInterface() throws RegistrationException, InvalidInputException, OrderException, StoreException, CookieException, PaymentException, CookException, BadQuantityException, InvalidPhoneNumberException {
+    private static void authenticationInterface() throws RegistrationException, InvalidInputException, OrderException, StoreException, CookieException, CookException, BadQuantityException, InvalidPhoneNumberException, InvalidPickupTimeException {
         Client client;
         System.out.println("Client Interface : ");
 
@@ -269,7 +268,7 @@ public class App {
         clientInterface(client);
     }
 
-    private static void clientInterface(Client client) throws StoreException, BadQuantityException, PaymentException, CookException, CookieException, OrderException {
+    private static void clientInterface(Client client) throws StoreException, BadQuantityException, CookException, CookieException, OrderException, InvalidPickupTimeException {
         System.out.println("Client Interface : Do you want to order (O), to cancel your order (C) or the check your Past orders (P) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
@@ -293,29 +292,41 @@ public class App {
         COD.cancelOrder(idOrder);
     }
 
-    private static void passOrder(Client client) throws StoreException, CookieException, OrderException, PaymentException, CookException, BadQuantityException {
+    private static void passOrder(Client client) throws StoreException, CookieException, OrderException, CookException, BadQuantityException, InvalidPickupTimeException {
         COD.printStores();
         System.out.println("Enter the id of a store :");
         String idStore = SCANNER.nextLine();
         Store store = COD.getStore(Integer.parseInt(idStore));
         COD.printRecipes(store);
-        System.out.println("Choose a recipe :");
-        String name = SCANNER.nextLine();
-        System.out.println("Choose an amount :");
-        String amount = SCANNER.nextLine();
-        COD.chooseCookie(client, store, name, Integer.parseInt(amount));
-
-        while (name.equals("STOP")){
-            System.out.println("Choose a recipe (STOP if you have enough):");
-            name = SCANNER.nextLine();
-            System.out.println("Choose an amount :");
-            amount = SCANNER.nextLine();
-            //Bug ici, pb d'inventaire ?
-            COD.chooseCookie(client, store, name, Integer.parseInt(amount));
-        }
+        chooseOrder(client, store);
         System.out.println("Your Cart : "+client.getCart());
+        choosePickUpTime(client, store);
         String orderId = COD.finalizeOrder(client, store);
         System.out.println("Congrats ! Here is the id to pick up your order : " + orderId);
+    }
+
+    private static void chooseOrder(Client client, Store store) throws CookieException, OrderException {
+        System.out.println("Choose a recipe :");
+        String name = SCANNER.nextLine();
+
+        while (!name.equalsIgnoreCase("STOP")){
+            System.out.println("Choose an amount :");
+            String amount = SCANNER.nextLine();
+            COD.chooseCookie(client, store, name, Integer.parseInt(amount));
+            System.out.println("Choose a recipe (STOP if you have enough):");
+            name = SCANNER.nextLine();
+        }
+    }
+
+    private static void choosePickUpTime(Client client, Store store) throws InvalidPickupTimeException {
+        List<LocalTime> possiblePickUpTimes = COD.getPickupTimes(client.getCart(), store);
+        System.out.println("Choose a pickup time (enter the number)");
+        int i = 0;
+        for (LocalTime l: possiblePickUpTimes) {
+            System.out.println(i++ + " "+ l);
+        }
+        String rep = SCANNER.nextLine();
+        COD.choosePickupTime(client.getCart(), store, possiblePickUpTimes.get(Integer.parseInt(rep)));
     }
 
     private static boolean askIfRegister(){
@@ -339,4 +350,6 @@ public class App {
         } else
             return askIfAccount();
     }
+
+   */
 }
