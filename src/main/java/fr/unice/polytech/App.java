@@ -19,7 +19,7 @@ import java.util.Scanner;
 import static java.lang.Math.min;
 
 public class App {
-  /*  static Scanner SCANNER = new Scanner(System.in);
+    /*static Scanner SCANNER = new Scanner(System.in);
     static COD COD = new COD();
 
     public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException, InvalidPickupTimeException {
@@ -193,7 +193,6 @@ public class App {
         COD.addStore(Integer.parseInt(nbCook), address, open, end, Double.parseDouble(tax), List.of(new Occasion((occasion))));
         System.out.println("You added a store at the address"+address+".");
 
-
     }
 
     private static void fillInventory() throws StoreException, AlreadyExistException, BadQuantityException, CatalogException {
@@ -350,6 +349,6 @@ public class App {
         } else
             return askIfAccount();
     }
+*/
 
-   */
 }

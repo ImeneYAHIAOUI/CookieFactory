@@ -32,6 +32,10 @@ public class Cart {
         total=0.0;
     }
 
+    /**
+     * add item to cart
+     * @param item
+     */
     public void addItem(Item item) {
         if (items.stream().anyMatch(item1 -> item1.getCookie() == item.getCookie())) {
             Item existingItem = items.stream().filter(item1 -> item1.getCookie() == item.getCookie()).findFirst().orElse(null);
@@ -44,10 +48,13 @@ public class Cart {
         calculateAccordingPrice(item);
     }
 
+    /**
+     * update total
+     * @param item
+     */
     private void calculateAccordingPrice(Item item) {
         subtotal+= item.getCookie().getPrice()* item.getQuantity();
-        int factor = calculateFactorDependingOnSize(item.getCookie().getSize());
-        total =subtotal*(1+tax)*factor;
+        total =subtotal*(1+tax);
     }
 
     /**
@@ -79,22 +86,10 @@ public class Cart {
         total = 15 - (total % 15);
         return Duration.ofMinutes(total);
     }
-
     public void emptyItems() {
         items.clear();
         subtotal=0.0;
         total=0.0;
         tax=0.0;
-    }
-
-    private int calculateFactorDependingOnSize(CookieSize cookieSize){
-        int factor;
-        factor = switch (cookieSize) {
-            case L -> 4;
-            case XL -> 5;
-            case XXL -> 6;
-            case  BASIC -> 1;
-        };
-        return factor;
     }
 }

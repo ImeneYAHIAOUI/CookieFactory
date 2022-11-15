@@ -219,7 +219,7 @@
       And amount 1
       And client finalize his order
 
-      Then the price of the order is 25.0
+      Then the price of the order is 5.0
       #prix cookie normal = 5.0, taille XL -> prix x5 = 25.0
 
     Scenario: Higher Price for a party cookie with size XXL than a normal cookie
@@ -238,7 +238,7 @@
       And amount 1
       And client finalize his order
 
-      Then the price of the order is 30.0
+      Then the price of the order is 5.0
       #prix cookie normal = 5.0, taille XL -> prix x6 = 30.0
 
     Scenario: Order a party cookie with a theme

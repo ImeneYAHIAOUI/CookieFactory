@@ -393,7 +393,6 @@ public class ChooseCookieStepDefs {
         store.addCookies(cookieList);
 
     }
-
     @When("Client chooses party cookies of type {string} and size {string} and theme {string}")
     public void clientChoosesPartyCookiesOfTypeAndSizeAndTheme(String cookieName, String cookieSize, String cookieTheme) {
         cookie = cookieList.stream()
@@ -403,7 +402,6 @@ public class ChooseCookieStepDefs {
                 .filter(cookie1 -> cookie1.getTheme().toString().equals(cookieTheme))
                 .findFirst().orElse(null);
     }
-
     @Then("the price of the order is {double}")
     public void thePriceOfTheOrderIs(double expectedPrice) {
         assertEquals(expectedPrice, cod.getOrders().get(0).getPrice(), 0.0);

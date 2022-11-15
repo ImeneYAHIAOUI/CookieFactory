@@ -9,6 +9,7 @@ public class Cookie extends Recipe{
     @Getter
     private CookieSize size;
     @Getter
+    @Setter
     private Theme theme;
 
     public Cookie(String name,Double price, int cookingTime,Cooking cooking, Mix mix,Dough dough, Flavour flavour,List<Topping> toppings){
@@ -31,7 +32,6 @@ public class Cookie extends Recipe{
                 break;
         }
         this.size=size;
-
     }
     public Double getBasicPrice(){
         Double priceCookie;
@@ -49,7 +49,6 @@ public class Cookie extends Recipe{
                 break;
             default:
                 priceCookie=price;
-                ;
                 break;
         }
         return priceCookie;

@@ -7,8 +7,10 @@ import java.util.List;
 
 public class PartyCookie extends Cookie{
     @Getter
+    @Setter
     private final CookieSize size;
     @Getter
+    @Setter
     private final Theme theme;
 
     public PartyCookie(String name, double price, int cookingTime, Cooking cooking, Mix mix, Dough dough, Flavour flavour, List<Topping> toppings,CookieSize size,Theme theme) {
@@ -16,5 +18,6 @@ public class PartyCookie extends Cookie{
         this.size = size;
         this.theme = theme;
     }
+
 
 }
