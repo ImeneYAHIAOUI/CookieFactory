@@ -1,18 +1,19 @@
 package fr.unice.polytech.services;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import fr.unice.polytech.client.NotificationMessage;
+import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
-import lombok.SneakyThrows;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class StatusScheduler {
 
+    ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+
+
     private static StatusScheduler INSTANCE = null;
-    private Timer time = new Timer();
 
     public static StatusScheduler getInstance() {
         if (INSTANCE == null) {
@@ -21,62 +22,54 @@ public class StatusScheduler {
         return INSTANCE;
     }
 
-    private StatusScheduler(Timer time) {
-        this.time = time;
+    private StatusScheduler(ScheduledThreadPoolExecutor executor) {
+        executor.setRemoveOnCancelPolicy(true);
+        this.executor = executor;
     }
 
     private StatusScheduler() {
+        executor.setRemoveOnCancelPolicy(true);
     }
 
-    public static StatusScheduler getInstance(Timer time ) {
+    public static StatusScheduler getInstance(ScheduledThreadPoolExecutor executor ) {
         if (INSTANCE == null) {
-            INSTANCE = new StatusScheduler(time);
+            INSTANCE = new StatusScheduler(executor);
         }
         return INSTANCE;
     }
 
+    public void fiveMinutesNotification(Order order, String clientPhoneNumber) {
+        if (!order.getStatus().equals(OrderStatus.COMPLETED)) {
+            SMSService.getInstance().notifyClient(clientPhoneNumber, NotificationMessage.COMMAND_READY_5_MIN.getMessage());
+            executor.schedule(() -> oneHourNotification(order, clientPhoneNumber), 55, java.util.concurrent.TimeUnit.MINUTES);
+        }
+    }
 
+    public void oneHourNotification(Order order, String clientPhoneNumber) {
+        if (!order.getStatus().equals(OrderStatus.COMPLETED)) {
+            SMSService.getInstance().notifyClient(clientPhoneNumber, NotificationMessage.COMMAND_READY_1_HOUR.getMessage());
+            executor.schedule(() -> {
+                try {
+                    twoHoursNotification(order, clientPhoneNumber);
+                } catch (OrderException e) {
+                    throw new RuntimeException(e);
+                }
+            }, 1, java.util.concurrent.TimeUnit.HOURS);
+        }
+    }
+
+    public void twoHoursNotification(Order order, String clientPhoneNumber) throws OrderException {
+        if (!order.getStatus().equals(OrderStatus.COMPLETED)) {
+            SMSService.getInstance().notifyClient(clientPhoneNumber, NotificationMessage.COMMAND_OBSOLETE.getMessage());
+            order.setStatus(OrderStatus.OBSOLETE);
+        }
+    }
 
     public void statusSchedulerTask(Order order, String clientPhoneNumber) {
         SMSService.getInstance().notifyClient(clientPhoneNumber, NotificationMessage.COMMAND_READY.getMessage());
-        TimerTask fiveMinutesTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if (!order.getStatus().equals(OrderStatus.COMPLETED)) {
-                    SMSService.getInstance().notifyClient(clientPhoneNumber, NotificationMessage.COMMAND_READY_5_MIN.getMessage());
-                } else {
-                    time.cancel();
-                }
-            }
-        };
-        time.schedule(fiveMinutesTimerTask, 5 * 60 * 1000);
-
-        TimerTask oneHourTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if (!order.getStatus().equals(OrderStatus.COMPLETED)) {
-                    SMSService.getInstance().notifyClient(clientPhoneNumber, NotificationMessage.COMMAND_READY_1_HOUR.getMessage());
-                } else {
-                    time.cancel();
-                }
-            }
-        };
-        time.schedule(oneHourTimerTask, 3600 * 1000);
-
-        TimerTask twoHoursTimerTask = new TimerTask() {
-            @SneakyThrows
-            @Override
-            public void run() {
-                if (!order.getStatus().equals(OrderStatus.COMPLETED)) {
-                    SMSService.getInstance().notifyClient(clientPhoneNumber, NotificationMessage.COMMAND_OBSOLETE.getMessage());
-                    order.setStatus(OrderStatus.OBSOLETE);
-                } else {
-                    time.cancel();
-                }
-            }
-        };
-        time.schedule(twoHoursTimerTask, 2 * 3600 * 1000);
-
+        executor.schedule(() -> {
+            fiveMinutesNotification(order, clientPhoneNumber);
+        }, 5, java.util.concurrent.TimeUnit.MINUTES);
     }
 
 

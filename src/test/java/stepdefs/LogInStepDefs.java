@@ -18,7 +18,7 @@ public class LogInStepDefs {
     String password;
 
     @Given("cod with registered client with id {string} , password {string} and phone number {string}")
-    public void cod_with_registered_client_with_id_and_password(String id, String password, String phoneNumber) {
+    public void codWithRegisteredClientWithIdAndPassword(String id, String password, String phoneNumber) {
         cod = new COD();
         try {
             cod.register(id, password, phoneNumber);

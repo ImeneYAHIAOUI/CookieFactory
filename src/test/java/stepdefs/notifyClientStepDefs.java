@@ -25,12 +25,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 
 public class notifyClientStepDefs {
 
     @Spy
-    Timer mockedTimer = spy(new Timer());
-    Timer timer = new Timer();
+    ScheduledThreadPoolExecutor mockedExecutor = spy(new ScheduledThreadPoolExecutor(1));
+    ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     Client client;
     @Spy
     Order order ;
@@ -39,10 +42,7 @@ public class notifyClientStepDefs {
     @Given("a client with phone number {string}")
     public void aClientWithPhoneNumber(String phoneNumber) throws InvalidPhoneNumberException {
         client = new UnregisteredClient(phoneNumber);
-
-
     }
-
 
     @And("the order is ready")
     public void anOrderIsReady() throws OrderException {
@@ -58,45 +58,34 @@ public class notifyClientStepDefs {
         }).when(order).setStatus(any(OrderStatus.class));
 
         doAnswer( invocation -> {
-            timer.schedule(invocation.getArgument(0), 0);
+            executor.execute(invocation.getArgument(0));
             return null;
-        }).when(mockedTimer).schedule(any(TimerTask.class), anyLong());
-        doAnswer( invocation -> {
-            timer.cancel();
-            timer = new Timer();
-            return null;
-        }).when(mockedTimer).cancel();
-
-
+        }).when(mockedExecutor).schedule(any(Runnable.class), anyLong(),any(TimeUnit.class));
 
     }
 
     @Then("the client gets notified and doesn't receive more notifications")
     public void theClientShouldBeNotified() throws InterruptedException {
-        StatusScheduler.getInstance(mockedTimer).statusSchedulerTask(order, client.getPhoneNumber());
-        verify(mockedTimer, times(3)).schedule(any(TimerTask.class), anyLong());
+        StatusScheduler.getInstance(mockedExecutor).statusSchedulerTask(order, client.getPhoneNumber());
+        verify(mockedExecutor, times(1)).schedule(any(Runnable.class), anyLong(),any(TimeUnit.class));
+        Thread.sleep(10);
+        assertEquals(OrderStatus.COMPLETED,order.getStatus());
     }
 
 
     @When("the client never picks up the order")
     public void theClientDoesntPickUpTheOrder() {
         when(order.getStatus()).thenReturn(OrderStatus.READY);
-
     }
     @Then("the client gets notified and the order is obsolete")
     public void theClientGetsNotifiedAndTheOrderIsObsolete() throws InterruptedException {
-        StatusScheduler.getInstance(mockedTimer).statusSchedulerTask(order, client.getPhoneNumber());
+        StatusScheduler.getInstance(mockedExecutor).statusSchedulerTask(order, client.getPhoneNumber());
         Thread.sleep(10);
         assertEquals(OrderStatus.OBSOLETE,order.getStatus());
     }
 
-
     @When("the client picks up the order")
     public void theClientPicksUpOrderOneHourAfter(){
-        when(order.getStatus()).thenReturn(OrderStatus.READY,OrderStatus.READY,OrderStatus.COMPLETED);
+        when(order.getStatus()).thenReturn(OrderStatus.COMPLETED);
     }
-
-
-
-
 }
