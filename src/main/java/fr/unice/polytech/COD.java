@@ -392,7 +392,7 @@ public class COD {
      * Sets the desired pickup time on the given cart
      *
      * @param cart       the cart to set the pickup time on
-     * @param store      the store where the order will be picked up
+     * the store where the order will be picked up
      * @param pickupTime the desired pickup time
      */
     public void choosePickupTime(Cart cart, Store store, LocalTime pickupTime) throws InvalidPickupTimeException {

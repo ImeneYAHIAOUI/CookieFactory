@@ -14,9 +14,13 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+
 public class Cart {
+    @Getter
+    @Setter
     private final List<Item> items;
+    @Getter
+    @Setter
     private LocalTime pickupTime;
     @Getter
     private Double subtotal;

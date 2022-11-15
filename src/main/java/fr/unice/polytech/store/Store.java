@@ -12,6 +12,8 @@ import lombok.Setter;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -100,7 +102,8 @@ public class Store {
         List<LocalTime> possiblePickupTimes = new ArrayList<>();
         // Acceptable earliest pickup time is 10 minutes after now.
         // This is to account for the time it takes to place the order.
-        LocalTime cookingStartTime = LocalTime.now(COD.getCLOCK()).plusMinutes(10);
+        LocalTime now = LocalTime.now(COD.getCLOCK());
+        LocalTime cookingStartTime = now.plusMinutes(15+(now.getMinute() % 5)).truncatedTo(ChronoUnit.MINUTES);
         TimeSlot potentialTimeSlot = new TimeSlot(cookingStartTime, cart.totalCookingTime());
         while (potentialTimeSlot.getEnd().isBefore(closingTime)) {
             if (cooks.stream().anyMatch(cook -> cook.canTakeTimeSlot(potentialTimeSlot))) {

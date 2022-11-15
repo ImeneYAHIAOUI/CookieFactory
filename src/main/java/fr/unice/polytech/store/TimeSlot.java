@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 @Data
 @AllArgsConstructor
@@ -13,8 +14,8 @@ public class TimeSlot implements Comparable<TimeSlot> {
     private LocalTime end;
 
     public TimeSlot(LocalTime begin, Duration duration) {
-        this.begin = begin;
-        this.end = begin.plus(duration);
+        this.begin = begin.truncatedTo(ChronoUnit.MINUTES);
+        this.end = begin.plus(duration).truncatedTo(ChronoUnit.MINUTES);
     }
 
     public void slideBy(Duration duration) {
