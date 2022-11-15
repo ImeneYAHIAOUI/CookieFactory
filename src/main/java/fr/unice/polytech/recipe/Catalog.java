@@ -1,16 +1,18 @@
-package fr.unice.polytech;
+package fr.unice.polytech.recipe;
 
 import fr.unice.polytech.exception.CatalogException;
-import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.exception.IngredientTypeException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Catalog {
     private static List<Ingredient> INGREDIENTS = new ArrayList<>();
+    private static IngredientFactory  INGREDIENTFACTORY = new IngredientFactory();
 
     public Catalog(){
         INGREDIENTS = new ArrayList<>();
+        INGREDIENTFACTORY = new IngredientFactory();
     }
 
     private boolean contains(String name){
@@ -19,17 +21,14 @@ public class Catalog {
                 return true;
         }
         return false;
+
     }
 
-    public void addIngredient(String name, double price, IngredientType ingredientType) throws CatalogException {
+    public void addIngredient(String name, double price, IngredientType ingredientType) throws CatalogException, IngredientTypeException {
         if(contains(name))
             throw new CatalogException("The ingredient "+name+" is already in the catalog.");
 
-        switch (ingredientType){
-            case DOUGH -> INGREDIENTS.add(new Dough(name, price));
-            case FLAVOUR -> INGREDIENTS.add(new Flavour(name, price));
-            case TOPPING -> INGREDIENTS.add(new Topping(name, price));
-        }
+        INGREDIENTS.add(INGREDIENTFACTORY.createIngredient(name, price, ingredientType));
     }
 
     public Ingredient getIngredient(String name) throws CatalogException {

@@ -192,12 +192,12 @@ public class CODTest {
     }
 
     @Test
-    public void addIngredientToCatalog() throws CatalogException {
+    public void addIngredientToCatalog() throws CatalogException, IngredientTypeException {
         cod.addIngredientCatalog("Sugar", 10.0,IngredientType.FLAVOUR);
         assertEquals(IngredientType.FLAVOUR, cod.getIngredientCatalog("Sugar").getIngredientType());
     }
     @Test
-    public void addIngredientAlreadyInCatalog() throws CatalogException {
+    public void addIngredientAlreadyInCatalog() throws CatalogException, IngredientTypeException {
         cod.addIngredientCatalog("Orange", 10.0,IngredientType.FLAVOUR);
         assertThrows(CatalogException.class, () -> cod.addIngredientCatalog("Orange", 10.0,IngredientType.FLAVOUR));
     }

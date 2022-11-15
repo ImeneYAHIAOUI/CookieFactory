@@ -476,7 +476,7 @@ public class COD {
      * @param ingredientType of the ingredient
      * @throws CatalogException if an ingredient of the same name already exists
      */
-    public void addIngredientCatalog(String name, double price, IngredientType ingredientType) throws CatalogException {
+    public void addIngredientCatalog(String name, double price, IngredientType ingredientType) throws CatalogException, IngredientTypeException {
         catalog.addIngredient(name, price, ingredientType);
     }
 

@@ -4,6 +4,7 @@ import fr.unice.polytech.COD;
 import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CatalogException;
+import fr.unice.polytech.exception.IngredientTypeException;
 import fr.unice.polytech.recipe.IngredientType;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
@@ -40,13 +41,13 @@ public class FillInventoryStepDefs {
     }
 
     @When("add Inventory ingredient {string} in amount {int}")
-    public void addInventory(String name, int ingredient) throws CatalogException, AlreadyExistException, BadQuantityException {
+    public void addInventory(String name, int ingredient) throws CatalogException, AlreadyExistException, BadQuantityException, IngredientTypeException {
         cod.addIngredientCatalog(name, 0, IngredientType.DOUGH);
         cod.addInventory(store, name, ingredient);
     }
 
     @Then("Ingredient {string} not in store")
-    public void ingredientNotInStore(String name) throws CatalogException {
+    public void ingredientNotInStore(String name) throws CatalogException, IngredientTypeException {
         cod.addIngredientCatalog(name, 0, IngredientType.DOUGH);
         assertFalse(store.getInventory().hasIngredient(cod.getIngredientCatalog(name)));
     }

@@ -1,6 +1,6 @@
 package stepdefs;
 
-import fr.unice.polytech.Catalog;
+import fr.unice.polytech.recipe.Catalog;
 import fr.unice.polytech.exception.CatalogException;
 import fr.unice.polytech.recipe.IngredientType;
 import io.cucumber.java.en.And;
