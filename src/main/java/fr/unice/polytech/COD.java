@@ -263,7 +263,7 @@ public class COD {
      * @param idOrder which we want the Order
      * @throws OrderException of the Order does not exist
      */
-    public void cancelOrder(String idOrder) throws OrderException {
+    public void cancelOrder(String idOrder) throws OrderException, BadQuantityException {
         Optional<Order> order = (orders.stream().filter(o -> (o.getId().equals(idOrder))).findFirst());
         if(order.isPresent())
             cancelOrder(order.get());
@@ -276,7 +276,7 @@ public class COD {
      * @param order the order to cancel
      * @throws OrderException if the order does not exist
      */
-    public void cancelOrder(Order order) throws OrderException {
+    public void cancelOrder(Order order) throws OrderException, BadQuantityException {
         order.setStatus(OrderStatus.CANCELLED);
         order.getCook().cancelOrder(order);
         Store store = order.store;
@@ -288,14 +288,20 @@ public class COD {
      * @param items the items of the cancelled order
      * @param store the store where the order was made
      */
-    private static void putBackIngredientsInInventory(List<Item> items, Store store) {
+    public static void putBackIngredientsInInventory(List<Item> items, Store store) throws BadQuantityException {
         for (Item item : items) {
             Cookie cookie = item.getCookie();
             int numberOfCookie = item.getQuantity();
-            store.getInventory().addIngredient(item.getCookie().getDough(),  numberOfCookie);
-            store.getInventory().addIngredient(item.getCookie().getFlavour(), numberOfCookie);
+            store.addIngredients(item.getCookie().getDough(),  numberOfCookie);
+            store.addIngredients(item.getCookie().getFlavour(), numberOfCookie);
             //topping
-            cookie.getToppings().forEach(topping -> store.getInventory().addIngredient(topping, numberOfCookie));
+            cookie.getToppings().forEach(topping -> {
+                try {
+                    store.addIngredients(topping, numberOfCookie);
+                } catch (BadQuantityException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 
@@ -305,11 +311,10 @@ public class COD {
      * @param s chosen Store
      * @param ingredient name of the ingredient
      * @param amount to add in th store
-     * @throws AlreadyExistException if the ingredient is already in the Store
      * @throws BadQuantityException if the Quantity of Ingredient become negative
      * @throws CatalogException if the Ingredient does not exist
      */
-    public void addInventory(Store s, String ingredient, int amount) throws AlreadyExistException, BadQuantityException, CatalogException {
+    public void addInventory(Store s, String ingredient, int amount) throws BadQuantityException, CatalogException {
         s.addIngredients(getIngredientCatalog(ingredient), amount);
         for (Cookie c: this.recipes) {
             if(!s.getRecipes().contains(c) && s.canAddCookieToStore(c))
@@ -352,7 +357,7 @@ public class COD {
     private void createOrderItem(Cart cart, Order order) throws BadQuantityException {
         for (Item item : cart.getItems()) {
             Cookie cookie = item.getCookie();
-            addCookieInOrder(item.getQuantity(),cookie,order);
+            addCookieInOrder(item.getQuantity(),cookie,order.getStore());
         }
         if (order.getClient() instanceof RegisteredClient) {
             if (((RegisteredClient) order.getClient()).isEligibleForDiscount()) {
@@ -520,10 +525,10 @@ public class COD {
      * the bigger the cookie is, the more ingredients you'll need
      * @param numberOfCookie the number of this type of cookie in the cart
      * @param cookie the cookie to add
-     * @param order the order to add the cookie to
+     * @param store the store to add the cookie to
      * @throws BadQuantityException if the quantity of ingredients to make the cookie is not available
      */
-    public void addCookieInOrder(int numberOfCookie, Cookie cookie, Order order) throws BadQuantityException {
+    public void addCookieInOrder(int numberOfCookie, Cookie cookie, Store store) throws BadQuantityException {
         int ingredientsToDecreaseDueToSize =1 ;
         if (cookie.getSize() != null) {
             switch (cookie.getSize()) {
@@ -532,10 +537,10 @@ public class COD {
                 case XXL -> ingredientsToDecreaseDueToSize = 4;
             }
         }
-        order.store.getInventory().decreaseIngredientQuantity(cookie.getDough(), numberOfCookie * ingredientsToDecreaseDueToSize);
-        order.store.getInventory().decreaseIngredientQuantity(cookie.getFlavour(), numberOfCookie * ingredientsToDecreaseDueToSize);
+        store.getInventory().decreaseIngredientQuantity(cookie.getDough(), numberOfCookie * ingredientsToDecreaseDueToSize);
+        store.getInventory().decreaseIngredientQuantity(cookie.getFlavour(), numberOfCookie * ingredientsToDecreaseDueToSize);
         for (Topping topping : cookie.getToppings()) {
-            order.store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * ingredientsToDecreaseDueToSize);
+            store.getInventory().decreaseIngredientQuantity(topping, numberOfCookie * ingredientsToDecreaseDueToSize);
         }
     }
 

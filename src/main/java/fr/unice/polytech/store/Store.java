@@ -3,7 +3,6 @@ package fr.unice.polytech.store;
 
 import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Cart;
-import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CookException;
 import fr.unice.polytech.recipe.*;
@@ -13,7 +12,6 @@ import lombok.Setter;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -115,14 +113,14 @@ public class Store {
         return possiblePickupTimes;
     }
 
-    public void addIngredients(Ingredient ingredient, int quantity) throws AlreadyExistException, BadQuantityException {
+    public void addIngredients(Ingredient ingredient, int quantity) throws BadQuantityException {
         if (quantity < 0) {
             throw new BadQuantityException("Quantity cannot be under 0");
         }
         if (!this.inventory.hasIngredient(ingredient))
             this.inventory.addIngredient(ingredient, quantity);
         else {
-            throw new AlreadyExistException();
+            this.inventory.addAmountQuantity(ingredient, quantity);
         }
     }
 

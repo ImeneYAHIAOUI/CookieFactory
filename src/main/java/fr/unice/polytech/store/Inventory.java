@@ -28,10 +28,9 @@ public class Inventory extends HashMap<Ingredient, Integer> {
     }
 
     public void decreaseIngredientQuantity(Ingredient ingredient, int quantity) throws BadQuantityException {
-        if (this.get(ingredient) - quantity >= 0) {
+        if (this.hasIngredient(ingredient) && this.get(ingredient) - quantity >= 0) {
             this.replace(ingredient, this.get(ingredient) - quantity);
         } else {
-            System.out.println(this.get(ingredient) - quantity);
             throw new BadQuantityException("Negative quantity not allow");
         }
 

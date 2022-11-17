@@ -19,30 +19,36 @@ import java.util.Scanner;
 import static java.lang.Math.min;
 
 public class App {
-    /*static Scanner SCANNER = new Scanner(System.in);
+    static Scanner SCANNER = new Scanner(System.in);
     static COD COD = new COD();
 
-    public static void main(String[] args) throws RegistrationException, InvalidInputException, StoreException, OrderException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException, InvalidPickupTimeException {
+    public static void main(String[] args) {
         welcomeInterface();
 
     }
 
-    private static void welcomeInterface() throws RegistrationException, InvalidInputException, StoreException, OrderException, CookException, CookieException, BadQuantityException, AlreadyExistException, CatalogException, InvalidPhoneNumberException, InvalidPickupTimeException {
+    private static void welcomeInterface() {
         System.out.println("Welcome in the Cookie On Demand System !");
         COD.printStores();
         COD.printRecipes();
 
-        System.out.println("Are you a Client (Cl), a Cook (Co), an admin (A) or do you want to Quit (Q) ?");
-        String rep = SCANNER.nextLine();
-        switch (rep) {
-            case "Cl" -> authenticationInterface();
-            case "Co" -> cookInterface();
-            case "A" -> adminInterface();
-            case "Q" -> {
-                return;
+        try {
+            System.out.println("Are you a Client (Cl), a Cook (Co), an admin (A) or do you want to Quit (Q) ?");
+            String rep = SCANNER.nextLine();
+            switch (rep) {
+                case "Cl" -> authenticationInterface();
+                case "Co" -> cookInterface();
+                case "A" -> adminInterface();
+                case "Q" -> {
+                    return;
+                }
+                default -> welcomeInterface();
             }
-            default -> welcomeInterface();
+        } catch (Exception | InvalidPickupTimeException exception){
+            System.err.println(exception.getMessage());
         }
+
+
         welcomeInterface();
     }
 
@@ -111,7 +117,7 @@ public class App {
         System.out.println("The order "+rep+" has now a status "+o.getStatus()+".");
     }
 
-    private static void adminInterface() throws StoreException, AlreadyExistException, BadQuantityException, CatalogException {
+    private static void adminInterface() throws StoreException, AlreadyExistException, BadQuantityException, CatalogException, IngredientTypeException {
         System.out.println("Admin Interface : Do you want to add a Store (S), change Taxes of a store (T), change Hours of a store, fill an Inventory (I), add a Cook (C), add an Ingredient to the Catalog (IC) or to validate the news Recipes (R) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
@@ -126,7 +132,7 @@ public class App {
         }
     }
 
-    private static void addIngredientCatalogLoop() throws CatalogException {
+    private static void addIngredientCatalogLoop() throws CatalogException, IngredientTypeException {
         COD.printCatalog();
         System.out.println("How many ingredients do you want to add to the catalog ?");
         String nb = SCANNER.nextLine();
@@ -135,7 +141,7 @@ public class App {
         COD.printCatalog();
     }
 
-    private static void addIngredientCatalog() throws CatalogException {
+    private static void addIngredientCatalog() throws CatalogException, IngredientTypeException {
         COD.printCatalog();
         System.out.println("Enter the name of the ingredient :");
         String name = SCANNER.nextLine();
@@ -195,7 +201,7 @@ public class App {
 
     }
 
-    private static void fillInventory() throws StoreException, AlreadyExistException, BadQuantityException, CatalogException {
+    private static void fillInventory() throws StoreException, BadQuantityException, CatalogException {
         COD.printStores();
         COD.printCatalog();
         System.out.println("Enter the id of a store :");
@@ -285,7 +291,7 @@ public class App {
             System.out.println("You can't see you past orders if you aren't registered.");
     }
 
-    private static void cancelOrder() throws OrderException {
+    private static void cancelOrder() throws OrderException, BadQuantityException {
         System.out.println("Enter the id of your order :");
         String idOrder = SCANNER.nextLine();
         COD.cancelOrder(idOrder);
@@ -349,6 +355,6 @@ public class App {
         } else
             return askIfAccount();
     }
-*/
+
 
 }

@@ -17,7 +17,7 @@ public class Catalog {
 
     private boolean contains(String name){
         for (Ingredient i: INGREDIENTS) {
-            if(i.getName().equals(name))
+            if(i.getName().equalsIgnoreCase(name))
                 return true;
         }
         return false;
@@ -33,7 +33,7 @@ public class Catalog {
 
     public Ingredient getIngredient(String name) throws CatalogException {
         for (Ingredient i: INGREDIENTS) {
-            if(i.getName().equals(name))
+            if(i.getName().equalsIgnoreCase(name))
                 return i;
         }
         throw new CatalogException("The ingredient "+name+" is not in the catalog.");

@@ -4,6 +4,7 @@ import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.NotificationMessage;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.exception.OrderException;
@@ -65,7 +66,7 @@ public class MakeOrderStepDefs {
     }
 
     @When("the client cancels the order")
-    public void whenTheClientCancelsTheOrder() throws OrderException {
+    public void whenTheClientCancelsTheOrder() throws OrderException, BadQuantityException {
         cod.cancelOrder(cod.getOrders().get(0));
     }
 

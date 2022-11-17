@@ -1,12 +1,8 @@
 package stepdefs;
 
 import fr.unice.polytech.COD;
-import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
-import fr.unice.polytech.recipe.Cookie;
-import fr.unice.polytech.recipe.Dough;
-import fr.unice.polytech.recipe.Ingredient;
-import fr.unice.polytech.recipe.IngredientType;
+import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
@@ -19,7 +15,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class StoreStepDefs {
     public final List<Cook> cooks = new ArrayList<>();
@@ -103,7 +99,7 @@ public class StoreStepDefs {
     }
 
     @When("As a Store Manager I can add the new product in the store")
-    public void thenAsAStoreManagerICanAddTheNewProductInTheStore() throws AlreadyExistException, BadQuantityException {
+    public void thenAsAStoreManagerICanAddTheNewProductInTheStore() throws BadQuantityException {
         int storeIndex = this.cod.getStores().indexOf(this.store);
         this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
     }
@@ -115,26 +111,21 @@ public class StoreStepDefs {
     }
 
     @When("As a Store Manager I add a product that already exist in the store")
-    public void addProductAlreadyInInventory() throws AlreadyExistException, BadQuantityException {
+    public void addProductAlreadyInInventory() throws BadQuantityException {
         int storeIndex = this.cod.getStores().indexOf(this.store);
         this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
     }
 
-    @Then("An Error appears because it's already in the inventory")
-    public void thenAnAlreadyExistExceptionIsCaught() throws BadQuantityException {
-        boolean result = false;
+    @Then("The amount is added in the inventory and is now {int}")
+    public void thenAnAlreadyExist(int new_quantity) throws BadQuantityException {
         int storeIndex = this.cod.getStores().indexOf(this.store);
-        try {
-            this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
-        } catch (AlreadyExistException e) {
-            result = true;
-        }
-        assertTrue(result);
+        this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
+        assertEquals(this.cod.getStores().get(storeIndex).getInventory().get(ingredient).intValue(), new_quantity);
     }
 
 
     @When("As a Store Manager I subtract that quantity to the product")
-    public void asAStoreManagerISubtractThatQuantityToTheProduct() throws AlreadyExistException, BadQuantityException {
+    public void asAStoreManagerISubtractThatQuantityToTheProduct() throws BadQuantityException {
         int storeIndex = this.cod.getStores().indexOf(this.store);
         this.cod.getStores().get(storeIndex).addIngredients(ingredient, quantity);
     }
@@ -150,4 +141,17 @@ public class StoreStepDefs {
         }
         assertTrue(result);
     }
+
+    @Then("No error appears because I don't have negative quantity")
+    public void noErrorAppearsBecauseIDonTHaveNegativeQuantity() {
+        boolean result = false;
+        int storeIndex = this.cod.getStores().indexOf(this.store);
+        try {
+            this.cod.getStores().get(storeIndex).getInventory().decreaseIngredientQuantity(ingredient, quantityToSubtract);
+        } catch (BadQuantityException e) {
+            result = true;
+        }
+        assertFalse(result);
+    }
+
 }
