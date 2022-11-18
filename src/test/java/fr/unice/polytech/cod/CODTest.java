@@ -1,4 +1,4 @@
-package fr.unice.polytech;
+package fr.unice.polytech.cod;
 
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
@@ -11,6 +11,7 @@ import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.StoreFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +44,7 @@ public class CODTest {
 
     @BeforeEach
     public void setUp() throws InvalidPhoneNumberException {
+        COD.reset();
         cod = new COD();
         client = new UnregisteredClient("0606060606");
 
@@ -61,14 +63,14 @@ public class CODTest {
         cookie1 = new Cookie("chocolala",1.,15,Cooking.CHEWY,Mix.MIXED, new Dough("chocolate",1),new Flavour("chocolate",1),List.of(new Topping("chocolat",1.)));
 
         inventory = mock(Inventory.class);
-        store = new Store(
+        store = StoreFactory.createStore(
                 List.of(cook),
                 List.of(new Cookie("chocolala", 1., 15, Cooking.CHEWY, Mix.MIXED, new Dough("chocolate", 1), new Flavour("chocolate", 1), List.of(new Topping("chocolate chips", 1)))),
                 "30 Rte des Colles, 06410 Biot",
                 LocalTime.parse("08:00"),
                 LocalTime.parse("20:00"),
                 1,
-                new Inventory(new ArrayList<>()),4.2,new ArrayList<>()
+                new Inventory(new ArrayList<>()), 4.2, new ArrayList<>()
         );
         client.getCart().setPickupTime(LocalTime.parse("10:00"));
         order = new Order("1", client, cook, store);

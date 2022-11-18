@@ -24,7 +24,7 @@
         <option name="m_maxLength" value="32" />
       </extension>
       <extension name="StaticVariableNamingConvention" enabled="true">
-        <option name="m_regex" value="[A-Z][A-Z_\d]*" />
+        <option name="m_regex" value="[a-zA-Z][a-zA-Z_\d]*" />
         <option name="m_minLength" value="2" />
         <option name="m_maxLength" value="32" />
       </extension>

@@ -10,6 +10,7 @@ import fr.unice.polytech.recipe.Cookie;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.StoreFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -46,9 +47,9 @@ public class TimeSlotAttributionStepDefs {
         cooks.add(cook);
         List<Cookie> cookies = new ArrayList<>();
         cookies.add(cookie);
-        store = new Store(cooks, cookies, "", LocalTime.parse(openingHour),
+        store = StoreFactory.createStore(cooks, cookies, "", LocalTime.parse(openingHour),
                 LocalTime.parse(endingHour),
-                1, new Inventory(new ArrayList<>()),4.3, new ArrayList<>());
+                1, new Inventory(new ArrayList<>()), 4.3, new ArrayList<>());
     }
 
     @When("a cart with {int} of the recipe")

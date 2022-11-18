@@ -1,14 +1,15 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.StoreFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -38,11 +39,11 @@ public class PayOrderStepDefs {
 
     @Given("an empty cod and a unregistered client with phone number {string}")
     public void givenACODAndUnregisteredClient(String phoneNumber) throws InvalidPhoneNumberException {
-        cod = new COD();
+        cod = COD.getInstance();
         Client realClient = new UnregisteredClient(phoneNumber);
         client = spy(realClient);
         cooks.add(new Cook(0));
-        store = new Store(cooks, recipes, "address",
+        store = StoreFactory.createStore(cooks, recipes, "address",
                 LocalTime.parse("08:00"), LocalTime.parse("20:00"),
                 1, inventory, 7.0, new ArrayList<>());
         cod.addStore(store);

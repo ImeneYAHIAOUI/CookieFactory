@@ -3,8 +3,6 @@ package fr.unice.polytech.order;
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.services.SMSService;
-import fr.unice.polytech.services.StatusScheduler;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
 import fr.unice.polytech.store.TimeSlot;
@@ -12,7 +10,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,8 +40,8 @@ public class Order {
         this.history = new HashMap<>();
         this.history.put(OrderStatus.NOT_STARTED, new Date());
         this.store = store;
-        Cart cart=client.getCart();
-        this.pickupTime =cart.getPickupTime();
+        Cart cart = client.getCart();
+        this.pickupTime = cart.getPickupTime();
         this.price = cart.getTotal();
         this.timeSlot = new TimeSlot(pickupTime.minus(client.getCart().totalCookingTime()), pickupTime);
         //Tant qu'on a pas l'interaction entre les cooks et le système,
@@ -52,18 +49,6 @@ public class Order {
     }
 
     public void setStatus(OrderStatus status) throws OrderException {
-        if (this.status.equals(OrderStatus.CANCELLED)) {
-            throw new OrderException("This order has been canceled");
-        }
-        if (!(this.status.equals(OrderStatus.NOT_STARTED) || this.status.equals(OrderStatus.PAYED)) && status.equals(OrderStatus.CANCELLED)) {
-            throw new OrderException("This order's status is" + status + "it cannot be cancelled anymore");
-        }
-        if (this.status.equals((status))) {
-            throw new OrderException("This order's status is already "+status);
-        }
-        if (status.equals(OrderStatus.READY)) {
-            StatusScheduler.getInstance().statusSchedulerTask(this, client.getPhoneNumber());
-        }
         this.status = status;
         this.history.put(status, new Date());
     }

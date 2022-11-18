@@ -2,6 +2,7 @@ package stepdefs;
 
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.Order;
@@ -9,7 +10,7 @@ import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.services.StatusScheduler;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.StoreFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -18,29 +19,28 @@ import org.mockito.Spy;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 
-public class notifyClientStepDefs {
+public class NotifyClientStepDefs {
 
     @Spy
     ScheduledThreadPoolExecutor mockedExecutor = spy(new ScheduledThreadPoolExecutor(1));
     ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     Client client;
     @Spy
-    Order order ;
-
+    Order order;
+    COD cod;
 
     @Given("a client with phone number {string}")
     public void aClientWithPhoneNumber(String phoneNumber) throws InvalidPhoneNumberException {
+        cod = COD.getInstance();
         client = new UnregisteredClient(phoneNumber);
     }
 
@@ -50,14 +50,14 @@ public class notifyClientStepDefs {
         LocalTime closingTime = LocalTime.of(20, 0);
         LocalTime pickupTime = LocalTime.of(12, 0);
         client.getCart().setPickupTime(pickupTime);
-        Order order2 = new Order("1",client,new Cook(1),new Store(new ArrayList<>(), new ArrayList<>(), "address",openingTime,closingTime,1,new Inventory(new ArrayList<>()),0.2,new ArrayList<>()));
+        Order order2 = new Order("1", client, new Cook(1), StoreFactory.createStore(new ArrayList<>(), new ArrayList<>(), "address", openingTime, closingTime, 1, new Inventory(new ArrayList<>()), 0.2, new ArrayList<>()));
         order = spy(order2);
         doAnswer(invocation -> {
             when(order.getStatus()).thenReturn(invocation.getArgument(0));
             return null;
         }).when(order).setStatus(any(OrderStatus.class));
 
-        doAnswer( invocation -> {
+        doAnswer(invocation -> {
             executor.execute(invocation.getArgument(0));
             return null;
         }).when(mockedExecutor).schedule(any(Runnable.class), anyLong(),any(TimeUnit.class));
@@ -66,8 +66,8 @@ public class notifyClientStepDefs {
 
     @Then("the client gets notified and doesn't receive more notifications")
     public void theClientShouldBeNotified() throws InterruptedException {
-        StatusScheduler.getInstance(mockedExecutor).statusSchedulerTask(order, client.getPhoneNumber());
-        verify(mockedExecutor, times(1)).schedule(any(Runnable.class), anyLong(),any(TimeUnit.class));
+        StatusScheduler.getInstance(mockedExecutor).statusSchedulerTask(order);
+        verify(mockedExecutor, times(1)).schedule(any(Runnable.class), anyLong(), any(TimeUnit.class));
         Thread.sleep(10);
         assertEquals(OrderStatus.COMPLETED,order.getStatus());
     }
@@ -77,15 +77,16 @@ public class notifyClientStepDefs {
     public void theClientDoesntPickUpTheOrder() {
         when(order.getStatus()).thenReturn(OrderStatus.READY);
     }
+
     @Then("the client gets notified and the order is obsolete")
     public void theClientGetsNotifiedAndTheOrderIsObsolete() throws InterruptedException {
-        StatusScheduler.getInstance(mockedExecutor).statusSchedulerTask(order, client.getPhoneNumber());
+        StatusScheduler.getInstance(mockedExecutor).statusSchedulerTask(order);
         Thread.sleep(10);
-        assertEquals(OrderStatus.OBSOLETE,order.getStatus());
+        assertEquals(OrderStatus.OBSOLETE, order.getStatus());
     }
 
     @When("the client picks up the order")
-    public void theClientPicksUpOrderOneHourAfter(){
+    public void theClientPicksUpOrderOneHourAfter() {
         when(order.getStatus()).thenReturn(OrderStatus.COMPLETED);
     }
 }

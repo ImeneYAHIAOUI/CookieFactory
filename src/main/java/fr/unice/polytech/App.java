@@ -3,11 +3,11 @@ package fr.unice.polytech;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
-
 import fr.unice.polytech.store.Occasion;
 import fr.unice.polytech.store.Store;
 
@@ -20,7 +20,7 @@ import static java.lang.Math.min;
 
 public class App {
     static Scanner SCANNER = new Scanner(System.in);
-    static COD COD = new COD();
+    static COD cod = COD.getInstance();
 
     public static void main(String[] args) {
         welcomeInterface();
@@ -29,8 +29,8 @@ public class App {
 
     private static void welcomeInterface() {
         System.out.println("Welcome in the Cookie On Demand System !");
-        COD.printStores();
-        COD.printRecipes();
+        cod.printStores();
+        cod.printRecipes();
 
         try {
             System.out.println("Are you a Client (Cl), a Cook (Co), an admin (A) or do you want to Quit (Q) ?");
@@ -63,7 +63,7 @@ public class App {
     }
 
     private static void suggestRecipe() throws CatalogException {
-        COD.printCatalog();
+        cod.printCatalog();
         System.out.println("Let's create a recipe ! What is the name ?");
         String name = SCANNER.nextLine();
         System.out.println("Choose a price :");
@@ -76,10 +76,10 @@ public class App {
         String mix = SCANNER.nextLine();
         System.out.println("Choose a dough :");
         String dough = SCANNER.nextLine();
-        Ingredient doughIngredient = COD.getIngredientCatalog(dough);
+        Ingredient doughIngredient = cod.getIngredientCatalog(dough);
         System.out.println("Choose a flavour :");
         String flavour = SCANNER.nextLine();
-        Ingredient flavourIngredient = COD.getIngredientCatalog(flavour);
+        Ingredient flavourIngredient = cod.getIngredientCatalog(flavour);
         Mix mix_chosen = Mix.MIXED;
         if(mix.equals("T"))
             mix_chosen = Mix.TOPPED;
@@ -92,16 +92,16 @@ public class App {
         for (int i = 0; i<min(Integer.parseInt(nbTopping), 3); i++){
             System.out.println("Choose a topping :");
             String t = SCANNER.nextLine();
-            toppingList.add(COD.getIngredientCatalog(t));
+            toppingList.add(cod.getIngredientCatalog(t));
         }
-        COD.suggestRecipe(name, Double.parseDouble(price), Integer.parseInt(time), cooking_chosen, mix_chosen, doughIngredient, flavourIngredient, toppingList);
-        System.out.println("You suggested the recipe "+name+".");
+        cod.suggestRecipe(name, Double.parseDouble(price), Integer.parseInt(time), cooking_chosen, mix_chosen, doughIngredient, flavourIngredient, toppingList);
+        System.out.println("You suggested the recipe " + name + ".");
     }
 
     private static void setStatusOrder() throws OrderException {
         System.out.println("Enter the idOrder :");
         String rep = SCANNER.nextLine();
-        Order o = COD.getOrder(rep);
+        Order o = cod.getOrder(rep);
         System.out.println("The order "+rep+" has a status "+o.getStatus()+".");
         System.out.println("Choose the new status : in progress (P), Ready (R), Completed (C), Obsolete (O).");
         rep = SCANNER.nextLine();
@@ -113,8 +113,8 @@ public class App {
             case "O" -> status = OrderStatus.OBSOLETE;
             default -> status = o.getStatus();
         }
-        COD.setStatus(o, status);
-        System.out.println("The order "+rep+" has now a status "+o.getStatus()+".");
+        cod.setStatus(o, status);
+        System.out.println("The order " + rep + " has now a status " + o.getStatus() + ".");
     }
 
     private static void adminInterface() throws StoreException, AlreadyExistException, BadQuantityException, CatalogException, IngredientTypeException {
@@ -133,16 +133,16 @@ public class App {
     }
 
     private static void addIngredientCatalogLoop() throws CatalogException, IngredientTypeException {
-        COD.printCatalog();
+        cod.printCatalog();
         System.out.println("How many ingredients do you want to add to the catalog ?");
         String nb = SCANNER.nextLine();
         for(int i = 0; i<Integer.parseInt(nb); i++)
             addIngredientCatalog();
-        COD.printCatalog();
+        cod.printCatalog();
     }
 
     private static void addIngredientCatalog() throws CatalogException, IngredientTypeException {
-        COD.printCatalog();
+        cod.printCatalog();
         System.out.println("Enter the name of the ingredient :");
         String name = SCANNER.nextLine();
         System.out.println("Enter the price of the ingredient :");
@@ -155,32 +155,32 @@ public class App {
             case "D" -> ingredientType = IngredientType.DOUGH;
             default -> ingredientType = IngredientType.TOPPING;
         }
-        COD.addIngredientCatalog(name, Double.parseDouble(price), ingredientType);
-        System.out.println(name+" added with success.");
+        cod.addIngredientCatalog(name, Double.parseDouble(price), ingredientType);
+        System.out.println(name + " added with success.");
     }
 
     private static void setTax() throws StoreException {
         System.out.println("Enter the idStore :");
         String rep = SCANNER.nextLine();
-        Store s = COD.getStore(Integer.parseInt(rep));
+        Store s = cod.getStore(Integer.parseInt(rep));
         System.out.println("The store "+rep+" has taxes at "+s.getTax()+".");
         System.out.println("Enter the new taxes :");
         String tax = SCANNER.nextLine();
-        COD.setTax(s, Double.parseDouble(tax));
-        System.out.println("The store "+rep+" has now taxes at "+s.getTax()+".");
+        cod.setTax(s, Double.parseDouble(tax));
+        System.out.println("The store " + rep + " has now taxes at " + s.getTax() + ".");
     }
 
     private static void setHours() throws StoreException {
         System.out.println("Enter the idStore :");
         String rep = SCANNER.nextLine();
-        Store s = COD.getStore(Integer.parseInt(rep));
+        Store s = cod.getStore(Integer.parseInt(rep));
         System.out.println("The store "+rep+" has hours ("+s.openingTime+";"+s.closingTime+").");
         System.out.println("Enter the new opening hour (ex: \"08:00\":");
         String open = SCANNER.nextLine();
         System.out.println("Enter the new ending hour (ex: \"08:00\":");
         String end = SCANNER.nextLine();
-        COD.setHours(s, LocalTime.parse(open), LocalTime.parse(end));
-        System.out.println("The store "+rep+" has now hours ("+s.openingTime+";"+s.closingTime+").");
+        cod.setHours(s, LocalTime.parse(open), LocalTime.parse(end));
+        System.out.println("The store " + rep + " has now hours (" + s.openingTime + ";" + s.closingTime + ").");
     }
 
     private static void addStore(){
@@ -196,48 +196,47 @@ public class App {
         String tax = SCANNER.nextLine();
         System.out.println("Enter an occasion :"); // à modifier plus tard pour ajouter plusieurs occasions
         String occasion = SCANNER.nextLine();
-        COD.addStore(Integer.parseInt(nbCook), address, open, end, Double.parseDouble(tax), List.of(new Occasion((occasion))));
-        System.out.println("You added a store at the address"+address+".");
+        cod.addStore(Integer.parseInt(nbCook), address, open, end, Double.parseDouble(tax), List.of(new Occasion((occasion))));
+        System.out.println("You added a store at the address" + address + ".");
 
     }
 
     private static void fillInventory() throws StoreException, BadQuantityException, CatalogException {
-        COD.printStores();
-        COD.printCatalog();
+        cod.printStores();
+        cod.printCatalog();
         System.out.println("Enter the id of a store :");
         String idStore = SCANNER.nextLine();
-        Store store = COD.getStore(Integer.parseInt(idStore));
+        Store store = cod.getStore(Integer.parseInt(idStore));
         System.out.println(store.getInventory());
         System.out.println("What is the name of the ingredient you want to add ?");
         String name = SCANNER.nextLine();
         System.out.println("How much do you want to add ?");
         String amount = SCANNER.nextLine();
-        COD.addInventory(store, name, Integer.parseInt(amount));
-        System.out.println("You added "+amount+" "+name+" in the store "+idStore+".");
+        cod.addInventory(store, name, Integer.parseInt(amount));
+        System.out.println("You added " + amount + " " + name + " in the store " + idStore + ".");
     }
 
     private static void addCook() throws StoreException {
         System.out.println("Enter the id of the store for the cook :");
         String idStore = SCANNER.nextLine();
-        COD.addCook(Integer.parseInt(idStore));
-        System.out.println("Cook added in the store "+idStore+".");
+        cod.addCook(Integer.parseInt(idStore));
+        System.out.println("Cook added in the store " + idStore + ".");
     }
 
     private static void validateRecipes(){
-        if(COD.getSuggestedRecipes().isEmpty())
+        if (cod.getSuggestedRecipes().isEmpty())
             System.out.println("No suggested recipes today !");
-        for (Cookie c: COD.getSuggestedRecipes()) {
+        for (Cookie c : cod.getSuggestedRecipes()) {
             System.out.println(c);
             System.out.println("Do you want to validate this recipe ? (Y/N)");
             String rep = SCANNER.nextLine();
-            if(rep.equals("Y")){
+            if (rep.equals("Y")) {
                 System.out.println("Choose a price for the recipe :");
                 String price = SCANNER.nextLine();
-                COD.acceptRecipe(c, Double.valueOf(price));
+                cod.acceptRecipe(c, Double.valueOf(price));
                 System.out.println("Recipe accepted.");
-            }
-            else if (rep.equals("N")) {
-                COD.declineRecipe(c);
+            } else if (rep.equals("N")) {
+                cod.declineRecipe(c);
                 System.out.println("Recipe declined.");
             } else
                 System.out.println("Recipe passed.");
@@ -257,13 +256,13 @@ public class App {
                 String pw = SCANNER.nextLine();
                 System.out.println("Enter your phone number :");
                 String pn = SCANNER.nextLine();
-                COD.register(un, pw, pn);
+                cod.register(un, pw, pn);
             }
             System.out.println("Let's log into your account ! Enter your userName :");
             String un = SCANNER.nextLine();
             System.out.println("Enter your password :");
             String pw = SCANNER.nextLine();
-            client = COD.logIn(un, pw);
+            client = cod.logIn(un, pw);
         } else {
             System.out.println("You still have to enter your phone number :");
             String phoneNumber = SCANNER.nextLine();
@@ -294,19 +293,19 @@ public class App {
     private static void cancelOrder() throws OrderException, BadQuantityException {
         System.out.println("Enter the id of your order :");
         String idOrder = SCANNER.nextLine();
-        COD.cancelOrder(idOrder);
+        cod.cancelOrder(idOrder);
     }
 
     private static void passOrder(Client client) throws StoreException, CookieException, OrderException, CookException, BadQuantityException, InvalidPickupTimeException {
-        COD.printStores();
+        cod.printStores();
         System.out.println("Enter the id of a store :");
         String idStore = SCANNER.nextLine();
-        Store store = COD.getStore(Integer.parseInt(idStore));
-        COD.printRecipes(store);
+        Store store = cod.getStore(Integer.parseInt(idStore));
+        cod.printRecipes(store);
         chooseOrder(client, store);
-        System.out.println("Your Cart : "+client.getCart());
+        System.out.println("Your Cart : " + client.getCart());
         choosePickUpTime(client, store);
-        String orderId = COD.finalizeOrder(client, store);
+        String orderId = cod.finalizeOrder(client, store);
         System.out.println("Congrats ! Here is the id to pick up your order : " + orderId);
     }
 
@@ -317,21 +316,21 @@ public class App {
         while (!name.equalsIgnoreCase("STOP")){
             System.out.println("Choose an amount :");
             String amount = SCANNER.nextLine();
-            COD.chooseCookie(client, store, name, Integer.parseInt(amount));
+            cod.chooseCookie(client, store, name, Integer.parseInt(amount));
             System.out.println("Choose a recipe (STOP if you have enough):");
             name = SCANNER.nextLine();
         }
     }
 
     private static void choosePickUpTime(Client client, Store store) throws InvalidPickupTimeException {
-        List<LocalTime> possiblePickUpTimes = COD.getPickupTimes(client.getCart(), store);
+        List<LocalTime> possiblePickUpTimes = cod.getPickupTimes(client.getCart(), store);
         System.out.println("Choose a pickup time (enter the number)");
         int i = 0;
         for (LocalTime l: possiblePickUpTimes) {
             System.out.println(i++ + " "+ l);
         }
         String rep = SCANNER.nextLine();
-        COD.choosePickupTime(client.getCart(), store, possiblePickUpTimes.get(Integer.parseInt(rep)));
+        cod.choosePickupTime(client.getCart(), store, possiblePickUpTimes.get(Integer.parseInt(rep)));
     }
 
     private static boolean askIfRegister(){

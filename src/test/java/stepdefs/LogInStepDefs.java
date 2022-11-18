@@ -1,7 +1,7 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.InvalidInputException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.RegistrationException;
@@ -19,7 +19,7 @@ public class LogInStepDefs {
 
     @Given("cod with registered client with id {string} , password {string} and phone number {string}")
     public void codWithRegisteredClientWithIdAndPassword(String id, String password, String phoneNumber) {
-        cod = new COD();
+        cod = COD.getInstance();
         try {
             cod.register(id, password, phoneNumber);
             this.id = id;
@@ -51,7 +51,7 @@ public class LogInStepDefs {
     public void client_log_in_with_invalid_password_id_and_password(String id, String password) {
         try {
             cod.logIn(id, password);
-        } catch (InvalidInputException exception) {
+        } catch (InvalidInputException ignored) {
 
         }
     }

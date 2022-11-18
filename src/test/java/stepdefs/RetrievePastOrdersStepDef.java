@@ -1,7 +1,7 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 public class RetrievePastOrdersStepDef {
 
-    COD cod = new COD();
+    COD cod = COD.getInstance();
 
     RegisteredClient client;
 

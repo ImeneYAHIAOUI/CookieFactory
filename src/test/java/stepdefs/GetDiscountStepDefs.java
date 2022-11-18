@@ -1,7 +1,7 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
@@ -10,7 +10,6 @@ import fr.unice.polytech.recipe.Flavour;
 import fr.unice.polytech.recipe.Topping;
 import fr.unice.polytech.services.PaymentService;
 import fr.unice.polytech.store.Store;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -35,9 +34,8 @@ public class GetDiscountStepDefs {
 
     List<Order> pastOrders;
 
-    @Before
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
-        cod = new COD();
+        cod = COD.getInstance();
         cod.initializationCod();
         paymentService = mock(PaymentService.class);
         Field paymentServiceInstance = PaymentService.class.getDeclaredField("INSTANCE");
@@ -51,7 +49,8 @@ public class GetDiscountStepDefs {
     }
 
     @Given("a registered client")
-    public void givenARegisteredClient() throws InvalidPhoneNumberException {
+    public void givenARegisteredClient() throws InvalidPhoneNumberException, NoSuchFieldException, IllegalAccessException {
+        setUp();
         RegisteredClient realClient = new RegisteredClient("id", "password", "0123456789");
         client = spy(realClient);
     }

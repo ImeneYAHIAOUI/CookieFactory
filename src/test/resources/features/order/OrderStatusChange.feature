@@ -4,9 +4,9 @@ Feature: Order Status Change
   Background:
     Given an order with id "1234"
 
-    Scenario: order status is "in progress" and we want to cancel it
-      When order status is "IN_PROGRESS"
-      Then the order can not be set to "CANCELLED"
+  Scenario: order status is "in progress" and we want to cancel it
+    When order status is "IN_PROGRESS"
+    Then the order can not be set to "CANCELLED"
 
   Scenario: order status is "Ready" and we want to cancel it
     When order status is "READY"

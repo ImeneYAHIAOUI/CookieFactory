@@ -1,6 +1,6 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.services.LocationService;
 import fr.unice.polytech.store.Store;
 import io.cucumber.java.en.And;
@@ -28,8 +28,8 @@ public class getNearbyStoresStepDefs {
 
     @Given("^stores with locations$")
     public void givenTheFollowingStores(List<String> addresses) {
-        cod = new COD();
-        cod.initializationCod();
+        COD.reset();
+        cod = COD.getInstance();
         for (String address : addresses) {
             Store store = mock(Store.class);
             when(store.getAddress()).thenReturn(address);
@@ -42,23 +42,21 @@ public class getNearbyStoresStepDefs {
     public void andTheClientIsLocatedAt(String address) throws IOException {
         locationService = mock(LocationService.class);
         location = address;
-        for(int i=1;i<cod.getStores().size();i++){
-            if(i <3 ) {
-                when(locationService.distance(location,cod.getStores().get(i).getAddress())).thenReturn(0.75);
-                when(locationService.distance(location,cod.getStores().get(i).getAddress(),"km")).thenReturn(0.75);
-                when(locationService.distance(location,cod.getStores().get(i).getAddress(),"m")).thenReturn(750.0);
+        for (int i = 1; i < cod.getStores().size(); i++) {
+            if (i < 3) {
+                when(locationService.distance(location, cod.getStores().get(i).getAddress())).thenReturn(0.75);
+                when(locationService.distance(location, cod.getStores().get(i).getAddress(), "km")).thenReturn(0.75);
+                when(locationService.distance(location, cod.getStores().get(i).getAddress(), "m")).thenReturn(750.0);
+            } else if (i < 4) {
+                when(locationService.distance(location, cod.getStores().get(i).getAddress())).thenReturn(0.78);
+                when(locationService.distance(location, cod.getStores().get(i).getAddress(), "km")).thenReturn(0.78);
+                when(locationService.distance(location, cod.getStores().get(i).getAddress(), "m")).thenReturn(780.0);
+            } else {
+                when(locationService.distance(location, cod.getStores().get(i).getAddress())).thenReturn(5.0);
+                when(locationService.distance(location, cod.getStores().get(i).getAddress(), "km")).thenReturn(5.0);
+                when(locationService.distance(location, cod.getStores().get(i).getAddress(), "m")).thenReturn(5000.0);
             }
-            else if(i<5){
-                when(locationService.distance(location,cod.getStores().get(i).getAddress())).thenReturn(0.78);
-                when(locationService.distance(location,cod.getStores().get(i).getAddress(),"km")).thenReturn(0.78);
-                when(locationService.distance(location,cod.getStores().get(i).getAddress(),"m")).thenReturn(780.0);
-            }
-            else {
-                when(locationService.distance(location,cod.getStores().get(i).getAddress())).thenReturn(5.0);
-                when(locationService.distance(location,cod.getStores().get(i).getAddress(),"km")).thenReturn(5.0);
-                when(locationService.distance(location,cod.getStores().get(i).getAddress(),"m")).thenReturn(5000.0);
-            }
-       }
+        }
         cod.setLocationService(locationService);
     }
 
@@ -78,6 +76,7 @@ public class getNearbyStoresStepDefs {
             assertTrue(nearbyStores.stream().anyMatch(store -> store.getAddress().equals(address)));
         }
     }
+
     @And(("^not these locations$"))
     public void andNotTheseLocations(List<String> addresses) {
         for (String address : addresses) {

@@ -1,4 +1,4 @@
-package fr.unice.polytech;
+package fr.unice.polytech.cod;
 
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
@@ -10,11 +10,8 @@ import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.services.LocationService;
 import fr.unice.polytech.services.PaymentService;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Inventory;
-import fr.unice.polytech.store.Occasion;
-
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.services.StatusScheduler;
+import fr.unice.polytech.store.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class COD {
+    private static COD INSTANCE = null;
     @Getter
     private final List<Cookie> recipes;
     private final List<Cookie> suggestedRecipes;
@@ -50,7 +48,7 @@ public class COD {
 
     private final Catalog catalog;
 
-    public COD(){
+    COD() {
         this.recipes = new ArrayList<>();
         this.stores = new ArrayList<>();
         this.orders = new ArrayList<>();
@@ -61,10 +59,21 @@ public class COD {
         locationService = new LocationService();
     }
 
+    public static COD getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new COD();
+        }
+        return INSTANCE;
+    }
+
+    public static void reset() {
+        INSTANCE = null;
+    }
+
     /**
      * Initialization of the COD with 1 store, 1 recipe and 1 occasion
      */
-    public void initializationCod(){
+    public void initializationCod() {
         //Initialisation with 1 store + 1 recipe
         recipes.add(new Cookie(
                 "chocolala",
@@ -139,7 +148,7 @@ public class COD {
 
 
     public void setStatus(Order order, OrderStatus status) throws OrderException {
-        order.setStatus(status);
+        StatusScheduler.getInstance().setStatus(order, status);
     }
 
     public void setHours(Store store, LocalTime openingTime, LocalTime closingTime) {
@@ -421,7 +430,7 @@ public class COD {
         List<Cook> cooks = new ArrayList<>();
         for (int i =0; i<nbCooks; i++)
             cooks.add(new Cook(idCook++));
-        stores.add(new Store(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>()),tax,occasions));
+        stores.add(StoreFactory.createStore(cooks, List.copyOf(recipes), address, LocalTime.parse(openingTime), LocalTime.parse(endingTime), idStore++, new Inventory(new ArrayList<>()), tax, occasions));
     }
 
     /**

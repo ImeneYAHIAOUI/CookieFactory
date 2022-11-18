@@ -1,11 +1,12 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.StoreFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -36,14 +37,14 @@ public class StoreStepDefs {
 
     @Given("a store with address {string}")
     public void givenAStore(String address) {
-        this.store = new Store(cooks, recipes, address, LocalTime.parse("08:00"),
+        this.store = StoreFactory.createStore(cooks, recipes, address, LocalTime.parse("08:00"),
                 LocalTime.parse("20:00"),
-                id, inventory,4.0, new ArrayList<>());
+                id, inventory, 4.0, new ArrayList<>());
     }
 
     @And("a cod with the store")
     public void andGivenCODStore() {
-        this.cod = new COD();
+        this.cod = COD.getInstance();
         this.cod.getStores().add(store);
     }
 

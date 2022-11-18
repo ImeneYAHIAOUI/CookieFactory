@@ -1,10 +1,10 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.exception.*;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
@@ -14,6 +14,7 @@ import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.StoreFactory;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -68,7 +69,7 @@ public class ChooseCookieStepDefs {
 
     @Given("a cod to store data")
     public void andGiven() {
-        cod = new COD();
+        cod = COD.getInstance();
         codIngredients.add(new Topping("chocolate chips", 1));
         codIngredients.add(new Dough("chocolate dough", 1));
         codIngredients.add(new Flavour("vanillaFlavour", 1));
@@ -102,7 +103,7 @@ public class ChooseCookieStepDefs {
     {
         List<Cook> cooks = new ArrayList<>();
         cooks.add(new Cook(0));
-        store = new Store(cooks, new ArrayList<>(), "address", LocalTime.parse("08:30"), LocalTime.parse("16:00"), id, inventory,4.0,null);
+        store = StoreFactory.createStore(cooks, new ArrayList<>(), "address", LocalTime.parse("08:30"), LocalTime.parse("16:00"), id, inventory,4.0,null);
     }
 
 

@@ -1,6 +1,6 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.CatalogException;
 import fr.unice.polytech.recipe.Cooking;
 import fr.unice.polytech.recipe.IngredientType;
@@ -20,7 +20,7 @@ public class SuggestRecipesStepDefs {
 
     @Given("empty cod")
     public void initializeCod(){
-        cod = new COD();
+        cod = COD.getInstance();
     }
 
     @When("add the ingredient with name {string}, price {double} and type {string}")

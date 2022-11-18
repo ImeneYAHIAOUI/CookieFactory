@@ -1,11 +1,12 @@
 package fr.unice.polytech.store;
 
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Cart;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CookException;
 import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.services.TooGoodToGo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,20 +29,34 @@ public class Store {
     @Getter
     public LocalTime closingTime;
     @Getter
+    private final List<Occasion> occasionList;
+    @Getter
     private final int id;
     @Getter
     private final Inventory inventory;
     @Getter
     @Setter
-    private  Double tax;
+    private TooGoodToGo tooGoodToGo;
     @Getter
-    private  final List<Occasion> occasionList;
-    public Store(List<Cook> cooks, List<Cookie> recipes, String address, LocalTime openingTime, LocalTime closingTime, int id, Inventory inventory,double tax,List<Occasion> occasions) {
-        occasionList =new ArrayList<>();
+    @Setter
+    private Double tax;
+
+    Store(
+            List<Cook> cooks,
+            List<Cookie> recipes,
+            String address,
+            LocalTime openingTime,
+            LocalTime closingTime,
+            int id,
+            Inventory inventory,
+            double tax,
+            List<Occasion> occasions
+    ) {
+        occasionList = new ArrayList<>();
         this.cooks = new ArrayList<>(cooks);
         this.recipes = new ArrayList<>(recipes);
         this.address = address;
-        this.tax=tax;
+        this.tax = tax;
         if (openingTime.isBefore(closingTime)) {
             this.openingTime = openingTime;
             this.closingTime = closingTime;
@@ -52,15 +67,16 @@ public class Store {
         }
         this.id = id;
         this.inventory = inventory;
-        if( occasions != null){
-            occasions.forEach(occasion ->{
-                if(!this.occasionList.contains(occasion)){
+        if (occasions != null) {
+            occasions.forEach(occasion -> {
+                if (!this.occasionList.contains(occasion)) {
                     this.occasionList.add(occasion);
                 }
-            } );
+            });
         }
 
     }
+
     public void setHours(LocalTime openingTime, LocalTime closingTime) {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
@@ -98,7 +114,7 @@ public class Store {
      */
     public List<LocalTime> getPossiblePickupTimes(Cart cart) {
         List<LocalTime> possiblePickupTimes = new ArrayList<>();
-        // Acceptable earliest pickup time is 10 minutes after now.
+        // Acceptable earliest cooking start time is 10 minutes after now.
         // This is to account for the time it takes to place the order.
         LocalTime now = LocalTime.now(COD.getCLOCK());
         LocalTime cookingStartTime = now.plusMinutes(15+(now.getMinute() % 5)).truncatedTo(ChronoUnit.MINUTES);
@@ -153,7 +169,8 @@ public class Store {
             recipes.removeIf(cookie -> cookie.getToppings().contains(ingredient));
         }
     }
-    public void addCook(Cook c){
+
+    public void addCook(Cook c) {
         cooks.add(c);
     }
 

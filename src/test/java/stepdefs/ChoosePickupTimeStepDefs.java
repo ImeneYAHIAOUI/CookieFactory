@@ -1,8 +1,8 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.order.Item;
@@ -15,10 +15,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.time.Clock;
-import java.time.Instant;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,15 +25,12 @@ public class ChoosePickupTimeStepDefs {
     Client client;
     Store store;
 
-    @Before
+    @Before(value = "@choose-pickup-time", order = 2)
     public void setUp() throws InvalidPhoneNumberException {
-        cod = new COD();
+        cod = COD.getInstance();
         cod.initializationCod();
         client = new UnregisteredClient("0123456789");
         store = cod.getStores().get(0);
-        String instantExpected = "2022-11-07T09:15:00Z";
-        Clock clock = Clock.fixed(Instant.parse(instantExpected), ZoneId.of("UTC"));
-        COD.setCLOCK(clock);
         store.getInventory().addIngredient(new Dough("chocolate", 1), 100);
         store.getInventory().addIngredient(new Flavour("chocolate", 1), 100);
         store.getInventory().addIngredient(new Topping("chocolate chips", 1), 100);
@@ -44,7 +38,6 @@ public class ChoosePickupTimeStepDefs {
 
     @Given("a client with a cart containing some items")
     public void aClientWithACartContainingSomeItems() {
-
         client.getCart().setTax(.1);
         client.getCart()
                 .addItem(new Item(3, cod.getRecipes().get(0)));

@@ -1,9 +1,9 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.NotificationMessage;
 import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
@@ -11,10 +11,10 @@ import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.services.SMSService;
+import fr.unice.polytech.services.StatusScheduler;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Store;
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -35,22 +35,26 @@ public class MakeOrderStepDefs {
     Store store;
     private ByteArrayOutputStream outContent ;
 
-    @Before
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
         smsService = mock(SMSService.class);
-        cod = new COD();
+        cod = COD.getInstance();
         cod.initializationCod();
         store = cod.getStores().get(0);
         // Mock the sms service singleton
         Field instance = SMSService.class.getDeclaredField("INSTANCE");
         instance.setAccessible(true);
         instance.set(instance, smsService);
+        // Mock the cod singleton
+        Field codInstance = COD.class.getDeclaredField("INSTANCE");
+        codInstance.setAccessible(true);
+        codInstance.set(codInstance, cod);
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
     }
 
     @Given("a client")
-    public void givenAClient() throws InvalidPhoneNumberException {
+    public void givenAClient() throws InvalidPhoneNumberException, NoSuchFieldException, IllegalAccessException {
+        setUp();
         client = new UnregisteredClient("0123456789");
     }
 
@@ -77,7 +81,7 @@ public class MakeOrderStepDefs {
 
     @When("the order status changes to {string}")
     public void whenTheOrderStatusChangesTo(String status) throws OrderException {
-        cod.getOrders().get(0).setStatus(OrderStatus.valueOf(status));
+        StatusScheduler.getInstance().setStatus(cod.getOrders().get(0), OrderStatus.valueOf(status));
     }
 
     @Then("the client is notified")

@@ -1,6 +1,6 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CatalogException;
 import fr.unice.polytech.exception.IngredientTypeException;
@@ -9,6 +9,7 @@ import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.Cook;
 import fr.unice.polytech.store.Inventory;
 import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.StoreFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -27,10 +28,10 @@ public class InventoryStepDefs {
     Cookie cookie;
     @Given("cod with store and recipe")
     public void initialization(){
-        cod = new COD();
+        cod = COD.getInstance();
         cod.initializationCod();
         List<Cook> cooks = new ArrayList<>();
-        store = new Store(cooks,
+        store = StoreFactory.createStore(cooks,
                 new ArrayList<>(),
                 "",
                 LocalTime.parse("08:00"),

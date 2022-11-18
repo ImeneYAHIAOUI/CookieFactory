@@ -1,6 +1,6 @@
 package stepdefs;
 
-import fr.unice.polytech.COD;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.RegistrationException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -20,7 +20,7 @@ public class RegisterStepDefs {
 
     @Given("an empty cod without data")
     public void andGivenAnEmptyCOD() {
-        cod = new COD();
+        cod = COD.getInstance();
     }
 
     @When("Client register with id {string}, mdp {string}, phone number {string}")
