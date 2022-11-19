@@ -18,9 +18,8 @@
       And a store with id 1
 
       And the store has cookies
-        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
-        | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
-        | strawberry | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
+        | chocolate chip | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
       And the store has party cookies and all available size
         | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
         | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
@@ -28,11 +27,8 @@
 
       When Client chooses party cookies of type "chocolala" and size "L"
       And amount 1
-
-
       Then this order can be purchased
       And the clients cart contains 1 party cookie(s) of type "chocolala" and size "L"
-
 
     Scenario: Choose party cookies with wrong size
       Given an inventory with the ingredients and amounts
@@ -46,9 +42,8 @@
       And a store with id 1
 
       And the store has cookies
-        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
-        | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
-        | strawberry | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
+        | chocolate chip | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
       And the store has party cookies and all available size
         | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
         | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
@@ -73,15 +68,14 @@
       And a store with id 1
 
       And the store has cookies
-        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
-        | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
+        | chocolate chip | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
       And the store has party cookies and all available size
         | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
         | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
 
       When Client chooses party cookies of type "chocoWrong" and size "L"
       And amount 1
-
       Then this order cannot be purchased because the cookie doesn't exist
       And the clients cart is empty
 
@@ -98,8 +92,8 @@
       And a store with id 1
 
       And the store has cookies
-        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
-        | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
+        | chocolate chip | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
       And the store has party cookies and all available size
         | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
         | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
@@ -122,8 +116,8 @@
       And a store with id 1
 
       And the store has cookies
-        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
-        | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
+        | chocolate chip | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
       And the store has party cookies and all available size
         | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
         | vanilla   | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
@@ -146,7 +140,7 @@
       And a store with id 1
 
       And the store has cookies
-        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | chocolate chip | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
       And the store has party cookies and all available size
         | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
 
@@ -168,7 +162,7 @@
       And a store with id 1
 
       And the store has cookies
-        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | chocolate chip | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
       And the store has party cookies and all available size
         | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
 
@@ -191,7 +185,7 @@
       And a store with id 1
 
       And the store has cookies
-        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | chocolate chip | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
       And the store has party cookies and all available size
         | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
 
@@ -219,7 +213,7 @@
       And amount 1
       And client finalize his order
 
-      Then the price of the order is 5.0
+      Then the price of the order is 25.0
       #prix cookie normal = 5.0, taille XL -> prix x5 = 25.0
 
     Scenario: Higher Price for a party cookie with size XXL than a normal cookie
@@ -238,7 +232,7 @@
       And amount 1
       And client finalize his order
 
-      Then the price of the order is 5.0
+      Then the price of the order is 30.0
       #prix cookie normal = 5.0, taille XL -> prix x6 = 30.0
 
     Scenario: Order a party cookie with a theme

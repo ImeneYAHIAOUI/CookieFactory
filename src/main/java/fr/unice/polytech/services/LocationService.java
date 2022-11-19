@@ -75,7 +75,6 @@ public class LocationService {
                 String lat = (String) jsonObject.get("lat");
                 res.put("lon", Double.parseDouble(lon));
                 res.put("lat", Double.parseDouble(lat));
-
             }
         }
         return res;

@@ -338,8 +338,9 @@ public class ChooseCookieStepDefs {
             }
 
             for (CookieSize cookieSize : CookieSize.values()) {
-                Cookie cookie = new PartyCookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings,cookieSize,null);
-                cookieList.add(cookie);
+                Cookie cookie=new Cookie(row.get(0), 1.0, 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
+                Cookie Partycookie = new PartyCookie(cookie,cookieSize,null);
+                cookieList.add(Partycookie);
             }
 
         }
@@ -386,8 +387,10 @@ public class ChooseCookieStepDefs {
             }
             for (CookieSize cookieSize : CookieSize.values()) {
                 for (Theme theme : Theme.values()) {
-                Cookie cookie = new PartyCookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings,cookieSize,theme);
-                cookieList.add(cookie);
+                    Cookie cookie=new Cookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
+
+                    Cookie partyCookie = new PartyCookie(cookie,cookieSize,theme);
+                cookieList.add(partyCookie);
                 }
             }
         }
@@ -398,7 +401,6 @@ public class ChooseCookieStepDefs {
     public void clientChoosesPartyCookiesOfTypeAndSizeAndTheme(String cookieName, String cookieSize, String cookieTheme) {
         cookie = cookieList.stream()
                 .filter(c -> c.getName().equals(cookieName))
-                .filter(cookie1-> cookie1.getClass() == PartyCookie.class)
                 .filter(cookie1 -> cookie1.getSize().toString().equals(cookieSize))
                 .filter(cookie1 -> cookie1.getTheme().toString().equals(cookieTheme))
                 .findFirst().orElse(null);

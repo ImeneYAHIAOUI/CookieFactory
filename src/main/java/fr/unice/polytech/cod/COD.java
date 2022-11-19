@@ -18,10 +18,7 @@ import lombok.Setter;
 import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class COD {
     private static COD INSTANCE = null;
@@ -87,9 +84,8 @@ public class COD {
         ));
         locationService = new LocationService();
 
-        Occasion occasion=new Occasion("birthday");
         addStore(2, "30 Rte des Colles, 06410 Biot", "08:00",
-                "20:00",10.3,List.of(occasion));
+                "20:00",10.3,List.of(Occasion.BIRHTDAY));
 
     }
 
@@ -192,7 +188,44 @@ public class COD {
             cart.setTax(store.getTax());
         }
         cart.addItem(new Item(amount, cookie));
+    }
 
+    /**
+     * personalize cookie
+     * @param client
+     * @param store
+     * @param cookieName
+     * @param amount
+     * @param size
+     * @param occasion
+     * @param theme
+     * @throws CookieException
+     * @throws OrderException
+     * @throws ServiceNotAvailable
+     */
+    public void personalizeCookie(Client client, Store store, String cookieName,int amount,CookieSize size, Occasion occasion, Theme theme) throws CookieException, OrderException, ServiceNotAvailable{
+        Optional<Cookie> cookie = (store.getRecipes().stream().filter(c -> (c.getName().equals(cookieName))).findFirst());
+        if(cookie.isEmpty())
+            throw new CookieException("The cookie "+cookieName+" does not exist.");
+        List<Theme> themeList=store.getThemeList();
+        List<Occasion> occasionList=store.getOccasionList();
+        Cookie choosenCookie=cookie.get();
+        if(themeList.contains(theme)&& occasionList.contains(occasion)){
+            PartyCookie partyCookie=new PartyCookie(choosenCookie,size,theme);
+            chooseCookie(client,store,partyCookie,amount);
+
+        }else
+            throw  new ServiceNotAvailable();
+
+    }
+
+    /**
+     * add occasion to store
+     * @param store
+     * @param occasion
+     */
+    public void addOccasion(Store store, Occasion occasion){
+        store.addOccasion(occasion);
     }
 
     /**

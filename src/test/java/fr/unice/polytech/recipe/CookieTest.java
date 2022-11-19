@@ -22,7 +22,7 @@ public class CookieTest {
     @Test
     void setCookieTest(){
         double price=cookie.getPrice();
-        assert(cookie.getSize().equals(CookieSize.BASIC));
+        assert(cookie.getSize()==null);
         assert(cookie.getPrice().equals(price));
         cookie.setSize(CookieSize.L);
         assert(cookie.getSize().equals(CookieSize.L));
@@ -37,7 +37,7 @@ public class CookieTest {
     @Test
     void getBasicPriceTest(){
         double price=cookie.getPrice();
-        assert(cookie.getSize().equals(CookieSize.BASIC));
+        assert(cookie.getSize()==null);
         assert(cookie.getBasicPrice()==price);
         cookie.setSize(CookieSize.L);
         assert(cookie.getSize().equals(CookieSize.L));

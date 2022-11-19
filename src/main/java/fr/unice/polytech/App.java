@@ -196,7 +196,7 @@ public class App {
         String tax = SCANNER.nextLine();
         System.out.println("Enter an occasion :"); // à modifier plus tard pour ajouter plusieurs occasions
         String occasion = SCANNER.nextLine();
-        cod.addStore(Integer.parseInt(nbCook), address, open, end, Double.parseDouble(tax), List.of(new Occasion((occasion))));
+        cod.addStore(Integer.parseInt(nbCook), address, open, end, Double.parseDouble(tax),List.of(Occasion.BIRHTDAY));
         System.out.println("You added a store at the address" + address + ".");
 
     }

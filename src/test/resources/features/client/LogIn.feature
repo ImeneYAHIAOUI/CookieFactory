@@ -9,12 +9,9 @@ Feature: LogIn
     When Client log in  with id "sgazzeh" and password "password"
     Then Cod connected clients is not empty
     And this client can logIn
-
   Scenario: logIn with invalid password
     When Client log in with invalid password :  id "sgazzeh" and password "mdp"
     Then  Cod connected clients is empty
-
-
   Scenario: logIn with invalid id
     When Client log in with invalid id :  id "id" and password "mdp"
     Then  Cod connected clients is empty

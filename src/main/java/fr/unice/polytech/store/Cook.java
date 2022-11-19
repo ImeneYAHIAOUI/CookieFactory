@@ -2,6 +2,7 @@ package fr.unice.polytech.store;
 
 import fr.unice.polytech.exception.CookException;
 import fr.unice.polytech.order.Order;
+import fr.unice.polytech.recipe.Cookie;
 import fr.unice.polytech.recipe.Theme;
 import lombok.Getter;
 
@@ -14,6 +15,7 @@ public class Cook {
     @Getter
     private final SortedMap<TimeSlot, Order> workingTimeSlot;
     final int id;
+    @Getter
     private final List<Theme> themeList;
 
     public Cook(int id) {
@@ -30,6 +32,14 @@ public class Cook {
      */
     public boolean canTakeTimeSlot(TimeSlot timeSlot) {
         return workingTimeSlot.keySet().stream().noneMatch(timeSlot::overlaps);
+    }
+    public boolean canMakeCookie(Cookie cookie){
+        Theme theme= cookie.getTheme();
+        if(theme!=null){
+            if(!themeList.contains(theme))
+                return false;
+        }
+        return true;
     }
 
     //Add the Order at the first time available to cook the order
@@ -48,6 +58,9 @@ public class Cook {
      */
     public void cancelOrder(Order order) {
         workingTimeSlot.remove(order.getTimeSlot());
+    }
+    public void addTheme(Theme theme){
+        themeList.add(theme);
     }
 }
 

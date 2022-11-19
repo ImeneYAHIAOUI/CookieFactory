@@ -5,6 +5,7 @@ import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CookException;
+import fr.unice.polytech.order.Item;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.services.TooGoodToGo;
 import lombok.Getter;
@@ -31,6 +32,8 @@ public class Store {
     @Getter
     private final List<Occasion> occasionList;
     @Getter
+    private final List<Theme> themeList;
+    @Getter
     private final int id;
     @Getter
     private final Inventory inventory;
@@ -53,7 +56,15 @@ public class Store {
             List<Occasion> occasions
     ) {
         occasionList = new ArrayList<>();
+        themeList=new ArrayList<>();
         this.cooks = new ArrayList<>(cooks);
+        for (Cook cook: cooks) {
+            List<Theme> themes=cook.getThemeList();
+            for (Theme theme: themes) {
+                if(!themeList.contains(theme))
+                     themeList.add(theme);
+            }
+        }
         this.recipes = new ArrayList<>(recipes);
         this.address = address;
         this.tax = tax;
@@ -104,6 +115,7 @@ public class Store {
                 .filter(cook -> cook.canTakeTimeSlot(orderTimeSlot))
                 .findFirst()
                 .orElseThrow(CookException::new);
+
     }
 
     /**
@@ -172,6 +184,11 @@ public class Store {
 
     public void addCook(Cook c) {
         cooks.add(c);
+        List<Theme> themes=c.getThemeList();
+        for (Theme theme: themes) {
+            if(!themeList.contains(theme))
+                themeList.add(theme);
+        }
     }
 
     public boolean canAddCookieToStore(Cookie cookie){
@@ -185,7 +202,18 @@ public class Store {
             if(inventory.get(t) ==0)
                 return false;
         }
+        Theme theme =cookie.getTheme();
+        if(theme!=null){
+            if(!themeList.contains(theme)){
+                return false;
+            }
+        }
         return true;
+    }
+    public void addOccasion(Occasion occasion){
+        if(!occasionList.contains(occasion)){
+            occasionList.add(occasion);
+        }
     }
 
 }

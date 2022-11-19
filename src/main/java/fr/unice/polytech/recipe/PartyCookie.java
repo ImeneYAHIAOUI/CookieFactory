@@ -6,17 +6,11 @@ import lombok.Setter;
 import java.util.List;
 
 public class PartyCookie extends Cookie{
-    @Getter
-    @Setter
-    private final CookieSize size;
-    @Getter
-    @Setter
-    private final Theme theme;
-
-    public PartyCookie(String name, double price, int cookingTime, Cooking cooking, Mix mix, Dough dough, Flavour flavour, List<Topping> toppings,CookieSize size,Theme theme) {
-        super(name, price, cookingTime,cooking, mix, dough, flavour, toppings);
-        this.size = size;
-        this.theme = theme;
+    public PartyCookie(Cookie cookie,CookieSize size,Theme theme) {
+        super(cookie.getName(), cookie.getPrice(), cookie.getCookingTime(),cookie.getCooking(), cookie.getMix(), cookie.getDough()
+                , cookie.getFlavour(), cookie.getToppings());
+        setSize(size);
+        setTheme(theme);
     }
 
 
