@@ -87,7 +87,8 @@ public class COD {
         locationService = new LocationService();
 
         addStore(2, "30 Rte des Colles, 06410 Biot", "08:00",
-                "20:00",10.3,List.of(Occasion.BIRHTDAY));
+
+                "20:00",10.3,List.of(Occasion.BIRTHDAY));
 
     }
 
@@ -178,7 +179,7 @@ public class COD {
 
         if (client instanceof RegisteredClient && ((RegisteredClient) client).isBanned())
             throw new OrderException("You have cancelled two orders in 8 minutes or less, you are banned for 10 minutes.\n Remaining time : " + ((RegisteredClient) client).getRemainingBanTime());
-        if (!store.getRecipes().contains(cookie)) {
+        if (cookie==null || store.getRecipes().stream().filter(cookie1 -> cookie1.getName()== cookie.getName()).count()==0) {
             throw new CookieException("this cookie is not available in this store");
         }
         int maxCookieAmount = calculateMaxCookieAmount(cookie,store);
@@ -220,6 +221,9 @@ public class COD {
             throw  new ServiceNotAvailable();
 
     }
+
+
+
 
     /**
      * add occasion to store

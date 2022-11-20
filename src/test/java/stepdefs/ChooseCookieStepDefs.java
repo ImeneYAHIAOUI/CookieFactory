@@ -11,11 +11,9 @@ import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Inventory;
-import fr.unice.polytech.store.Store;
-import fr.unice.polytech.store.StoreFactory;
+import fr.unice.polytech.store.*;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.an.E;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -102,7 +100,9 @@ public class ChooseCookieStepDefs {
     public void givenStore(Integer id)
     {
         List<Cook> cooks = new ArrayList<>();
-        cooks.add(new Cook(0));
+        Cook cook=new Cook(0);
+        cooks.add(cook);
+
         store = StoreFactory.createStore(cooks, new ArrayList<>(), "address", LocalTime.parse("08:30"), LocalTime.parse("16:00"), id, inventory,4.0,null);
     }
 
@@ -409,6 +409,49 @@ public class ChooseCookieStepDefs {
     public void thePriceOfTheOrderIs(double expectedPrice) {
         assertEquals(expectedPrice, cod.getOrders().get(0).getPrice(), 0.0);
     }
+    @Given("the store with theme {string}")
+    public void the_store_with_theme(String theme) {
+        Cook cook=new Cook(1);
+        cook.addTheme(Theme.ANIMAL);
+        store.addCook(cook);
+        store.addOccasion(Occasion.BIRTHDAY);
+        assertTrue(store.getThemeList().contains(Theme.valueOf(theme)));
+    }
+    @When("Client personalize {int} cookie of type {string}  size {string} and theme {string}")
+    public void client_personalize_cookie_of_type_size_and_theme(int int1, String string, String string2, String string3) {
+        amount=int1;
+        try{
+                cod.personalizeCookie(client,store,string,amount,CookieSize.valueOf(string2),
+                        Occasion.BIRTHDAY,Theme.valueOf(string3));
+            }catch(Exception e){
+
+            }
+
+    }
+    @Then("this order cannot be purchased because store doesn't offer the theme {string}")
+    public void cannot_offer_the_theme(String theme) {
+        assertFalse(store.getThemeList().contains(Theme.valueOf(theme)));}
+    @Then("the clients cart contains {int} party cookie\\(s) of type {string}  and size {string}")
+    public void the_clients_cart_contains_party_cookie_s_of_type_and_size(Integer int1, String string, String string2) {
+
+        assertTrue(client.getCart().getItems().stream().filter(i -> i.getCookie().getName().equals(string)).anyMatch(i -> i.getQuantity() == int1));
+    }
+    @When("Client personalize {int} cookie of type {string}  size {string} theme {string} and occasion {string}")
+    public void client_personalize_cookie_of_type_size_theme_and_occasion(Integer int1, String string, String string2, String string3, String string4) {
+        amount=int1;
+        try{
+            cod.personalizeCookie(client,store,string,amount,CookieSize.valueOf(string2),
+                    Occasion.valueOf(string4),Theme.valueOf(string3));
+        }catch(Exception e){
+
+        }
+    }
+    @Then("this order cannot be purchased because store doesn't offer the occasion {string}")
+    public void this_order_cannot_be_purchased_because_store_doesn_t_offer_the_occasion(String string) {
+        assertFalse(store.getThemeList().contains(Occasion.valueOf(string)));}
+
+
+
 }
 
 

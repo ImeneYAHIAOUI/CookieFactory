@@ -252,3 +252,68 @@
       And client finalize his order
 
       Then the inventory has no ingredients left
+
+    Scenario: Choose unavailable theme
+      Given an inventory with the ingredients and amounts
+        | chocolate chips       | 6  |
+        | chocolate dough       | 8  |
+        | vanillaFlavour        | 10 |
+        | strawberryFlavour     | 10 |
+        | chocolateFlavour      | 10 |
+        | white chocolate chips | 10 |
+      And a store with id 1
+      And the store has cookies
+        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
+      And the store with theme "ANIMAL"
+      When Client personalize 1 cookie of type "strawberry chip"  size "L" and theme "MUSIC"
+      Then this order cannot be purchased because store doesn't offer the theme "MUSIC"
+      And the clients cart is empty
+
+    Scenario: Choose unavailable occasion
+      Given an inventory with the ingredients and amounts
+        | chocolate chips       | 6  |
+        | chocolate dough       | 8  |
+        | vanillaFlavour        | 10 |
+        | strawberryFlavour     | 10 |
+        | chocolateFlavour      | 10 |
+        | white chocolate chips | 10 |
+      And a store with id 1
+      And the store has cookies
+        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
+      And the store with theme "ANIMAL"
+      When Client personalize 1 cookie of type "strawberry chip"  size "L" theme "ANIMAL" and occasion "WEDDING"
+      Then this order cannot be purchased because store doesn't offer the occasion "WEDDING"
+      And the clients cart is empty
+
+    Scenario: Choose available theme
+      Given an inventory with the ingredients and amounts
+        | chocolate chips       | 16 |
+        | chocolate dough       | 18 |
+        | vanillaFlavour        | 10 |
+        | strawberryFlavour     | 10 |
+        | chocolateFlavour      | 10 |
+        | white chocolate chips | 10 |
+      And a store with id 1
+      And the store has cookies
+        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
+      And the store with theme "ANIMAL"
+      When Client personalize 1 cookie of type "chocolala"  size "L" and theme "ANIMAL"
+      Then the clients cart contains 1 party cookie(s) of type "chocolala"  and size "L"
+    Scenario: Choose unavailable occasion
+      Given an inventory with the ingredients and amounts
+        | chocolate chips       | 6  |
+        | chocolate dough       | 8  |
+        | vanillaFlavour        | 10 |
+        | strawberryFlavour     | 10 |
+        | chocolateFlavour      | 10 |
+        | white chocolate chips | 10 |
+      And a store with id 1
+      And the store has cookies
+        | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
+        | strawberry chip | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
+      And the store with theme "ANIMAL"
+      When Client personalize 1 cookie of type "strawberry chip"  size "L" theme "ANIMAL" and occasion "BIRTHDAY"
+      Then the clients cart contains 1 party cookie(s) of type "strawberry chip"  and size "L"
