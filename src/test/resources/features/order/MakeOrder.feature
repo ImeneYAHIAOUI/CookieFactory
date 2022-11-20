@@ -5,10 +5,10 @@ Feature: Make order
     Given a client
     And an order from this client
 
-  Scenario:
+  Scenario: Client cancels order
     When the client cancels the order
     Then the order has status "CANCELLED"
 
-  Scenario:
+  Scenario: Order status is changed to "READY"
     When the order status changes to "READY"
     Then the client is notified
