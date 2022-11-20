@@ -15,6 +15,7 @@ import fr.unice.polytech.store.StoreFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,7 @@ public class CODTest {
                 1,
                 new Inventory(new ArrayList<>()), 4.2, new ArrayList<>()
         );
-        client.getCart().setPickupTime(LocalTime.parse("10:00"));
+        client.getCart().setPickupTime(LocalTime.parse("10:00").atDate(LocalDate.now(COD.getCLOCK())));
         order = new Order("1", client, cook, store);
 
     }

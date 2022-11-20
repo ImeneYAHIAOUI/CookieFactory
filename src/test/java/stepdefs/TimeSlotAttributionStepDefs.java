@@ -1,22 +1,24 @@
 package stepdefs;
 
 import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.CookException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.PickupTimeNotSetException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.Cookie;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Inventory;
-import fr.unice.polytech.store.Store;
-import fr.unice.polytech.store.StoreFactory;
+import fr.unice.polytech.store.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,22 @@ public class TimeSlotAttributionStepDefs {
     @Given("a cook with an empty timetable")
     public void givenEmptyCook() {
         cook = new Cook(0);
+    }
+
+    @Given("a cook with a timetable with a timeTable occupied from {string} to {string} on the date {string}")
+    public void givenCookWithATimeTableOccupiedFromToOnTheDate(String start, String end, String date) throws InvalidPhoneNumberException {
+        cook = new Cook(0);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        LocalDateTime startDateTime = LocalTime.parse(start).atDate(localDate);
+        LocalDateTime endDateTime = LocalTime.parse(end).atDate(localDate);
+        TimeSlot timeSlot = new TimeSlot(startDateTime, endDateTime);
+        client = new RegisteredClient("", "", "0123456789");
+        client.getCart().setTax(.1);
+        client.getCart().addItem(new Item(1, cookie));
+        client.getCart().setPickupTime(LocalTime.parse("10:00").atDate(localDate));
+        order = new Order("0", client, cook, store);
+        cook.getWorkingTimeSlot().put(timeSlot,order);
     }
 
     @And("a random recipe with cooking time of {int}")
@@ -57,7 +75,7 @@ public class TimeSlotAttributionStepDefs {
         client = new RegisteredClient("", "", "0123456789");
         client.getCart().setTax(.1);
         client.getCart().addItem(new Item(i, cookie));
-        client.getCart().setPickupTime(LocalTime.parse("10:00"));
+        client.getCart().setPickupTime(LocalTime.parse("10:00").atDate(LocalDate.now(COD.getCLOCK())));
     }
 
     @And("an order with {int} of the recipe")
@@ -65,7 +83,7 @@ public class TimeSlotAttributionStepDefs {
         client = new RegisteredClient("", "", "0123456789");
         client.getCart().setTax(.1);
         client.getCart().addItem(new Item(i, cookie));
-        client.getCart().setPickupTime(LocalTime.parse("10:00"));
+        client.getCart().setPickupTime(LocalTime.parse("10:00").atDate(LocalDate.now(COD.getCLOCK())));
         order = new Order("0", client, cook, store);
     }
 
@@ -108,5 +126,27 @@ public class TimeSlotAttributionStepDefs {
     public void cancelOrder() {
         cook.cancelOrder(order);
     }
+
+    @When("a cart with {int} of the recipe for the date {string}")
+    public void andCart(int i, String date) throws InvalidPhoneNumberException {
+        client = new RegisteredClient("", "", "0123456789");
+        client.getCart().setTax(.1);
+        client.getCart().addItem(new Item(i, cookie));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        client.getCart().setPickupTime(LocalTime.parse("10:00").atDate(localDate));
+    }
+
+    @And("an order with {int} of the recipe for the date {string}")
+    public void andOrder(int i,String date) throws InvalidPhoneNumberException {
+        client = new RegisteredClient("", "", "0123456789");
+        client.getCart().setTax(.1);
+        client.getCart().addItem(new Item(i, cookie));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        client.getCart().setPickupTime(LocalTime.parse("10:00").atDate(localDate));
+        order = new Order("0", client, cook, store);
+    }
+
 
 }

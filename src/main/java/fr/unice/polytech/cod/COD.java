@@ -17,6 +17,8 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -436,10 +438,24 @@ public class COD {
     }
 
     /**
+     * Returns the list of possible pickup times for the given cart and store for a given date
+     * @param cart the cart to be ordered
+     * @param store the store where the order will be picked up
+     * @param date the date for which we want the pickup times
+     * @return a list of possible pickup times
+     */
+    public List<LocalDateTime> getPickupTimesForAnotherDate(Cart cart, Store store, LocalDate date) throws InvalidPickupTimeException {
+        if(date.isAfter(LocalDate.now(COD.CLOCK))) {
+            return store.getPossiblePickupTimesForADate(cart, date);
+        }
+        throw new InvalidPickupTimeException("The date must be after today");
+    }
+
+    /**
      * Sets the desired pickup time on the given cart
      *
      * @param cart       the cart to set the pickup time on
-     * the store where the order will be picked up
+     * @param store the store where the order will be picked up
      * @param pickupTime the desired pickup time
      */
     public void choosePickupTime(Cart cart, Store store, LocalTime pickupTime) throws InvalidPickupTimeException {
@@ -447,8 +463,23 @@ public class COD {
         if (!validPickupTimes.contains(pickupTime)) {
             throw new InvalidPickupTimeException(pickupTime);
         }
+        cart.setPickupTime(pickupTime.atDate(LocalDate.now(CLOCK)));
+    }
+
+    /**
+     * Sets the desired pickup time on the given cart for a given date
+     * @param cart the cart to set the pickup time on
+     * @param store the store where the order will be picked up
+     * @param pickupTime the desired pickup time
+     */
+    public void  choosePickupTimeAtAnotherDate(Cart cart, Store store, LocalDateTime pickupTime) throws InvalidPickupTimeException {
+        List<LocalDateTime> validPickupTimes = getPickupTimesForAnotherDate(cart, store, pickupTime.toLocalDate());
+        if (!validPickupTimes.contains(pickupTime)) {
+            throw new InvalidPickupTimeException(pickupTime.toLocalTime());
+        }
         cart.setPickupTime(pickupTime);
     }
+
 
     /**
      * add a store in Cod

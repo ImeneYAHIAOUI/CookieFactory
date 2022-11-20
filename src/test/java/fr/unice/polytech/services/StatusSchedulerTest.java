@@ -2,6 +2,7 @@ package fr.unice.polytech.services;
 
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
@@ -10,6 +11,7 @@ import fr.unice.polytech.store.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +29,7 @@ public class StatusSchedulerTest {
         client = mock(Client.class);
         cook = mock(Cook.class);
         Cart cart = new Cart();
-        cart.setPickupTime(LocalTime.now());
+        cart.setPickupTime(LocalDateTime.now(COD.getCLOCK()));
         when(client.getCart()).thenReturn(cart);
         Store store = mock(Store.class);
         order = new Order("1", client, cook, store);

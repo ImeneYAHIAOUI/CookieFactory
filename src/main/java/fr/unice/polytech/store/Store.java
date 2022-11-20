@@ -12,7 +12,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -131,15 +134,39 @@ public class Store {
         LocalTime now = LocalTime.now(COD.getCLOCK());
         LocalTime cookingStartTime = now.plusMinutes(15+(now.getMinute() % 5)).truncatedTo(ChronoUnit.MINUTES);
         TimeSlot potentialTimeSlot = new TimeSlot(cookingStartTime, cart.totalCookingTime());
-        while (potentialTimeSlot.getEnd().isBefore(closingTime)) {
+        while (potentialTimeSlot.getEnd().isBefore(closingTime.atDate(LocalDate.now(COD.getCLOCK())))) {
             if (cooks.stream().anyMatch(cook -> cook.canTakeTimeSlot(potentialTimeSlot))) {
-                possiblePickupTimes.add(potentialTimeSlot.getEnd());
+                possiblePickupTimes.add(LocalTime.from(potentialTimeSlot.getEnd()));
             }
             // New pickup time every 5 minutes
             potentialTimeSlot.slideBy(Duration.ofMinutes(5));
         }
         return possiblePickupTimes;
     }
+
+    /**
+     * Returns the list of possible pickup times for a given cart in this store for a given date
+     *
+     * @param cart the cart to consider
+     * @return the list of possible pickup times
+     */
+    public List<LocalDateTime> getPossiblePickupTimesForADate(Cart cart, LocalDate date)
+    {
+        List<LocalDateTime> possiblePickupTimes = new ArrayList<>();
+        // Acceptable earliest cooking start time is 10 minutes after now.
+        // This is to account for the time it takes to place the order.
+        LocalTime cookingStartTime = openingTime.plusMinutes(15+(openingTime.getMinute() % 5)).truncatedTo(ChronoUnit.MINUTES);
+        TimeSlot potentialTimeSlot = new TimeSlot(cookingStartTime, cart.totalCookingTime(), date);
+        while (potentialTimeSlot.getEnd().isBefore(closingTime.atDate(date))) {
+            if (cooks.stream().anyMatch(cook -> cook.canTakeTimeSlot(potentialTimeSlot))) {
+                possiblePickupTimes.add(LocalDateTime.from(potentialTimeSlot.getEnd()));
+            }
+            // New pickup time every 5 minutes
+            potentialTimeSlot.slideBy(Duration.ofMinutes(5));
+        }
+        return possiblePickupTimes;
+    }
+
 
     public void addIngredients(Ingredient ingredient, int quantity) throws BadQuantityException {
         if (quantity < 0) {

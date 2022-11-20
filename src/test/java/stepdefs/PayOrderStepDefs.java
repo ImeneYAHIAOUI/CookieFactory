@@ -15,6 +15,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,7 @@ public class PayOrderStepDefs {
 
     @When("I confirm my cart and pay my order")
     public void iConfirmMyCartAndPayMyOrder() throws BadQuantityException, CookException, StoreException, PaymentException {
-        client.getCart().setPickupTime(LocalTime.parse("10:00"));
+        client.getCart().setPickupTime(LocalTime.parse("10:00").atDate(LocalDate.now(COD.getCLOCK())));
         orderID = cod.payOrder(client, store);
     }
 

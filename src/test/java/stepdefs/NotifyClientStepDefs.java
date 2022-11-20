@@ -17,6 +17,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.mockito.Spy;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -49,7 +50,7 @@ public class NotifyClientStepDefs {
         LocalTime openingTime = LocalTime.of(10, 0);
         LocalTime closingTime = LocalTime.of(20, 0);
         LocalTime pickupTime = LocalTime.of(12, 0);
-        client.getCart().setPickupTime(pickupTime);
+        client.getCart().setPickupTime(pickupTime.atDate(LocalDate.now(COD.getCLOCK())));
         Order order2 = new Order("1", client, new Cook(1), StoreFactory.createStore(new ArrayList<>(), new ArrayList<>(), "address", openingTime, closingTime, 1, new Inventory(new ArrayList<>()), 0.2, new ArrayList<>()));
         order = spy(order2);
         doAnswer(invocation -> {

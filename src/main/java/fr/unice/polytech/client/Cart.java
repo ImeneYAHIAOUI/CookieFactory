@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Cart {
     private final List<Item> items;
     @Getter
     @Setter
-    private LocalTime pickupTime;
+    private LocalDateTime pickupTime;
     @Getter
     private Double subtotal;
     @Getter

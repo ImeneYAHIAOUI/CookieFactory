@@ -6,4 +6,7 @@ public class InvalidPickupTimeException extends Throwable {
     public InvalidPickupTimeException(LocalTime pickupTime) {
         super("The pickup time " + pickupTime + " is not valid");
     }
+
+    public InvalidPickupTimeException(String s) {
+    }
 }

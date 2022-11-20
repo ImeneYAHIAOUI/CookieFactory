@@ -3,6 +3,7 @@ package fr.unice.polytech.store;
 
 import fr.unice.polytech.client.Cart;
 import fr.unice.polytech.client.Client;
+import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.order.Order;
@@ -10,6 +11,7 @@ import fr.unice.polytech.recipe.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,7 @@ public class StoreTest {
         client = mock(Client.class);
         cook = mock(Cook.class);
         when(client.getCart()).thenReturn(new Cart());
-        client.getCart().setPickupTime(LocalTime.of(12, 0));
+        client.getCart().setPickupTime(LocalTime.of(12, 0).atDate(LocalDate.now(COD.getCLOCK())));
         order = new Order("1", client, cook, store);
         doughs = List.of(new Dough("chocolate", 1), new Dough("strawberry", 1));
         flavours = List.of(new Flavour("chocolate", 1), new Flavour("strawberry", 1));

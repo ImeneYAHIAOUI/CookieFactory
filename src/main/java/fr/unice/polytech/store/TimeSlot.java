@@ -1,22 +1,36 @@
 package fr.unice.polytech.store;
 
+import fr.unice.polytech.cod.COD;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 @Data
 @AllArgsConstructor
 public class TimeSlot implements Comparable<TimeSlot> {
-    private LocalTime begin;
-    private LocalTime end;
+    private LocalDateTime begin;
+    private LocalDateTime end;
+
+
 
     public TimeSlot(LocalTime begin, Duration duration) {
-        this.begin = begin.truncatedTo(ChronoUnit.MINUTES);
-        this.end = begin.plus(duration).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime beginDate = begin.atDate(LocalDate.now(COD.getCLOCK()));
+        this.begin = beginDate.truncatedTo(ChronoUnit.MINUTES);
+        this.end = beginDate.plus(duration).truncatedTo(ChronoUnit.MINUTES);
     }
+
+    public TimeSlot(LocalTime begin, Duration duration, LocalDate date) {
+        LocalDateTime beginDate = begin.atDate(date);
+        this.begin = beginDate.truncatedTo(ChronoUnit.MINUTES);
+        this.end = beginDate.plus(duration).truncatedTo(ChronoUnit.MINUTES);
+    }
+
+
 
     public void slideBy(Duration duration) {
         begin = begin.plus(duration);

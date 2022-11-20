@@ -19,6 +19,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Queue;
@@ -54,7 +55,7 @@ public class TooGoodToGoStepDefs {
         cod.initializationCod();
         cook = mock(Cook.class);
         client = new UnregisteredClient("0123456789");
-        client.getCart().setPickupTime(LocalTime.of(12, 0));
+        client.getCart().setPickupTime(LocalTime.of(12, 0).atDate(LocalDate.now(COD.getCLOCK())));
         client.getCart().setTax(0.2);
         client.getCart().addItem(new Item(2, cod.getRecipes().get(0)));
         store = StoreFactory.createStore(

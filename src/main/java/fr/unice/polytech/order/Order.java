@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class Order {
     private double price;
     private final Map<OrderStatus, Date> history;
     private final TimeSlot timeSlot;
-    private LocalTime pickupTime;
+    private LocalDateTime pickupTime;
 
     public Order(String id, Client client, Cook cook, Store store) {
         this.id = id;
