@@ -54,6 +54,20 @@ public class TimeSlotAttributionStepDefs {
         cook.getWorkingTimeSlot().put(timeSlot,order);
     }
 
+    @Given("a cook with a timetable with a timeTable occupied from {string} to {string}")
+    public void givenCookWithATimeTableOccupied(String start, String end) throws InvalidPhoneNumberException {
+        cook = new Cook(0);
+        LocalDateTime startDateTime = LocalTime.parse(start).atDate(LocalDate.now(COD.getCLOCK()));
+        LocalDateTime endDateTime = LocalTime.parse(end).atDate(LocalDate.now(COD.getCLOCK()));
+        TimeSlot timeSlot = new TimeSlot(startDateTime, endDateTime);
+        client = new RegisteredClient("", "", "0123456789");
+        client.getCart().setTax(.1);
+        client.getCart().addItem(new Item(1, cookie));
+        client.getCart().setPickupTime(LocalTime.parse("10:00").atDate(LocalDate.now(COD.getCLOCK())));
+        order = new Order("0", client, cook, store);
+        cook.getWorkingTimeSlot().put(timeSlot,order);
+    }
+
     @And("a random recipe with cooking time of {int}")
     public void andRandomRecipeWithCookingTime(int cookieTime) {
         cookie = new Cookie("", 0.0, cookieTime, null, null, null, null, new ArrayList<>());

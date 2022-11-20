@@ -10,6 +10,11 @@ Feature: TimeSlot Attribution
     When a cart with 1 of the recipe
     Then The cook can do the order
 
+  Scenario: Cook can't do the order
+    Given a cook with a timetable with a timeTable occupied from "08:00" to "10:00"
+    When a cart with 2 of the recipe
+    Then The cook can't do the order
+
   Scenario: Cancel order
     When an order with 1 of the recipe
     And add order does not throw exception
