@@ -179,12 +179,12 @@ public class COD {
 
         if (client instanceof RegisteredClient && ((RegisteredClient) client).isBanned())
             throw new OrderException("You have cancelled two orders in 8 minutes or less, you are banned for 10 minutes.\n Remaining time : " + ((RegisteredClient) client).getRemainingBanTime());
-        if (cookie==null || store.getRecipes().stream().filter(cookie1 -> cookie1.getName()== cookie.getName()).count()==0) {
-            throw new CookieException("this cookie is not available in this store");
+        if (cookie==null || store.getRecipes().stream().filter(cookie1 -> cookie1.getName().equals(cookie.getName())).count()==0) {
+            throw new CookieException("This cookie is not available in this store");
         }
         int maxCookieAmount = calculateMaxCookieAmount(cookie,store);
         if (maxCookieAmount < amount) {
-            throw new CookieException("this store can't make this amount of cookies");
+            throw new CookieException("This store can't make this amount of cookies");
         }
         Cart cart= client.getCart();
         if(cart.getTax() == null && store.getTax()!=null ){
@@ -195,16 +195,16 @@ public class COD {
 
     /**
      * personalize cookie
-     * @param client
-     * @param store
-     * @param cookieName
-     * @param amount
-     * @param size
-     * @param occasion
-     * @param theme
-     * @throws CookieException
-     * @throws OrderException
-     * @throws ServiceNotAvailable
+     * @param client ordering the cookie
+     * @param store of the order
+     * @param cookieName of the Cookie
+     * @param amount of cookie
+     * @param size of cookie
+     * @param occasion of the PartyCookie
+     * @param theme of the PartyCookie
+     * @throws CookieException if the cookie doesn't exist
+     * @throws OrderException if the client can't order
+     * @throws ServiceNotAvailable if this theme isn't available
      */
     public void personalizeCookie(Client client, Store store, String cookieName,int amount,CookieSize size, Occasion occasion, Theme theme) throws CookieException, OrderException, ServiceNotAvailable{
         Optional<Cookie> cookie = (store.getRecipes().stream().filter(c -> (c.getName().equals(cookieName))).findFirst());
@@ -218,7 +218,7 @@ public class COD {
             chooseCookie(client,store,partyCookie,amount);
 
         }else
-            throw  new ServiceNotAvailable();
+            throw new ServiceNotAvailable();
 
     }
 
@@ -227,8 +227,8 @@ public class COD {
 
     /**
      * add occasion to store
-     * @param store
-     * @param occasion
+     * @param store to add the occasion
+     * @param occasion to add
      */
     public void addOccasion(Store store, Occasion occasion){
         store.addOccasion(occasion);
@@ -639,5 +639,13 @@ public class COD {
 
     public List<Cookie> getSuggestedRecipes(){
         return List.copyOf(this.suggestedRecipes);
+    }
+
+    public void addClientToGoodToGo(Client client, String mail, List<LocalDateTime> list) throws ClientException {
+        client.addToGoodToGo(mail, list);
+    }
+
+    public List<RegisteredClient> getTooGooToGoClients(){
+        return getClients().stream().filter(RegisteredClient::isToGoodToGoClient).toList();
     }
 }

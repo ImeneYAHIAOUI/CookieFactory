@@ -3,8 +3,10 @@ package stepdefs;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.cod.COD;
+import fr.unice.polytech.exception.ClientException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
+import fr.unice.polytech.exception.RegistrationException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
@@ -21,16 +23,12 @@ import io.cucumber.java.en.When;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -165,5 +163,41 @@ public class TooGoodToGoStepDefs {
     @Then("the {int} obsolete orders are converted")
     public void theOrdersAreConverted(int nbOrders) {
         verify(tooGoodToGo, times(nbOrders)).convertOrder(any(Order.class));
+    }
+
+    @Given("a cod with no registered client")
+    public void setupClients(){
+        COD.reset();
+        cod = COD.getInstance();
+    }
+
+    @When("Register a client")
+    public void register() throws RegistrationException, InvalidPhoneNumberException {
+        cod.register("id", "password", "0612345678");
+        client = cod.getClients().get(0);
+    }
+    @When("Client wants to be notified")
+    public void notified() throws ClientException {
+        cod.addClientToGoodToGo(client, "flo@gmail.com", new ArrayList<>());
+    }
+
+    @Then("No clients in the cod")
+    public void clientEmpty(){
+        assertTrue(cod.getClients().isEmpty());
+    }
+
+    @Then("Client in the cod")
+    public void clientNotEmpty(){
+        assertTrue(cod.getClients().contains(client));
+    }
+
+    @Then("No clients to notified for TooGoodToGo in the cod")
+    public void clientToGoodToGoEmpty(){
+        assertTrue(cod.getTooGooToGoClients().isEmpty());
+    }
+
+    @Then("Client in the list to be notified for TooGoodToGo in the cod")
+    public void clientToGoodToGoNotEmpty(){
+        assertTrue(cod.getTooGooToGoClients().contains(client));
     }
 }

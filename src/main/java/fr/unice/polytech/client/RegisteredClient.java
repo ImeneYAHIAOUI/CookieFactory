@@ -7,6 +7,7 @@ import fr.unice.polytech.order.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,12 @@ public class RegisteredClient extends Client {
     private String remainingBanTime;
     @Getter
     private boolean eligibleForDiscount;
+    @Getter
+    private boolean toGoodToGoClient;
+    @Getter
+    private String mail;
+    @Getter
+    private List<LocalDateTime> notificationsDates;
 
     public RegisteredClient(String id, String password, String phoneNumber) throws InvalidPhoneNumberException {
         super(phoneNumber);
@@ -34,6 +41,16 @@ public class RegisteredClient extends Client {
         nbCookie = 0;
         this.pastOrders = new ArrayList<>();
         eligibleForDiscount = false;
+        toGoodToGoClient = false;
+        mail = null;
+        notificationsDates = new ArrayList<>();
+    }
+
+    @Override
+    public void addToGoodToGo(String mail, List<LocalDateTime> list){
+        toGoodToGoClient = true;
+        this.mail = mail;
+        this.notificationsDates = List.copyOf(list);
     }
 
     @Override

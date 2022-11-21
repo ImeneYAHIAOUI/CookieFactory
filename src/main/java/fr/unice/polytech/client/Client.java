@@ -1,9 +1,12 @@
 package fr.unice.polytech.client;
 
+import fr.unice.polytech.exception.ClientException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Order;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,5 +46,9 @@ public abstract class Client {
 
     public boolean isRegistered() {
         return false;
+    }
+
+    public void addToGoodToGo(String mail, List<LocalDateTime> list) throws ClientException {
+        throw new ClientException("You can't have notifications for the Too Good To Go bags of you are not registered.");
     }
 }

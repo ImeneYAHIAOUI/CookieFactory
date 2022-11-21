@@ -24,3 +24,20 @@ Feature: TooGoodToGo
       | 10         | 0       | "IN_PROGRESS" |
       | 24         | 1       | "NOT_STARTED" |
       | 0          | 0       | "COMPLETED"   |
+
+  Scenario: Client wants to be notified
+    Given a cod with no registered client
+    And No clients in the cod
+    And No clients to notified for TooGoodToGo in the cod
+    When Register a client
+    And Client wants to be notified
+    Then Client in the cod
+    And Client in the list to be notified for TooGoodToGo in the cod
+
+  Scenario: Client doesn't want to be notified
+    Given a cod with no registered client
+    And No clients in the cod
+    And No clients to notified for TooGoodToGo in the cod
+    When Register a client
+    Then Client in the cod
+    And No clients to notified for TooGoodToGo in the cod
