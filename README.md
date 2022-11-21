@@ -47,13 +47,14 @@ Chaque user story doit être décrite par
 - [MakeOrder.feature](src/test/resources/features/order/MakeOrder.feature)
   - Client cancels order
 #### [#5](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/5) Création des recettes
-- En tant que Cuisinier, Je veux ajouter une recette
+
+- En tant que Cuisinier, je veux ajouter une recette
 - [CreateRecipe.feature](src/test/resources/features/store/CreateRecipe.feature)
   - Suggest recipe with name "Iced Cookie"
   - Cookie with  name "Iced Cookie" is accepted
 
-#### [#6](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/6) Changer les heures d'ouvertures et de fermeture du magasin
-- En tant que Store manager, Je veux changer les horaires du magasin
+#### [#6](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/6) Changer les heures d'ouvertures et de fermeture du magasi
+- En tant que Store manager, je veux changer les horaires du magasin
 - [ChangeOpeningHours.feature](src/test/resources/features/store/ChangeOpeningHours.feature)
   - Change Opening Hours to a New Opening Time and to a New Closing Time
 
@@ -86,20 +87,23 @@ Chaque user story doit être décrite par
 ### Milestone 3
 #### [#15](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/15) Task Ajout du Time slot dans les Cook liée à US [#1](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/1)
 - [TimeSlotAttribution.feature](src/test/resources/features/store/TimeSlotAttribution.feature)
-- Cook can do the order
-- Cancel order
+  - Cook can do the order
+  - Cancel order
+
 #### [#16](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/16) Paiement du client
 - En tant que Client, je veux payer ma commande
 - [PayOrder.feature](src/test/resources/features/client/PayOrder.feature)
   - As a Client Pay an Order (no problems)
   - As a Client Pay an Order (already orders in the list)
 #### [#17](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/17) Authentification
-- En tant que Client non enregistré, Je veux m'authentifier afin de pouvoir me connecter et me déconnecter
+- En tant que Client non enregistré, je veux m'authentifier afin de pouvoir me connecter et me déconnecter
 - [LogIn.feature](src/test/resources/features/client/LogIn.feature)
   - logIn with valid input
   - logIn with invalid password
   - logIn with invalid id
-#### [#18](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/18) Appliquer la réduction lié à l'US [#16](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/16)
+
+#### [#18](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/18) Appliquer la réduction, liée à l'US [#16](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/16)
+
 - En tant que Client enregistré je veux pouvoir appliquer ma réduction de fidélité
 - [GetDiscount.feature](src/test/resources/features/order/GetDiscount.feature)
   - Tous les scénarios du fichier
@@ -110,11 +114,73 @@ Chaque user story doit être décrite par
 - [RetrievePastOrders.feature](src/test/resources/features/client/RetrievePastOrders.feature)
     - get past orders
 #### [#42](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/42) Ban user, task associée : [#41](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/41)
-- As a client, if I cancel two orders in less than 8 minutes then i get ban for 10 minutes
+- En tant que client, si j'annule 2 commandes en moins de 8 minutes, alors je suis banni pendant 10 minutes
 - ?
 ### Milestone 4
-
+#### [#53](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/53) Choose store, task associée [#55]
+- En tant que client je veux trouver les magasins les plus proches de ma position
+- [getNearbyStores.feature](src/test/resources/features/store/getNearbyStores.feature)
+  - get nearby stores
+  - get stores with a specific distance
+  - get stores with a specific distance 2
+#### [#20](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/20) Choisir un horaire de récupération de la commande, Task associée : [#22](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/22)
+- En tant que client, je veux choisir un horaire de récupération afin de pouvoir l'ajouter à ma commande
+- [ChoosePickupTime.feature](src/test/resources/features/order/ChoosePickupTime.feature)
+  - Choose pickup time
+  - Choose pickup time not in the valid pickup time list
+- [PayOrder.feature](src/test/resources/features/client/PayOrder.feature)
+  - As a Client Pay an Order (no problems)
+  - As a Client Pay an Order (already orders in the list)
 ### Milestone 5
+#### Task [#51](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/51) Taxes magasins, associée à l'US [#50](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/50)
+- En tant que Manager, je veux que mes clients payent une taxe au magasin pour chaque commande afin de pouvoir gagner plus d'argent
+- ?
+####  [56](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/56) Commander un Party Cookie avec une taille choisie, Task associée : [#52](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/52)
+- En tant que Client, je veux pouvoir commander un Party Cookie avec une certaine taille
+- [ChoosePartyCookie.feature](src/test/resources/features/cookie/ChoosePartyCookie.feature)
+  - Choose an available party cookies
+  - Choose party cookies with wrong size
+  - Choose party cookies that doesn't exist
+  - Choose party cookies with wrong amount
+  - Choose many party cookies
+  - More Ingredients are used for a party cookie size XL
+  - More Ingredients are used for a party cookie size XXL
+  - More Ingredients are used for a party cookie size L
+  - Higher Price for a party cookie with size XL than a normal cookie
+  - Higher Price for a party cookie with size XXL than a normal cookie
+####  [#59](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/59) Commander un Party cookie avec un thème
+- En tant que Client je veux commander un Party cookie avec un thème
+- [ChoosePartyCookie.feature](src/test/resources/features/cookie/ChoosePartyCookie.feature)
+  - Order a party cookie with a theme
+  - Choose unavailable theme
+  - Choose available theme
+#### Task [#60](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/60) notify client once order is ready
+- [notifyClient.feature](src/test/resources/features/client/notifyClient.feature)
+  - client picks up command
+  - client never picks up the order
+
+### Milestone 6
+#### Task [#66](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/66) Le client peut choisir un thème/ une occasion ou pas, liée à l'US [#59](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/59)
+####  [#67](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/67) Too good to go : créer panier à partir des commandes obsolètes
+- En tant que responsable du magasin, je veux créer des paniers avec les commandes obsolètes pour limiter le gaspillage et de gagner plus d'argent
+- [TooGoodToGo.feature](src/test/resources/features/order/TooGoodToGo.feature)
+  - Bag creation from obsolete orders
+  - Bag creation but there are no orders
+  - Bag creation with some obsolete orders and some not
+#### [#86](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/86) Make an order for a later date, Task associée : [#87](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/87)
+- En tant que Client, je veux pouvoir commander des cookies pour une date ultérieure, afin de pouvoir les récupérer plus tard
+- [ChoosePickUpTimeForADate.feature](src/test/resources/features/order/ChoosePickUpTimeForADate.feature)
+  - Choose pickup time
+  - Choose pickup time not in the valid pickup time list
+  - Choose pickup time on an invalid date
+- [TimeSlotAttributionForADate.feature](src/test/resources/features/store/TimeSlotAttributionForADate.feature)
+  - Cook can do the order
+  - Cook can't do the order
+  - Cancel order
+####  [#90](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/90) Demander à être notifié des paniers Too Good To Go
+- En tant que Client, je veux être notifié afin de pouvoir savoir quand des paniers cookies sont disponibles
+#### Task [#95](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/95) Verify if service “Personalized Cookies for your Party (PCP)” is available
+
 
    
    
