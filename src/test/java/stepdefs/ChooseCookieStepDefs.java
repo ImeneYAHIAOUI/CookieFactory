@@ -69,6 +69,8 @@ public class ChooseCookieStepDefs {
     public void andGiven() {
         cod = COD.getInstance();
         codIngredients.add(new Topping("chocolate chips", 1));
+        codIngredients.add(new Topping("m&ms", 1));
+        codIngredients.add(new Flavour("caramel", 1));
         codIngredients.add(new Dough("chocolate dough", 1));
         codIngredients.add(new Flavour("vanillaFlavour", 1));
         codIngredients.add(new Flavour("strawberryFlavour", 1));
@@ -385,12 +387,17 @@ public class ChooseCookieStepDefs {
                 int finalJ = j;
                 toppings.add(((Topping) codIngredients.stream().filter(i -> i.getName().equals(row.get(finalJ))).findFirst().orElse(null)));
             }
+            Cook cook = new Cook(1);
             for (CookieSize cookieSize : CookieSize.values()) {
                 for (Theme theme : Theme.values()) {
                     Cookie cookie=new Cookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
 
+                    cook.addTheme(theme);
+
                     Cookie partyCookie = new PartyCookie(cookie,cookieSize,theme);
                 cookieList.add(partyCookie);
+                store.addCook(cook);
+
                 }
             }
         }
@@ -420,9 +427,12 @@ public class ChooseCookieStepDefs {
     @When("Client personalize {int} cookie of type {string}  size {string} and theme {string}")
     public void client_personalize_cookie_of_type_size_and_theme(int int1, String string, String string2, String string3) {
         amount=int1;
+        Cookie cookie = cookieList.stream()
+                .filter(c -> c.getName().equals(string))
+                .findFirst().orElse(null);
         try{
-                cod.personalizeCookie(client,store,string,amount,CookieSize.valueOf(string2),
-                        Occasion.BIRTHDAY,Theme.valueOf(string3));
+                cod.personalizeCookie(client,store,cookie,amount,CookieSize.valueOf(string2),
+                        Occasion.BIRTHDAY,Theme.valueOf(string3),new ArrayList<>(),new ArrayList<>());
             }catch(Exception e){
 
             }
@@ -439,9 +449,12 @@ public class ChooseCookieStepDefs {
     @When("Client personalize {int} cookie of type {string}  size {string} theme {string} and occasion {string}")
     public void client_personalize_cookie_of_type_size_theme_and_occasion(Integer int1, String string, String string2, String string3, String string4) {
         amount=int1;
+        Cookie cookie= cookieList.stream()
+                .filter(c -> c.getName().equals(string))
+                .findFirst().orElse(null);
         try{
-            cod.personalizeCookie(client,store,string,amount,CookieSize.valueOf(string2),
-                    Occasion.valueOf(string4),Theme.valueOf(string3));
+            cod.personalizeCookie(client,store,cookie,amount,CookieSize.valueOf(string2),
+                    Occasion.valueOf(string4),Theme.valueOf(string3),new ArrayList<>(),new ArrayList<>());
         }catch(Exception e){
 
         }

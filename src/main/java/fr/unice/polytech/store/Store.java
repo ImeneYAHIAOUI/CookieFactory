@@ -47,7 +47,7 @@ public class Store {
     @Setter
     private Double tax;
 
-    Store(
+    public Store(
             List<Cook> cooks,
             List<Cookie> recipes,
             String address,
@@ -114,8 +114,13 @@ public class Store {
      */
     public Cook getFreeCook(Cart cart) throws CookException {
         TimeSlot orderTimeSlot = new TimeSlot(cart.getPickupTime().minus(cart.totalCookingTime()), cart.getPickupTime());
+        List<Theme> themes = new ArrayList<>();
+        for (Item item : cart.getItems()) {
+            if(item.getCookie().getTheme()!=null)
+                themes.add(item.getCookie().getTheme());
+        }
         return cooks.stream()
-                .filter(cook -> cook.canTakeTimeSlot(orderTimeSlot))
+                .filter(cook -> cook.canTakeTimeSlot(orderTimeSlot) && cook.getThemeList().containsAll(themes))
                 .findFirst()
                 .orElseThrow(CookException::new);
 
@@ -184,11 +189,27 @@ public class Store {
         ingredientAmounts.add(inventory.get(cookie.getDough())*amountFactor);
         ingredientAmounts.add(inventory.get(cookie.getFlavour())*amountFactor);
         List<Topping> toppingList = cookie.getToppings();
-
         for (Topping topping : toppingList) {
             ingredientAmounts.add(inventory.get(topping)*amountFactor);
         }
-        return Collections.min(ingredientAmounts);
+
+        int factor = 1;
+
+        if(cookie instanceof PartyCookie)
+        {
+            for (Ingredient ingredient : ((PartyCookie) cookie).getAdditionalIngredients()) {
+                ingredientAmounts.add(inventory.get(ingredient)*amountFactor);
+            }
+
+            for (Ingredient ingredient : ((PartyCookie) cookie).getRemovedIngredients()) {
+                ingredientAmounts.remove(inventory.get(ingredient)*amountFactor);
+            }
+
+            factor = cookie.getSize().getMultiplier();
+        }
+
+
+        return Collections.min(ingredientAmounts) / factor;
     }
 
     public void addCookies(List<Cookie> cookieList) {
@@ -243,4 +264,7 @@ public class Store {
         }
     }
 
+    public void addTheme(Theme theme) {
+        themeList.add(theme);
+    }
 }

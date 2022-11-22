@@ -57,20 +57,11 @@ public class Cookie {
         toppings.add(topping);
     }
     public void setSize(CookieSize size){
-        switch(size){
-            case L:
-
-                setPrice(getBasicPrice()*4);
-                break;
-            case XL:
-                setPrice(getBasicPrice()*5);
-                break;
-            case XXL:
-                setPrice(getBasicPrice()*6);
-                break;
-            default:
-                setPrice(getBasicPrice());
-                break;
+        switch (size) {
+            case L -> setPrice(getBasicPrice() * 4);
+            case XL -> setPrice(getBasicPrice() * 5);
+            case XXL -> setPrice(getBasicPrice() * 6);
+            default -> setPrice(getBasicPrice());
         }
         this.size=size;
     }
