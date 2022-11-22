@@ -47,7 +47,7 @@ public class COD {
 
     private final Catalog catalog;
 
-    public COD() {
+     COD() {
         this.recipes = new ArrayList<>();
         this.stores = new ArrayList<>();
         this.orders = new ArrayList<>();

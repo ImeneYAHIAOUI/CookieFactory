@@ -8,10 +8,7 @@ import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.exception.ServiceNotAvailable;
 import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Inventory;
-import fr.unice.polytech.store.Occasion;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.store.*;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
 
@@ -23,7 +20,7 @@ import static org.junit.Assert.*;
 
 public class PersonalizeCookieStepDefs {
 
-    COD cod = new COD();
+    COD cod = COD.getInstance();
     Store store;
 
     Client client = new RegisteredClient("1","********","0606060606");
@@ -56,7 +53,7 @@ public class PersonalizeCookieStepDefs {
     @Given("a store")
     public void aStore() {
 
-        store = new Store(new ArrayList<>(), new ArrayList<>(), "1 rue de la paix", LocalTime.parse("08:00"), LocalTime.parse("12:00"), 1, inventory, 0.2, new ArrayList<>());
+        store = StoreFactory.createStore(new ArrayList<>(), new ArrayList<>(), "1 rue de la paix", LocalTime.parse("08:00"), LocalTime.parse("12:00"), 1, inventory, 0.2, new ArrayList<>());
     }
 
     @Given("^an inventory with the ingredients$")

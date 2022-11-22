@@ -47,7 +47,7 @@ public class Store {
     @Setter
     private Double tax;
 
-    public Store(
+     Store(
             List<Cook> cooks,
             List<Cookie> recipes,
             String address,
