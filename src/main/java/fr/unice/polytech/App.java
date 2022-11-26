@@ -52,7 +52,7 @@ public class App {
         welcomeInterface();
     }
 
-    private static void cookInterface() throws OrderException, CatalogException {
+    private static void cookInterface() throws OrderException, CatalogException, CookieException {
         System.out.println("Cook Interface : Do you want to suggest a recipe (S), or to set a status order (O) ?");
         String rep = SCANNER.nextLine();
         switch (rep) {
@@ -62,7 +62,7 @@ public class App {
         }
     }
 
-    private static void suggestRecipe() throws CatalogException {
+    private static void suggestRecipe() throws CatalogException, CookieException {
         cod.printCatalog();
         System.out.println("Let's create a recipe ! What is the name ?");
         String name = SCANNER.nextLine();

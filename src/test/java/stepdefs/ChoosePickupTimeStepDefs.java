@@ -3,6 +3,7 @@ package stepdefs;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.cod.COD;
+import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
 import fr.unice.polytech.order.Item;
@@ -29,7 +30,7 @@ public class ChoosePickupTimeStepDefs {
     Store store;
 
     @Before(value = "@choose-pickup-time", order = 2)
-    public void setUp() throws InvalidPhoneNumberException {
+    public void setUp() throws InvalidPhoneNumberException, CookieException {
         cod = COD.getInstance();
         cod.initializationCod();
         client = new UnregisteredClient("0123456789");

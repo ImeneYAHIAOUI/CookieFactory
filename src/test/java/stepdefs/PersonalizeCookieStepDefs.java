@@ -33,7 +33,7 @@ public class PersonalizeCookieStepDefs {
             new Flavour("strawberryFlavour", 1),
             new Flavour("chocolateFlavour", 1),
             new Topping("white chocolate chips", 1));
-    Cookie cookie = new Cookie("chocolate",1.,1,Cooking.CHEWY,Mix.MIXED,(Dough) codIngredients.get(3),(Flavour) codIngredients.get(4),List.of((Topping) codIngredients.get(0), (Topping) codIngredients.get(7)));
+    Cookie cookie = CookieFactory.createSimpleCookie("chocolate",1.,1,Cooking.CHEWY,Mix.MIXED,(Dough) codIngredients.get(3),(Flavour) codIngredients.get(4),List.of((Topping) codIngredients.get(0), (Topping) codIngredients.get(7)));
     Inventory inventory;
 
     List<Ingredient> addedIngredients;
@@ -45,9 +45,13 @@ public class PersonalizeCookieStepDefs {
 
     CookieSize size;
 
+    Dough dough;
+    Flavour flavour;
+    List<Topping> toppings;
+
     int amount;
 
-    public PersonalizeCookieStepDefs() throws InvalidPhoneNumberException {
+    public PersonalizeCookieStepDefs() throws InvalidPhoneNumberException, CookieException {
     }
 
     @Given("a store")
@@ -76,6 +80,31 @@ public class PersonalizeCookieStepDefs {
             addedIngredients.add(codIngredients.stream().filter(i -> i.getName().equals(ingredient)).findFirst().get());
         }
     }
+
+    @When("the client wants to personalize the cookie of by choosing dough {string}, flavour {string}")
+    public void theClientWantsToPersonalizeTheCookieOfByChoosingDoughFlavourAndToppings(String doughName, String flavourName) {
+        dough = (Dough) codIngredients.stream().filter(i -> i.getName().equals(doughName)).findFirst().get();
+        flavour = (Flavour) codIngredients.stream().filter(i -> i.getName().equals(flavourName)).findFirst().get();
+    }
+
+    @And("^adding the toppings$")
+    public void andToppings(List<String> toppingsNames)
+    {
+        toppings = new ArrayList<>();
+        for (String toppingName : toppingsNames) {
+            toppings.add((Topping) codIngredients.stream().filter(i -> i.getName().equals(toppingName)).findFirst().get());
+        }
+    }
+
+    @And("^adding the ingredients$")
+    public void addingTheIngredients(List<String> ingredients) {
+        addedIngredients = new ArrayList<>();
+        for (String ingredient : ingredients) {
+            addedIngredients.add(codIngredients.stream().filter(i -> i.getName().equals(ingredient)).findFirst().get());
+        }
+    }
+
+
 
     @Given("the store has the required occasion")
     public void theStoreHasTheRequiredOccasion() {
@@ -113,26 +142,42 @@ public class PersonalizeCookieStepDefs {
         this.amount = amount;
     }
 
-    @Then("the cookie can be ordered")
+    @Then("the cookie personalized from base recipe can be ordered")
     public void theCookieCanBeAddedToCard() throws CookieException, ServiceNotAvailable, OrderException {
-        cod.personalizeCookie(client, store,cookie,amount,size, occasion,theme, addedIngredients, removedIngredients);
+        cod.personalizeCookieFromBaseRecipe(client, store,cookie,amount,size, occasion,theme, addedIngredients, removedIngredients);
         assertNotNull(client.getCart().getItems().get(0));
     }
 
+    @Then("the cookie personalized from scratch can be ordered")
+    public void theCookieCanBeOrdered() throws CookieException, ServiceNotAvailable, OrderException {
+        cod.personalizeCookieFromScratch(client, store,"personalized Cookie",Cooking.CHEWY,Mix.MIXED,dough,flavour,toppings,amount,size, occasion,theme, addedIngredients);
+        assertNotNull(client.getCart().getItems().get(0));
+    }
+
+    @Then("the cookie personalized from scratch cannot be ordered because the store does not have the required ingredients")
+    public void theCookiePersonalizedFromScratchCannotBeAddedToCard() {
+            assertThrows(CookieException.class, () -> cod.personalizeCookieFromScratch(client, store,"personalized Cookie",Cooking.CHEWY,Mix.MIXED,dough,flavour,toppings,amount,size, occasion,theme, addedIngredients));
+
+
+    }
+    @Then("the cookie personalized from scratch cannot be ordered because the store does not have the required themes and or ingredients")
+    public void theCookiePersonalizedFromScratchCannotBeAddedToCard2() {
+        assertThrows(ServiceNotAvailable.class, () -> cod.personalizeCookieFromScratch(client, store, "personalized Cookie", Cooking.CHEWY, Mix.MIXED, dough, flavour, toppings, amount, size, occasion, theme, addedIngredients));
+    }
 
 
     @Then("the cookie cannot be ordered because the chosen cookie is not available or because there isn't enough ingredients")
     public void theCookieCannotBeAddedToCardBecauseTheChosenCookieIsNotAvailable() {
-        assertThrows(CookieException.class, () -> cod.personalizeCookie(client, store,cookie,amount,size, occasion,theme, addedIngredients, removedIngredients));
+        assertThrows(CookieException.class, () -> cod.personalizeCookieFromBaseRecipe(client, store,cookie,amount,size, occasion,theme, addedIngredients, removedIngredients));
     }
 
     @Then("the cookie cannot be ordered because the chosen theme and or occasion are not available")
     public void theCookieCannotBeAddedToCardBecauseTheChosenThemeAndOrOccasionAreNotAvailable() {
-        assertThrows(ServiceNotAvailable.class, () -> cod.personalizeCookie(client, store,cookie,amount,size, occasion,theme, addedIngredients, removedIngredients));
+        assertThrows(ServiceNotAvailable.class, () ->  cod.personalizeCookieFromScratch(client, store, "personalized Cookie", Cooking.CHEWY, Mix.MIXED, dough, flavour, toppings, amount, size, occasion, theme, addedIngredients));
     }
 
     @And("the cookie's price is changed")
-    public void theCookieSPriceIsChanged() throws CookieException, ServiceNotAvailable, OrderException {
+    public void theCookieSPriceIsChanged() {
         Cookie OrderedCookie =  client.getCart().getItems().get(0).getCookie();
         double addPrice = 0;
         double removePrice = 0;
@@ -142,9 +187,20 @@ public class PersonalizeCookieStepDefs {
         for (Ingredient ingredient : removedIngredients) {
             removePrice += ingredient.getPrice() * size.getMultiplier();
         }
-        assertEquals(OrderedCookie.getPrice(), 1.* size.getMultiplier() + addPrice - removePrice, 0.01);
+        assertEquals(OrderedCookie.getPrice(), cookie.getPrice()* size.getMultiplier() + addPrice - removePrice, 0.01);
 
     }
+
+    @And("the cookie's price is calculated based on the size and ingredients")
+    public void theCookieSPriceIsCalculatedBasedOnTheSizeAndIngredients() {
+        Cookie OrderedCookie =  client.getCart().getItems().get(0).getCookie();
+        double addPrice = dough.getPrice() + flavour.getPrice() + toppings.stream().mapToDouble(Topping::getPrice).sum();
+        for (Ingredient ingredient : addedIngredients) {
+            addPrice += ingredient.getPrice() ;
+        }
+        assertEquals(OrderedCookie.getPrice(),  addPrice * size.getMultiplier(), 0.01);
+    }
+
 
 
 }

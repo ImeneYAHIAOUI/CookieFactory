@@ -116,8 +116,9 @@ public class Store {
         TimeSlot orderTimeSlot = new TimeSlot(cart.getPickupTime().minus(cart.totalCookingTime()), cart.getPickupTime());
         List<Theme> themes = new ArrayList<>();
         for (Item item : cart.getItems()) {
-            if(item.getCookie().getTheme()!=null)
-                themes.add(item.getCookie().getTheme());
+            if(item.getCookie() instanceof PartyCookie) {
+                themes.add(((PartyCookie) item.getCookie()).getTheme());
+            }
         }
         return cooks.stream()
                 .filter(cook -> cook.canTakeTimeSlot(orderTimeSlot) && cook.getThemeList().containsAll(themes))
@@ -184,27 +185,24 @@ public class Store {
         }
     }
 
-    public int getMaxCookieAmount(Cookie cookie,int amountFactor) {
+    public int getMaxCookieAmount(Cookie cookie, int factor) {
         List<Integer> ingredientAmounts = new ArrayList<>();
-        ingredientAmounts.add(inventory.get(cookie.getDough())*amountFactor);
-        ingredientAmounts.add(inventory.get(cookie.getFlavour())*amountFactor);
+        ingredientAmounts.add(inventory.get(cookie.getDough()));
+        ingredientAmounts.add(inventory.get(cookie.getFlavour()));
         List<Topping> toppingList = cookie.getToppings();
         for (Topping topping : toppingList) {
-            ingredientAmounts.add(inventory.get(topping)*amountFactor);
+            ingredientAmounts.add(inventory.get(topping));
         }
 
-        int factor = 1;
+        if (cookie instanceof PartyCookie) {
 
-        if(cookie instanceof PartyCookie)
-        {
-            for (Ingredient ingredient : ((PartyCookie) cookie).getAdditionalIngredients()) {
-                ingredientAmounts.add(inventory.get(ingredient)*amountFactor);
+            if (cookie instanceof PartyCookieWithBaseRecipe) {
+                ((PartyCookieWithBaseRecipe) cookie).getAddedIngredients().forEach((ingredient) -> ingredientAmounts.add(inventory.get(ingredient)));
+                ((PartyCookieWithBaseRecipe) cookie).getRemovedIngredients().forEach((ingredient) -> ingredientAmounts.remove(inventory.get(ingredient)));
             }
-
-            for (Ingredient ingredient : ((PartyCookie) cookie).getRemovedIngredients()) {
-                ingredientAmounts.remove(inventory.get(ingredient)*amountFactor);
+            if (cookie instanceof PartyCookieFromScratch) {
+                ((PartyCookieFromScratch) cookie).getSupplementaryIngredients().forEach((ingredient) -> ingredientAmounts.add(inventory.get(ingredient)));
             }
-
             factor = cookie.getSize().getMultiplier();
         }
 
@@ -250,11 +248,9 @@ public class Store {
             if(inventory.get(t) ==0)
                 return false;
         }
-        Theme theme =cookie.getTheme();
-        if(theme!=null){
-            if(!themeList.contains(theme)){
-                return false;
-            }
+        if(cookie instanceof PartyCookie){
+            Theme theme=((PartyCookie) cookie).getTheme();
+            return themeList.contains(theme);
         }
         return true;
     }

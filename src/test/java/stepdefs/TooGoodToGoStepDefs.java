@@ -3,10 +3,7 @@ package stepdefs;
 import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.cod.COD;
-import fr.unice.polytech.exception.ClientException;
-import fr.unice.polytech.exception.InvalidPhoneNumberException;
-import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.exception.RegistrationException;
+import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
@@ -47,7 +44,7 @@ public class TooGoodToGoStepDefs {
     Client client;
     Cook cook;
 
-    private void setup() throws InvalidPhoneNumberException {
+    private void setup() throws InvalidPhoneNumberException, CookieException {
         statusSchedulerRunnables = new ArrayBlockingQueue<>(3);
         cod = COD.getInstance();
         cod.initializationCod();
@@ -93,7 +90,7 @@ public class TooGoodToGoStepDefs {
     }
 
     @Given("a cod with a store having an order in progress")
-    public void aCodWithAStoreHavingAnOrderInProgress() throws OrderException, InvalidPhoneNumberException {
+    public void aCodWithAStoreHavingAnOrderInProgress() throws OrderException, InvalidPhoneNumberException, CookieException {
         setup();
         order = new Order("0", client, cook, store);
         order.setStatus(OrderStatus.IN_PROGRESS);
@@ -129,7 +126,7 @@ public class TooGoodToGoStepDefs {
     }
 
     @Given("a cod with a store having no orders in progress")
-    public void aCodWithAStoreHavingNoOrdersInProgress() throws InvalidPhoneNumberException {
+    public void aCodWithAStoreHavingNoOrdersInProgress() throws InvalidPhoneNumberException, CookieException {
         setup();
     }
 
@@ -146,7 +143,7 @@ public class TooGoodToGoStepDefs {
     }
 
     @Given("a cod with a store having {int} obsolete orders and {int} {string}")
-    public void aCodWithAStoreHavingObsoleteOrdersAndInProgress(int nbObsolete, int nbOrders2, String status2) throws InvalidPhoneNumberException, OrderException {
+    public void aCodWithAStoreHavingObsoleteOrdersAndInProgress(int nbObsolete, int nbOrders2, String status2) throws InvalidPhoneNumberException, OrderException, CookieException {
         setup();
         for (int i = 0; i < nbObsolete; i++) {
             Order order = new Order(String.valueOf(i), client, cook, store);

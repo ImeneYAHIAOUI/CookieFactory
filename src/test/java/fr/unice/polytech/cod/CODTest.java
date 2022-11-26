@@ -44,7 +44,7 @@ public class CODTest {
     Inventory inventory;
 
     @BeforeEach
-    public void setUp() throws InvalidPhoneNumberException {
+    public void setUp() throws InvalidPhoneNumberException, CookieException {
         COD.reset();
         cod = new COD();
         client = new UnregisteredClient("0606060606");
@@ -61,12 +61,12 @@ public class CODTest {
 
         registeredClient = mock(RegisteredClient.class);
 
-        cookie1 = new Cookie("chocolala",1.,15,Cooking.CHEWY,Mix.MIXED, new Dough("chocolate",1),new Flavour("chocolate",1),List.of(new Topping("chocolat",1.)));
+        cookie1 = CookieFactory.createSimpleCookie("chocolala",1.,15,Cooking.CHEWY,Mix.MIXED, new Dough("chocolate",1),new Flavour("chocolate",1),List.of(new Topping("chocolat",1.)));
 
         inventory = mock(Inventory.class);
         store = StoreFactory.createStore(
                 List.of(cook),
-                List.of(new Cookie("chocolala", 1., 15, Cooking.CHEWY, Mix.MIXED, new Dough("chocolate", 1), new Flavour("chocolate", 1), List.of(new Topping("chocolate chips", 1)))),
+                List.of(CookieFactory.createSimpleCookie("chocolala", 1., 15, Cooking.CHEWY, Mix.MIXED, new Dough("chocolate", 1), new Flavour("chocolate", 1), List.of(new Topping("chocolate chips", 1)))),
                 "30 Rte des Colles, 06410 Biot",
                 LocalTime.parse("08:00"),
                 LocalTime.parse("20:00"),
@@ -79,7 +79,7 @@ public class CODTest {
     }
 
     @Test
-    public void testInitialstatus() {
+    public void testInitialisations() {
         assertEquals(order.getStatus(), OrderStatus.NOT_STARTED);
     }
 
@@ -185,10 +185,10 @@ public class CODTest {
     }
 
     @Test
-    public void acceptNewRecipe() {
+    public void acceptNewRecipe() throws CookieException {
         cod.addStore(store);
         List<Topping> toppingList = new ArrayList<>();
-        Cookie cookie = new Cookie("IncredibleCookie",10.0,10,Cooking.CHEWY,Mix.MIXED,new Dough("Yum",2),new Flavour("Yummy",6),toppingList);
+        Cookie cookie = CookieFactory.createSimpleCookie("IncredibleCookie",10.0,10,Cooking.CHEWY,Mix.MIXED,new Dough("Yum",2),new Flavour("Yummy",6),toppingList);
         cod.suggestRecipe(cookie);
         cod.acceptRecipe(cookie,10.1);
         assertEquals(1,store.getRecipes().size());

@@ -10,6 +10,8 @@ Feature: personalize party cookie
       | strawberryFlavour     | 50 |
       | chocolateFlavour      | 20 |
       | white chocolate chips | 10 |
+      | m&ms                  | 0  |
+      | caramel               | 0  |
     And a store
 
     Scenario: Client want to personalize a cookie with unavailable ingredients
@@ -41,8 +43,8 @@ Feature: personalize party cookie
     Given the store has the required occasion
     And the store has a cook specialised in the chosen theme
     When the client wants to personalize the cookie of by adding
-      |m&ms |
-      |caramel|
+      |chocolate dough  |
+      |white chocolate chips|
     And removing
       |chocolate chips|
     And order 1 of them of size "L"
@@ -80,7 +82,7 @@ Feature: personalize party cookie
     And removing
       |chocolate chips|
     And order 1 of them of size "XXL"
-    Then the cookie can be ordered
+    Then the cookie personalized from base recipe can be ordered
     And the cookie's price is changed
 
 

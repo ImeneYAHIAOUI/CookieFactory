@@ -1,7 +1,9 @@
 package stepdefs;
 
 import fr.unice.polytech.cod.COD;
+import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.recipe.Cookie;
+import fr.unice.polytech.recipe.CookieFactory;
 import fr.unice.polytech.store.Cook;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -25,8 +27,8 @@ public class CookStepDefs {
     }
 
     @And("a cookie with name {string}")
-    public void andGivenCookie(String name) {
-        cookie = new Cookie(name, 0.0, 0, null, null, null, null, null);
+    public void andGivenCookie(String name) throws CookieException {
+        cookie = CookieFactory.createSimpleCookie(name, 0.0, 0, null, null, null, null, null);
     }
 
     @And("a cod")

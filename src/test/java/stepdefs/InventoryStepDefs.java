@@ -3,6 +3,7 @@ package stepdefs;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CatalogException;
+import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.IngredientTypeException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.recipe.*;
@@ -27,7 +28,7 @@ public class InventoryStepDefs {
     Store store;
     Cookie cookie;
     @Given("cod with store and recipe")
-    public void initialization(){
+    public void initialization() throws CookieException {
         cod = COD.getInstance();
         cod.initializationCod();
         List<Cook> cooks = new ArrayList<>();
@@ -44,7 +45,7 @@ public class InventoryStepDefs {
     }
 
     @And("a recipe with dough {string}, flavour {string} and toppings {string} and {string}")
-    public void givenARecipe(String dough, String flavour, String topping1, String topping2) throws CatalogException, IngredientTypeException {
+    public void givenARecipe(String dough, String flavour, String topping1, String topping2) throws CatalogException, IngredientTypeException, CookieException {
         this.cod.addIngredientCatalog(dough, 0.0, IngredientType.DOUGH);
         this.cod.addIngredientCatalog(flavour, 0.0, IngredientType.FLAVOUR);
         this.cod.addIngredientCatalog(topping1, 0.0, IngredientType.TOPPING);
@@ -52,7 +53,7 @@ public class InventoryStepDefs {
         List<Topping> toppingList = new ArrayList<>();
         toppingList.add((Topping) this.cod.getIngredientCatalog(topping1));
         toppingList.add((Topping) this.cod.getIngredientCatalog(topping2));
-        this.cookie = new Cookie("test",
+        this.cookie = CookieFactory.createSimpleCookie("test",
                 0.0,
                 0,
                 Cooking.CRUNCHY,

@@ -58,7 +58,7 @@ public class PayOrderStepDefs {
         Flavour flavour = new Flavour("Chocolate",2);
         Topping topping = new Topping("Something", 1);
         toppings.add(topping);
-        Cookie cookie = new Cookie(cookieName, 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavour, toppings);
+        Cookie cookie = CookieFactory.createSimpleCookie(cookieName, 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavour, toppings);
         cookieList.add(cookie);
         store.addCookies(cookieList);
         store.addIngredients(dough, 10);

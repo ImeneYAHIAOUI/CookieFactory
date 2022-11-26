@@ -3,11 +3,13 @@ package stepdefs;
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.CookException;
+import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.PickupTimeNotSetException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.Cookie;
+import fr.unice.polytech.recipe.CookieFactory;
 import fr.unice.polytech.store.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -69,8 +71,8 @@ public class TimeSlotAttributionStepDefs {
     }
 
     @And("a random recipe with cooking time of {int}")
-    public void andRandomRecipeWithCookingTime(int cookieTime) {
-        cookie = new Cookie("", 0.0, cookieTime, null, null, null, null, new ArrayList<>());
+    public void andRandomRecipeWithCookingTime(int cookieTime) throws CookieException {
+        cookie = CookieFactory.createSimpleCookie("", 0.0, cookieTime, null, null, null, null, new ArrayList<>());
     }
 
     @And("a store with the recipe, the cook opening time {string} and ending time {string}")

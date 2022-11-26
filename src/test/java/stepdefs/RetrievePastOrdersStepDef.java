@@ -2,6 +2,7 @@ package stepdefs;
 
 import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.cod.COD;
+import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
@@ -43,7 +44,11 @@ public class RetrievePastOrdersStepDef {
             row.forEach(item -> {
                 String[] itemSplit = item.split(" ");
                 client.getCart().setTax(0.1);
-                client.getCart().addItem(new Item(Integer.parseInt(itemSplit[1]), new Cookie(itemSplit[0], 1., 1, Cooking.CHEWY, Mix.MIXED, new Dough("dough", 1.), new Flavour("flavour", 1.), List.of(new Topping("topping", 1.)))));
+                try {
+                    client.getCart().addItem(new Item(Integer.parseInt(itemSplit[1]), CookieFactory.createSimpleCookie(itemSplit[0], 1., 1, Cooking.CHEWY, Mix.MIXED, new Dough("dough", 1.), new Flavour("flavour", 1.), List.of(new Topping("topping", 1.)))));
+                } catch (CookieException e) {
+                    throw new RuntimeException(e);
+                }
             });
 
             Order order = mock(Order.class);

@@ -13,11 +13,11 @@ import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.store.*;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.an.E;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en_scouse.An;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -46,6 +46,8 @@ public class ChooseCookieStepDefs {
 
     Cookie cookie;
 
+    PartyCookie partyCookie;
+    CookieSize cookieSize;
     final List<Ingredient> codIngredients = new ArrayList<>();
 
     final List<Cookie> cookieList = new ArrayList<>();
@@ -110,7 +112,7 @@ public class ChooseCookieStepDefs {
 
 
     @And("^the store has cookies$")
-    public void andGiven(DataTable table) {
+    public void andGiven(DataTable table) throws CookieException {
         List<List<String>> rows = table.asLists(String.class);
 
         for (List<String> row : rows) {
@@ -125,7 +127,7 @@ public class ChooseCookieStepDefs {
                 int finalJ = j;
                 toppings.add(((Topping) codIngredients.stream().filter(i -> i.getName().equals(row.get(finalJ))).findFirst().orElse(null)));
             }
-            Cookie cookie = new Cookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
+            Cookie cookie = CookieFactory.createSimpleCookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
             cookieList.add(cookie);
         }
 
@@ -169,6 +171,15 @@ public class ChooseCookieStepDefs {
     @Then("this order can be purchased")
     public void thenCookiesAvailable() {
         assertDoesNotThrow(() -> cod.chooseCookie(client, store, cookie, amount));
+    }
+    @And("the Party cookie has personalized from the cookie")
+    public void thePartyCookieHasPersonalizedFromTheCookie() throws CookieException {
+        partyCookie = CookieFactory.createPartyCookieWithBaseCookie(cookie, cookieSize,null,new ArrayList<>(),new ArrayList<>());
+
+    }
+    @Then("this party cookie can be purchased")
+    public void thenPartyCookiesAvailable() throws CookieException {
+        assertDoesNotThrow(() -> cod.chooseCookie(client, store, partyCookie, amount));
     }
 
     @And("the clients card contains {int} cookie\\(s) of type {string}")
@@ -312,18 +323,24 @@ public class ChooseCookieStepDefs {
     @And("the clients cart contains {int} party cookie\\(s) of type {string} and size {string}")
     public void theClientsCartContainsPartyCookieSOfTypeAndSize(int nbOfCookie, String cookieName, String cookieSize) {
         assertEquals(this.client.getCart().getItems().get(0).getQuantity(), nbOfCookie);
-        assertEquals(this.client.getCart().getItems().get(0).getCookie().getName(), cookieName);
-        assertEquals(this.client.getCart().getItems().get(0).getCookie().getClass(), PartyCookie.class);
+        assertEquals(this.client.getCart().getItems().get(0).getCookie().getName(), "personalized "+cookieName);
+        assertTrue(this.client.getCart().getItems().get(0).getCookie() instanceof PartyCookie);
         assertEquals(( this.client.getCart().getItems().get(0).getCookie()).getSize().name(), cookieSize);
     }
 
     @When("Client chooses party cookies of type {string} and size {string}")
-    public void clientChoosesPartyCookiesOfTypeAndSize(String cookieName, String cookieSize) {
-        cookie = cookieList.stream().filter(c -> c.getName().equals(cookieName)).filter(cookie1-> cookie1.getClass() == PartyCookie.class).filter(cookie1 -> cookie1.getSize().toString().equals(cookieSize)).findFirst().orElse(null);
+    public void clientChoosesPartyCookiesOfTypeAndSize(String cookieName, String size) throws CookieException {
+        cookie = cookieList.stream().filter(c -> c.getName().equals(cookieName)).findFirst().orElse(null);
+        cookieSize = switch (size) {
+            case "L" -> CookieSize.L;
+            case "XL" -> CookieSize.XL;
+            case "XXL" -> CookieSize.XXL;
+            default -> throw new IllegalStateException("Unexpected value: " + cookieSize);
+        };
     }
 
     @And("^the store has party cookies and all available size$")
-    public void andGivenPartyCookies(DataTable table) {
+    public void andGivenPartyCookies(DataTable table) throws CookieException {
         List<List<String>> rows = table.asLists(String.class);
 
         for (List<String> row : rows) {
@@ -340,9 +357,8 @@ public class ChooseCookieStepDefs {
             }
 
             for (CookieSize cookieSize : CookieSize.values()) {
-                Cookie cookie=new Cookie(row.get(0), 1.0, 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
-                Cookie Partycookie = new PartyCookie(cookie,cookieSize,null);
-                cookieList.add(Partycookie);
+                Cookie cookie=CookieFactory.createSimpleCookie(row.get(0), 1.0, 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
+                cookieList.add(cookie);
             }
 
         }
@@ -372,12 +388,19 @@ public class ChooseCookieStepDefs {
         this.cod.finalizeOrder(client,store);
     }
 
-    @Then("this order cannot be purchased because the cookie doesn't exist")
+    @And("client finalize his personalized order")
+    public void clientFinalizeHisPersonalizedOrder() throws PaymentException, CookException, BadQuantityException, InvalidPickupTimeException, CookieException, OrderException {
+        cod.choosePickupTime(client.getCart(), store, LocalTime.parse("11:30"));
+        cod.chooseCookie(client, store, partyCookie, amount);
+        this.cod.finalizeOrder(client,store);
+    }
+
+    @Then("this order cannot be created because the base recipe doesn't exist")
     public void thisOrderCannotBePurchasedBecauseTheCookieDoesntExist() {
-        assertThrows(CookieException.class, ()-> cod.chooseCookie(client, store, cookie, amount));
+        assertThrows(NullPointerException.class, ()-> CookieFactory.createPartyCookieWithBaseCookie(cookie, cookieSize,null,new ArrayList<>(),new ArrayList<>()));
     }
     @And("^the store has party cookies with all size and all themes$")
-    public void theStoreHasPartyCookiesWithAllSizeAndAllThemes(DataTable table) {
+    public void theStoreHasPartyCookiesWithAllSizeAndAllThemes(DataTable table) throws CookieException {
         List<List<String>> rows = table.asLists(String.class);
         for (List<String> row : rows) {
             List<Topping> toppings = new ArrayList<>();
@@ -390,11 +413,11 @@ public class ChooseCookieStepDefs {
             Cook cook = new Cook(1);
             for (CookieSize cookieSize : CookieSize.values()) {
                 for (Theme theme : Theme.values()) {
-                    Cookie cookie=new Cookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
+                    Cookie cookie=CookieFactory.createSimpleCookie(row.get(0), 1., 30, Cooking.CHEWY, Mix.TOPPED, dough, flavor, toppings);
 
                     cook.addTheme(theme);
 
-                    Cookie partyCookie = new PartyCookie(cookie,cookieSize,theme);
+                    Cookie partyCookie = CookieFactory.createPartyCookieWithBaseCookie(cookie,cookieSize,theme,new ArrayList<>(),new ArrayList<>());
                 cookieList.add(partyCookie);
                 store.addCook(cook);
 
@@ -408,8 +431,9 @@ public class ChooseCookieStepDefs {
     public void clientChoosesPartyCookiesOfTypeAndSizeAndTheme(String cookieName, String cookieSize, String cookieTheme) {
         cookie = cookieList.stream()
                 .filter(c -> c.getName().equals(cookieName))
+                .filter(cookie1-> cookie1 instanceof PartyCookie)
                 .filter(cookie1 -> cookie1.getSize().toString().equals(cookieSize))
-                .filter(cookie1 -> cookie1.getTheme().toString().equals(cookieTheme))
+                .filter(cookie1 ->  ((PartyCookie) cookie1).getTheme().toString().equals(cookieTheme))
                 .findFirst().orElse(null);
     }
     @Then("the price of the order is {double}")
@@ -417,7 +441,7 @@ public class ChooseCookieStepDefs {
         assertEquals(expectedPrice, cod.getOrders().get(0).getPrice(), 0.0);
     }
     @Given("the store with theme {string}")
-    public void the_store_with_theme(String theme) {
+    public void theStoreWithTheme(String theme) {
         Cook cook=new Cook(1);
         cook.addTheme(Theme.ANIMAL);
         store.addCook(cook);
@@ -425,13 +449,13 @@ public class ChooseCookieStepDefs {
         assertTrue(store.getThemeList().contains(Theme.valueOf(theme)));
     }
     @When("Client personalize {int} cookie of type {string}  size {string} and theme {string}")
-    public void client_personalize_cookie_of_type_size_and_theme(int int1, String string, String string2, String string3) {
+    public void clientPersonalizeCookieOfTypeSizeAndTheme(int int1, String string, String string2, String string3) {
         amount=int1;
         Cookie cookie = cookieList.stream()
                 .filter(c -> c.getName().equals(string))
                 .findFirst().orElse(null);
         try{
-                cod.personalizeCookie(client,store,cookie,amount,CookieSize.valueOf(string2),
+                cod.personalizeCookieFromBaseRecipe(client,store,cookie,amount,CookieSize.valueOf(string2),
                         Occasion.BIRTHDAY,Theme.valueOf(string3),new ArrayList<>(),new ArrayList<>());
             }catch(Exception e){
 
@@ -439,28 +463,28 @@ public class ChooseCookieStepDefs {
 
     }
     @Then("this order cannot be purchased because store doesn't offer the theme {string}")
-    public void cannot_offer_the_theme(String theme) {
+    public void cannotOfferTheTheme(String theme) {
         assertFalse(store.getThemeList().contains(Theme.valueOf(theme)));}
     @Then("the clients cart contains {int} party cookie\\(s) of type {string}  and size {string}")
-    public void the_clients_cart_contains_party_cookie_s_of_type_and_size(Integer int1, String string, String string2) {
+    public void theClientsCartContainsPartyCookieSOfTypeAndSize(Integer int1, String string, String string2) {
 
         assertTrue(client.getCart().getItems().stream().filter(i -> i.getCookie().getName().equals(string)).anyMatch(i -> i.getQuantity() == int1));
     }
     @When("Client personalize {int} cookie of type {string}  size {string} theme {string} and occasion {string}")
-    public void client_personalize_cookie_of_type_size_theme_and_occasion(Integer int1, String string, String string2, String string3, String string4) {
+    public void clientPersonalizeCookieOfTypeSizeThemeAndOccasion(Integer int1, String string, String string2, String string3, String string4) {
         amount=int1;
         Cookie cookie= cookieList.stream()
                 .filter(c -> c.getName().equals(string))
                 .findFirst().orElse(null);
         try{
-            cod.personalizeCookie(client,store,cookie,amount,CookieSize.valueOf(string2),
+            cod.personalizeCookieFromBaseRecipe(client,store,cookie,amount,CookieSize.valueOf(string2),
                     Occasion.valueOf(string4),Theme.valueOf(string3),new ArrayList<>(),new ArrayList<>());
         }catch(Exception e){
 
         }
     }
     @Then("this order cannot be purchased because store doesn't offer the occasion {string}")
-    public void this_order_cannot_be_purchased_because_store_doesn_t_offer_the_occasion(String string) {
+    public void thisOrderCannotBePurchasedBecauseStoreDoesnTOfferTheOccasion(String string) {
         assertFalse(store.getThemeList().contains(Occasion.valueOf(string)));}
 
 

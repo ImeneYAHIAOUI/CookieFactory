@@ -6,6 +6,7 @@ import fr.unice.polytech.client.Client;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
+import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,7 @@ public class StoreTest {
 
     Cook cook;
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws CookieException {
         client = mock(Client.class);
         cook = mock(Cook.class);
         when(client.getCart()).thenReturn(new Cart());
@@ -49,9 +50,9 @@ public class StoreTest {
         flavours = List.of(new Flavour("chocolate", 1), new Flavour("strawberry", 1));
         toppings = List.of(new Topping("chocolat chips", 1.), new Topping("m&ms", 1.), new Topping("strawberry flakes", 1.));
         inventory = mock(Inventory.class);
-        cookie1 = new Cookie("chocolala", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavours.get(0), List.of(toppings.get(0)));
-        cookie2 = new Cookie("m&ms", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavours.get(0), List.of(toppings.get(1)));
-        cookie3 = new Cookie("strawbarry", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(1), flavours.get(1), List.of(toppings.get(2)));
+        cookie1 = CookieFactory.createSimpleCookie("chocolala", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavours.get(0), List.of(toppings.get(0)));
+        cookie2 = CookieFactory.createSimpleCookie("m&ms", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavours.get(0), List.of(toppings.get(1)));
+        cookie3 = CookieFactory.createSimpleCookie("strawbarry", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(1), flavours.get(1), List.of(toppings.get(2)));
         List<Cookie> cookies = new ArrayList<>();
         cookies.add(cookie1);
         cookies.add(cookie2);
@@ -117,24 +118,24 @@ public class StoreTest {
     }
 
     @Test
-    public void cannotAddCookieToStoreBecauseDoesntHaveDough(){
+    public void cannotAddCookieToStoreBecauseDoesntHaveDough() throws CookieException {
         Dough dough = new Dough("whiteChocolate", 1);
-        Cookie cookie = new Cookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, dough, flavours.get(0), List.of(toppings.get(0)));
+        Cookie cookie = CookieFactory.createSimpleCookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, dough, flavours.get(0), List.of(toppings.get(0)));
         assertFalse(store.canAddCookieToStore(cookie));
     }
 
     @Test
-    public void cannotAddCookieToStoreBecauseDoesntHaveFlavour(){
+    public void cannotAddCookieToStoreBecauseDoesntHaveFlavour() throws CookieException {
         Flavour flavour = new Flavour("whiteChocolate", 1);
-        Cookie cookie = new Cookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavour, List.of(toppings.get(0)));
+        Cookie cookie = CookieFactory.createSimpleCookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavour, List.of(toppings.get(0)));
         assertFalse(store.canAddCookieToStore(cookie));
     }
 
     @Test
-    public void cannotAddCookieToStoreBecauseZeroChosenFlavour() throws AlreadyExistException, BadQuantityException {
+    public void cannotAddCookieToStoreBecauseZeroChosenFlavour() throws AlreadyExistException, BadQuantityException, CookieException {
         Flavour flavour = new Flavour("whiteChocolate", 1);
         store.addIngredients(flavour, 0);
-        Cookie cookie = new Cookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavour, List.of(toppings.get(0)));
+        Cookie cookie = CookieFactory.createSimpleCookie("vanilla", 1., 15, Cooking.CHEWY, Mix.MIXED, doughs.get(0), flavour, List.of(toppings.get(0)));
         assertFalse(store.canAddCookieToStore(cookie));
     }
 

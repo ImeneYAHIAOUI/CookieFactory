@@ -1,12 +1,13 @@
 package fr.unice.polytech.recipe;
 
+import fr.unice.polytech.exception.CookieException;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Cookie {
+public class Cookie  {
     @Getter
     private CookieSize size;
     @Getter
@@ -30,13 +31,11 @@ public class Cookie {
     @Getter
     @Setter
     private Flavour flavour;
-    @Getter
-    @Setter
-    private Theme theme;
+
     @Getter
     private final List<Topping> toppings;
 
-    public Cookie(String name,Double price, int cookingTime,Cooking cooking, Mix mix,Dough dough, Flavour flavour,List<Topping> toppings){
+     Cookie(String name,double price,int cookingTime,Cooking cooking, Mix mix,Dough dough, Flavour flavour,List<Topping> toppings) throws CookieException {
 
         this.name=name;
         this.price=price;
@@ -53,38 +52,14 @@ public class Cookie {
         }
     }
 
-    public void addTopping(Topping topping) {
-        toppings.add(topping);
-    }
-    public void setSize(CookieSize size){
-        switch (size) {
-            case L -> setPrice(getBasicPrice() * 4);
-            case XL -> setPrice(getBasicPrice() * 5);
-            case XXL -> setPrice(getBasicPrice() * 6);
-            default -> setPrice(getBasicPrice());
+    public void addTopping(Topping topping) throws CookieException {
+        if(toppings.size()<3){
+            toppings.add(topping);
         }
-        this.size=size;
+        else throw new CookieException("Too many toppings, you can't have more than 3 in one recipe");
     }
-    public Double getBasicPrice(){
-        Double priceCookie=price;
 
-        if(size==null)
-            return priceCookie;
-        switch(size){
-            case L:
-                priceCookie=price/4;
-                break;
-            case XL:
-                priceCookie=price/5;
-                break;
-            case XXL:
-                priceCookie=price/6;
-                break;
-            default:
-                break;
-        }
-        return priceCookie;
-    }
+
 
 
 

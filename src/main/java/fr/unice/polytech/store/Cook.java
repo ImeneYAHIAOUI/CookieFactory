@@ -3,6 +3,7 @@ package fr.unice.polytech.store;
 import fr.unice.polytech.exception.CookException;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.recipe.Cookie;
+import fr.unice.polytech.recipe.PartyCookie;
 import fr.unice.polytech.recipe.Theme;
 import lombok.Getter;
 
@@ -34,10 +35,8 @@ public class Cook {
         return workingTimeSlot.keySet().stream().noneMatch(timeSlot::overlaps);
     }
     public boolean canMakeCookie(Cookie cookie){
-        Theme theme= cookie.getTheme();
-        if(theme!=null){
-            if(!themeList.contains(theme))
-                return false;
+        if (cookie instanceof PartyCookie){
+            return themeList.contains(((PartyCookie) cookie).getTheme());
         }
         return true;
     }

@@ -4,10 +4,7 @@ import fr.unice.polytech.client.Client;
 import fr.unice.polytech.client.NotificationMessage;
 import fr.unice.polytech.client.UnregisteredClient;
 import fr.unice.polytech.cod.COD;
-import fr.unice.polytech.exception.BadQuantityException;
-import fr.unice.polytech.exception.InvalidPhoneNumberException;
-import fr.unice.polytech.exception.InvalidPickupTimeException;
-import fr.unice.polytech.exception.OrderException;
+import fr.unice.polytech.exception.*;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
 import fr.unice.polytech.services.SMSService;
@@ -35,7 +32,7 @@ public class MakeOrderStepDefs {
     Store store;
     private ByteArrayOutputStream outContent ;
 
-    public void setUp() throws NoSuchFieldException, IllegalAccessException {
+    public void setUp() throws NoSuchFieldException, IllegalAccessException, CookieException {
         smsService = mock(SMSService.class);
         cod = COD.getInstance();
         cod.initializationCod();
@@ -53,7 +50,7 @@ public class MakeOrderStepDefs {
     }
 
     @Given("a client")
-    public void givenAClient() throws InvalidPhoneNumberException, NoSuchFieldException, IllegalAccessException {
+    public void givenAClient() throws InvalidPhoneNumberException, NoSuchFieldException, IllegalAccessException, CookieException {
         setUp();
         client = new UnregisteredClient("0123456789");
     }

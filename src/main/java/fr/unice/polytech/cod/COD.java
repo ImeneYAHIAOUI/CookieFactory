@@ -72,9 +72,9 @@ public class COD {
     /**
      * Initialization of the COD with 1 store, 1 recipe and 1 occasion
      */
-    public void initializationCod() {
+    public void initializationCod() throws CookieException {
         //Initialisation with 1 store + 1 recipe
-        recipes.add(new Cookie(
+        recipes.add(CookieFactory.createSimpleCookie(
                 "chocolala",
                 1.,
                 15,
@@ -180,7 +180,7 @@ public class COD {
         if (client instanceof RegisteredClient && ((RegisteredClient) client).isBanned())
             throw new OrderException("You have cancelled two orders in 8 minutes or less, you are banned for 10 minutes.\n Remaining time : " + ((RegisteredClient) client).getRemainingBanTime());
 
-        if (cookie==null || store.getRecipes().stream().noneMatch(cookie1 -> Objects.equals(cookie1.getName(), cookie.getName()))) {
+        if ( ! (cookie instanceof PartyCookie) && (cookie==null || ! store.getRecipes().contains(cookie))) {
             throw new CookieException("this cookie is not available in this store");
         }
         int maxCookieAmount = calculateMaxCookieAmount(cookie,store);
@@ -211,23 +211,29 @@ public class COD {
      * @throws OrderException
      * @throws ServiceNotAvailable
      */
-    public void personalizeCookie(Client client, Store store, Cookie cookie,int amount,CookieSize size, Occasion occasion, Theme theme, List<Ingredient> addedIngredients, List<Ingredient> removedIngredients) throws CookieException, OrderException, ServiceNotAvailable{
+    public void personalizeCookieFromBaseRecipe(Client client, Store store, Cookie cookie,int amount,CookieSize size, Occasion occasion, Theme theme, List<Ingredient> addedIngredients, List<Ingredient> removedIngredients) throws CookieException, OrderException, ServiceNotAvailable{
         //Optional<Cookie> cookie = (store.getRecipes().stream().filter(c -> (c.getName().equals(cookieName))).findFirst());
         if(! store.getRecipes().contains(cookie))
             throw new CookieException("The cookie "+cookie.getName()+" does not exist.");
         List<Theme> themeList=store.getThemeList();
         List<Occasion> occasionList=store.getOccasionList();
         if(themeList.contains(theme)&& occasionList.contains(occasion)){
-            PartyCookie partyCookie=new PartyCookie(cookie,size,theme);
-            partyCookie.setAdditionalIngredients(addedIngredients);
-            partyCookie.setRemovedIngredients(removedIngredients);
+            PartyCookieWithBaseRecipe partyCookie=CookieFactory.createPartyCookieWithBaseCookie(cookie,size,theme,addedIngredients,removedIngredients);
             chooseCookie(client,store,partyCookie,amount);
 
         }else
             throw new ServiceNotAvailable();
-
     }
 
+    public void personalizeCookieFromScratch(Client client, Store store, String cookieName, Cooking cooking, Mix mix, Dough dough, Flavour flavour, List<Topping> toppings, int amount, CookieSize size, Occasion occasion, Theme theme, List<Ingredient> SupplementaryIngredients) throws CookieException, OrderException, ServiceNotAvailable {
+        List<Theme> themeList=store.getThemeList();
+        List<Occasion> occasionList=store.getOccasionList();
+        if(themeList.contains(theme)&& occasionList.contains(occasion)){
+            PartyCookieFromScratch partyCookie=CookieFactory.createPartyCookieFromScratch(size,theme,cookieName, cooking,mix,dough,flavour,toppings,SupplementaryIngredients);
+            chooseCookie(client,store,partyCookie,amount);
+        }
+        else throw new ServiceNotAvailable();
+    }
 
 
 
@@ -272,7 +278,7 @@ public class COD {
      * @param toppings Toppings of the recipe
      * @throws CatalogException if one of the ingredients does not exist
      */
-    public void suggestRecipe(String name, double price, int time, Cooking cooking_chosen, Mix mix_chosen, Ingredient doughIngredient, Ingredient flavourIngredient,List<Ingredient> toppings) throws CatalogException {
+    public void suggestRecipe(String name, double price, int time, Cooking cooking_chosen, Mix mix_chosen, Ingredient doughIngredient, Ingredient flavourIngredient,List<Ingredient> toppings) throws CatalogException, CookieException {
         List<Topping> toppingList = new ArrayList<>();
         for (Ingredient i: toppings) {
             if(i.getIngredientType().equals(IngredientType.TOPPING)
@@ -287,7 +293,7 @@ public class COD {
                 && doughIngredient.equals(catalog.getIngredient(doughIngredient.getName()))
                 && flavourIngredient.equals(catalog.getIngredient(flavourIngredient.getName()))
         )
-            suggestRecipe(new Cookie(name, price, time, cooking_chosen, mix_chosen, (Dough) doughIngredient, (Flavour) flavourIngredient, toppingList));
+            suggestRecipe(CookieFactory.createSimpleCookie(name, price, time, cooking_chosen, mix_chosen, (Dough) doughIngredient, (Flavour) flavourIngredient, toppingList));
         else
             throw new CatalogException("Bad Ingredient Type");
     }

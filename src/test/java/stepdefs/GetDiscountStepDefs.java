@@ -34,7 +34,7 @@ public class GetDiscountStepDefs {
 
     List<Order> pastOrders;
 
-    public void setUp() throws NoSuchFieldException, IllegalAccessException {
+    public void setUp() throws NoSuchFieldException, IllegalAccessException, CookieException {
         cod = COD.getInstance();
         cod.initializationCod();
         paymentService = mock(PaymentService.class);
@@ -49,7 +49,7 @@ public class GetDiscountStepDefs {
     }
 
     @Given("a registered client")
-    public void givenARegisteredClient() throws InvalidPhoneNumberException, NoSuchFieldException, IllegalAccessException {
+    public void givenARegisteredClient() throws InvalidPhoneNumberException, NoSuchFieldException, IllegalAccessException, CookieException {
         setUp();
         RegisteredClient realClient = new RegisteredClient("id", "password", "0123456789");
         client = spy(realClient);
