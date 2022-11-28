@@ -657,8 +657,8 @@ public class COD {
         return List.copyOf(this.suggestedRecipes);
     }
 
-    public void addClientToGoodToGo(Client client, String mail, List<LocalDateTime> list) throws ClientException {
-        client.addToGoodToGo(mail, list);
+    public void addClientToGoodToGo(Client client, String mail, List<LocalDateTime> list,Store store) throws ClientException {
+        client.addToGoodToGo(mail, list,store);
     }
 
     public List<RegisteredClient> getTooGooToGoClients(){

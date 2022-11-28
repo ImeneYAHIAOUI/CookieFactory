@@ -30,7 +30,6 @@ public class StoreFactory {
                 tax,
                 occasions
         );
-        store.setTooGoodToGo(new TooGoodToGo(store));
         COD.getInstance().addStore(store);
         return store;
     }

@@ -2,12 +2,14 @@ package fr.unice.polytech.store;
 
 
 import fr.unice.polytech.client.Cart;
+import fr.unice.polytech.client.RegisteredClient;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CookException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.recipe.*;
 import fr.unice.polytech.services.TooGoodToGo;
+import fr.unice.polytech.services.TooGoodToGoBag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +17,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,8 +42,11 @@ public class Store {
     @Getter
     private final Inventory inventory;
     @Getter
-    @Setter
-    private TooGoodToGo tooGoodToGo;
+    private final List<RegisteredClient> tooGooToGoClients;
+    @Getter
+    private final List<TooGoodToGoBag> tooGoodToGoBags;
+    @Getter
+    private final TooGoodToGo tooGoodTooGoService;
     @Getter
     @Setter
     private Double tax;
@@ -59,7 +63,10 @@ public class Store {
             List<Occasion> occasions
     ) {
         occasionList = new ArrayList<>();
+         tooGoodTooGoService=new TooGoodToGo();
+         tooGoodToGoBags =new ArrayList<>();
         themeList=new ArrayList<>();
+         tooGooToGoClients =new ArrayList<>();
         this.cooks = new ArrayList<>(cooks);
         for (Cook cook: cooks) {
             List<Theme> themes=cook.getThemeList();
@@ -103,6 +110,9 @@ public class Store {
                 ", openingTime=" + openingTime +
                 ", closingTime=" + closingTime +
                 '}';
+    }
+    public void addTooGooToGoBAG(TooGoodToGoBag bag){
+        this.tooGoodToGoBags.add(bag);
     }
 
     /**

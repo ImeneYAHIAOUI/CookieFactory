@@ -59,10 +59,6 @@ public class Cookie  {
         else throw new CookieException("Too many toppings, you can't have more than 3 in one recipe");
     }
 
-
-
-
-
     @Override
     public String toString() {
         return "Cookie {" +

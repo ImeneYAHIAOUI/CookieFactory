@@ -3,6 +3,7 @@ package fr.unice.polytech.client;
 import fr.unice.polytech.exception.ClientException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Order;
+import fr.unice.polytech.store.Store;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -48,7 +49,7 @@ public abstract class Client {
         return false;
     }
 
-    public void addToGoodToGo(String mail, List<LocalDateTime> list) throws ClientException {
+    public void addToGoodToGo(String mail, List<LocalDateTime> list, Store store) throws ClientException {
         throw new ClientException("You can't have notifications for the Too Good To Go bags of you are not registered.");
     }
 }

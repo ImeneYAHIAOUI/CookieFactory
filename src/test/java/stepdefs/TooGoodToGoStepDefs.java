@@ -84,9 +84,8 @@ public class TooGoodToGoStepDefs {
             return null;
         });
 
-        tooGoodToGo = spy(new TooGoodToGo(store, tooGoodToGoExecutor));
-        store.setTooGoodToGo(tooGoodToGo);
-        tooGoodToGo.initThreadPool();
+        tooGoodToGo = spy(new TooGoodToGo( tooGoodToGoExecutor));
+        tooGoodToGo.initThreadPool(store);
     }
 
     @Given("a cod with a store having an order in progress")
@@ -121,7 +120,7 @@ public class TooGoodToGoStepDefs {
         Thread thread = new Thread(tooGoodToGoRunnable);
         thread.start();
         thread.join();
-        verify(tooGoodToGo).convertOrder(order);
+        verify(tooGoodToGo).convertOrder(store,order);
         assertTrue(tooGoodToGo.getBagCount() > 0);
     }
 
@@ -159,7 +158,7 @@ public class TooGoodToGoStepDefs {
 
     @Then("the {int} obsolete orders are converted")
     public void theOrdersAreConverted(int nbOrders) {
-        verify(tooGoodToGo, times(nbOrders)).convertOrder(any(Order.class));
+        verify(tooGoodToGo, times(nbOrders)).convertOrder(eq(store),any(Order.class));
     }
 
     @Given("a cod with no registered client")
@@ -175,9 +174,8 @@ public class TooGoodToGoStepDefs {
     }
     @When("Client wants to be notified")
     public void notified() throws ClientException {
-        cod.addClientToGoodToGo(client, "flo@gmail.com", new ArrayList<>());
+        cod.addClientToGoodToGo(client, "flo@gmail.com", new ArrayList<>(),null);
     }
-
     @Then("No clients in the cod")
     public void clientEmpty(){
         assertTrue(cod.getClients().isEmpty());

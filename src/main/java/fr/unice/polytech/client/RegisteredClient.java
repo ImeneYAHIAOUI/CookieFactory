@@ -4,6 +4,7 @@ import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.order.Item;
 import fr.unice.polytech.order.Order;
 import fr.unice.polytech.order.OrderStatus;
+import fr.unice.polytech.store.Store;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,7 +48,7 @@ public class RegisteredClient extends Client {
     }
 
     @Override
-    public void addToGoodToGo(String mail, List<LocalDateTime> list){
+    public void addToGoodToGo(String mail, List<LocalDateTime> list, Store store){
         toGoodToGoClient = true;
         this.mail = mail;
         this.notificationsDates = List.copyOf(list);
