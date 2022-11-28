@@ -1,5 +1,8 @@
 package fr.unice.polytech.client;
 
+import fr.unice.polytech.entities.client.Client;
+import fr.unice.polytech.entities.client.RegisteredClient;
+import fr.unice.polytech.entities.client.UnregisteredClient;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.PickupTimeNotSetException;
 import org.junit.jupiter.api.Test;

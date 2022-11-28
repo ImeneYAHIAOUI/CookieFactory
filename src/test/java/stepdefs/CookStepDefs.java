@@ -2,9 +2,9 @@ package stepdefs;
 
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.CookieException;
-import fr.unice.polytech.recipe.Cookie;
-import fr.unice.polytech.recipe.CookieFactory;
-import fr.unice.polytech.store.Cook;
+import fr.unice.polytech.entities.recipe.Cookie;
+import fr.unice.polytech.entities.recipe.CookieFactory;
+import fr.unice.polytech.entities.store.Cook;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

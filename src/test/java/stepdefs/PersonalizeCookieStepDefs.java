@@ -1,14 +1,14 @@
 package stepdefs;
 
-import fr.unice.polytech.client.Client;
-import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.entities.client.Client;
+import fr.unice.polytech.entities.client.RegisteredClient;
 import fr.unice.polytech.cod.COD;
+import fr.unice.polytech.entities.recipe.*;
+import fr.unice.polytech.entities.store.*;
 import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
 import fr.unice.polytech.exception.ServiceNotAvailable;
-import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.*;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
 
@@ -33,7 +33,7 @@ public class PersonalizeCookieStepDefs {
             new Flavour("strawberryFlavour", 1),
             new Flavour("chocolateFlavour", 1),
             new Topping("white chocolate chips", 1));
-    Cookie cookie = CookieFactory.createSimpleCookie("chocolate",1.,1,Cooking.CHEWY,Mix.MIXED,(Dough) codIngredients.get(3),(Flavour) codIngredients.get(4),List.of((Topping) codIngredients.get(0), (Topping) codIngredients.get(7)));
+    Cookie cookie = CookieFactory.createSimpleCookie("chocolate",1.,1,Cooking.CHEWY, Mix.MIXED,(Dough) codIngredients.get(3),(Flavour) codIngredients.get(4),List.of((Topping) codIngredients.get(0), (Topping) codIngredients.get(7)));
     Inventory inventory;
 
     List<Ingredient> addedIngredients;

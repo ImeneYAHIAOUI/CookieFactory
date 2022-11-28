@@ -2,9 +2,9 @@ package stepdefs;
 
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.CatalogException;
-import fr.unice.polytech.recipe.Cooking;
-import fr.unice.polytech.recipe.IngredientType;
-import fr.unice.polytech.recipe.Mix;
+import fr.unice.polytech.entities.recipe.Cooking;
+import fr.unice.polytech.entities.recipe.IngredientType;
+import fr.unice.polytech.entities.recipe.Mix;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

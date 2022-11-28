@@ -1,16 +1,16 @@
 package stepdefs;
 
 import fr.unice.polytech.cod.COD;
+import fr.unice.polytech.entities.recipe.*;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CatalogException;
 import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.IngredientTypeException;
-import fr.unice.polytech.order.Item;
-import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Inventory;
-import fr.unice.polytech.store.Store;
-import fr.unice.polytech.store.StoreFactory;
+import fr.unice.polytech.entities.order.Item;
+import fr.unice.polytech.entities.store.Cook;
+import fr.unice.polytech.entities.store.Inventory;
+import fr.unice.polytech.entities.store.Store;
+import fr.unice.polytech.entities.store.StoreFactory;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

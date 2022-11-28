@@ -1,15 +1,15 @@
 package stepdefs;
 
-import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.entities.client.RegisteredClient;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.*;
-import fr.unice.polytech.order.Item;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.recipe.Dough;
-import fr.unice.polytech.recipe.Flavour;
-import fr.unice.polytech.recipe.Topping;
+import fr.unice.polytech.entities.order.Item;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.recipe.Dough;
+import fr.unice.polytech.entities.recipe.Flavour;
+import fr.unice.polytech.entities.recipe.Topping;
 import fr.unice.polytech.services.PaymentService;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.entities.store.Store;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

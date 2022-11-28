@@ -1,14 +1,18 @@
 package fr.unice.polytech.store;
 
 
-import fr.unice.polytech.client.Cart;
-import fr.unice.polytech.client.Client;
+import fr.unice.polytech.entities.client.Cart;
+import fr.unice.polytech.entities.client.Client;
 import fr.unice.polytech.cod.COD;
+import fr.unice.polytech.entities.recipe.*;
+import fr.unice.polytech.entities.store.Cook;
+import fr.unice.polytech.entities.store.Inventory;
+import fr.unice.polytech.entities.store.Store;
+import fr.unice.polytech.entities.store.StoreFactory;
 import fr.unice.polytech.exception.AlreadyExistException;
 import fr.unice.polytech.exception.BadQuantityException;
 import fr.unice.polytech.exception.CookieException;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.entities.order.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

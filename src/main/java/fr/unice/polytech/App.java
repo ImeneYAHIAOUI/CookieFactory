@@ -1,15 +1,15 @@
 package fr.unice.polytech;
 
-import fr.unice.polytech.client.Client;
-import fr.unice.polytech.client.RegisteredClient;
-import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.entities.client.Client;
+import fr.unice.polytech.entities.client.RegisteredClient;
+import fr.unice.polytech.entities.client.UnregisteredClient;
 import fr.unice.polytech.cod.COD;
+import fr.unice.polytech.entities.recipe.*;
 import fr.unice.polytech.exception.*;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.Occasion;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.order.OrderStatus;
+import fr.unice.polytech.entities.store.Occasion;
+import fr.unice.polytech.entities.store.Store;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -40,6 +40,7 @@ public class App {
                 case "Co" -> cookInterface();
                 case "A" -> adminInterface();
                 case "Q" -> {
+                    System.out.println("Goodbye !");
                     return;
                 }
                 default -> welcomeInterface();

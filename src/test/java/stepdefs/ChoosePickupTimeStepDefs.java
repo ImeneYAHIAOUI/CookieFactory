@@ -1,16 +1,16 @@
 package stepdefs;
 
-import fr.unice.polytech.client.Client;
-import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.entities.client.Client;
+import fr.unice.polytech.entities.client.UnregisteredClient;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.InvalidPickupTimeException;
-import fr.unice.polytech.order.Item;
-import fr.unice.polytech.recipe.Dough;
-import fr.unice.polytech.recipe.Flavour;
-import fr.unice.polytech.recipe.Topping;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.entities.order.Item;
+import fr.unice.polytech.entities.recipe.Dough;
+import fr.unice.polytech.entities.recipe.Flavour;
+import fr.unice.polytech.entities.recipe.Topping;
+import fr.unice.polytech.entities.store.Store;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

@@ -1,10 +1,10 @@
 package fr.unice.polytech.services;
 
-import fr.unice.polytech.client.Client;
-import fr.unice.polytech.client.NotificationMessage;
+import fr.unice.polytech.entities.client.Client;
+import fr.unice.polytech.entities.client.NotificationMessage;
 import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.order.OrderStatus;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 

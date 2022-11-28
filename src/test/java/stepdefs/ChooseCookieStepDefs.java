@@ -1,23 +1,22 @@
 package stepdefs;
 
-import fr.unice.polytech.client.Client;
-import fr.unice.polytech.client.RegisteredClient;
-import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.entities.client.Client;
+import fr.unice.polytech.entities.client.RegisteredClient;
+import fr.unice.polytech.entities.client.UnregisteredClient;
+import fr.unice.polytech.entities.recipe.*;
+import fr.unice.polytech.entities.store.*;
 import fr.unice.polytech.exception.*;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.CookieException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
 import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.*;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.order.OrderStatus;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.en_scouse.An;
 
 import java.time.Clock;
 import java.time.Instant;

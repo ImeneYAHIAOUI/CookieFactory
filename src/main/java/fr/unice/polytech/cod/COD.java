@@ -1,17 +1,17 @@
 package fr.unice.polytech.cod;
 
-import fr.unice.polytech.client.Cart;
-import fr.unice.polytech.client.Client;
-import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.entities.client.Cart;
+import fr.unice.polytech.entities.client.Client;
+import fr.unice.polytech.entities.client.RegisteredClient;
+import fr.unice.polytech.entities.recipe.*;
+import fr.unice.polytech.entities.store.*;
 import fr.unice.polytech.exception.*;
-import fr.unice.polytech.order.Item;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.recipe.*;
+import fr.unice.polytech.entities.order.Item;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.order.OrderStatus;
 import fr.unice.polytech.services.LocationService;
 import fr.unice.polytech.services.PaymentService;
 import fr.unice.polytech.services.StatusScheduler;
-import fr.unice.polytech.store.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -211,7 +211,7 @@ public class COD {
      * @throws OrderException
      * @throws ServiceNotAvailable
      */
-    public void personalizeCookieFromBaseRecipe(Client client, Store store, Cookie cookie,int amount,CookieSize size, Occasion occasion, Theme theme, List<Ingredient> addedIngredients, List<Ingredient> removedIngredients) throws CookieException, OrderException, ServiceNotAvailable{
+    public void personalizeCookieFromBaseRecipe(Client client, Store store, Cookie cookie, int amount, CookieSize size, Occasion occasion, Theme theme, List<Ingredient> addedIngredients, List<Ingredient> removedIngredients) throws CookieException, OrderException, ServiceNotAvailable{
         //Optional<Cookie> cookie = (store.getRecipes().stream().filter(c -> (c.getName().equals(cookieName))).findFirst());
         if(! store.getRecipes().contains(cookie))
             throw new CookieException("The cookie "+cookie.getName()+" does not exist.");

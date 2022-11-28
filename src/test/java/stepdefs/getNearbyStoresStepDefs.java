@@ -2,7 +2,7 @@ package stepdefs;
 
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.services.LocationService;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.entities.store.Store;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

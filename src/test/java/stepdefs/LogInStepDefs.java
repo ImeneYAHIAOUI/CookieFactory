@@ -1,6 +1,6 @@
 package stepdefs;
 
-import fr.unice.polytech.client.RegisteredClient;
+import fr.unice.polytech.entities.client.RegisteredClient;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.InvalidInputException;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;

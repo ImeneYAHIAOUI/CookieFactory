@@ -1,9 +1,9 @@
 package fr.unice.polytech.recipe;
 
 
+import fr.unice.polytech.entities.recipe.*;
 import fr.unice.polytech.exception.CookieException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,17 +1,17 @@
 package fr.unice.polytech.cod;
 
-import fr.unice.polytech.client.Cart;
-import fr.unice.polytech.client.Client;
-import fr.unice.polytech.client.RegisteredClient;
-import fr.unice.polytech.client.UnregisteredClient;
+import fr.unice.polytech.entities.client.Cart;
+import fr.unice.polytech.entities.client.Client;
+import fr.unice.polytech.entities.client.RegisteredClient;
+import fr.unice.polytech.entities.client.UnregisteredClient;
+import fr.unice.polytech.entities.recipe.*;
 import fr.unice.polytech.exception.*;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.recipe.*;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Inventory;
-import fr.unice.polytech.store.Store;
-import fr.unice.polytech.store.StoreFactory;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.order.OrderStatus;
+import fr.unice.polytech.entities.store.Cook;
+import fr.unice.polytech.entities.store.Inventory;
+import fr.unice.polytech.entities.store.Store;
+import fr.unice.polytech.entities.store.StoreFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -61,7 +61,7 @@ public class CODTest {
 
         registeredClient = mock(RegisteredClient.class);
 
-        cookie1 = CookieFactory.createSimpleCookie("chocolala",1.,15,Cooking.CHEWY,Mix.MIXED, new Dough("chocolate",1),new Flavour("chocolate",1),List.of(new Topping("chocolat",1.)));
+        cookie1 = CookieFactory.createSimpleCookie("chocolala",1.,15,Cooking.CHEWY, Mix.MIXED, new Dough("chocolate",1),new Flavour("chocolate",1),List.of(new Topping("chocolat",1.)));
 
         inventory = mock(Inventory.class);
         store = StoreFactory.createStore(
@@ -196,7 +196,7 @@ public class CODTest {
 
     @Test
     public void addIngredientToCatalog() throws CatalogException, IngredientTypeException {
-        cod.addIngredientCatalog("Sugar", 10.0,IngredientType.FLAVOUR);
+        cod.addIngredientCatalog("Sugar", 10.0, IngredientType.FLAVOUR);
         assertEquals(IngredientType.FLAVOUR, cod.getIngredientCatalog("Sugar").getIngredientType());
     }
     @Test

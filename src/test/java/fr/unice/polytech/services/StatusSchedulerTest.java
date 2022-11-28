@@ -1,18 +1,17 @@
 package fr.unice.polytech.services;
 
-import fr.unice.polytech.client.Cart;
-import fr.unice.polytech.client.Client;
+import fr.unice.polytech.entities.client.Cart;
+import fr.unice.polytech.entities.client.Client;
 import fr.unice.polytech.cod.COD;
 import fr.unice.polytech.exception.OrderException;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.store.Cook;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.order.OrderStatus;
+import fr.unice.polytech.entities.store.Cook;
+import fr.unice.polytech.entities.store.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;

@@ -1,8 +1,9 @@
 package fr.unice.polytech.client;
 
+import fr.unice.polytech.entities.client.RegisteredClient;
 import fr.unice.polytech.exception.InvalidPhoneNumberException;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.order.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

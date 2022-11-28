@@ -1,9 +1,9 @@
 package fr.unice.polytech.services;
 
 import fr.unice.polytech.cod.COD;
-import fr.unice.polytech.order.Order;
-import fr.unice.polytech.order.OrderStatus;
-import fr.unice.polytech.store.Store;
+import fr.unice.polytech.entities.order.Order;
+import fr.unice.polytech.entities.order.OrderStatus;
+import fr.unice.polytech.entities.store.Store;
 import lombok.Data;
 
 import java.time.LocalTime;
