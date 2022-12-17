@@ -134,7 +134,7 @@ Chaque user story doit être décrite par
 ### Milestone 5
 #### Task [#51](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/51) Taxes magasins, associée à l'US [#50](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/50)
 - En tant que Manager, je veux que mes clients payent une taxe au magasin pour chaque commande afin de pouvoir gagner plus d'argent
-- ?
+- PayTax.feature
 ####  [56](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/56) Commander un Party Cookie avec une taille choisie, Task associée : [#52](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/52)
 - En tant que Client, je veux pouvoir commander un Party Cookie avec une certaine taille
 - [ChoosePartyCookie.feature](src/test/resources/features/cookie/ChoosePartyCookie.feature)
