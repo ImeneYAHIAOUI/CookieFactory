@@ -52,6 +52,8 @@ Chaque user story doit être décrite par
 - [CreateRecipe.feature](src/test/resources/features/store/CreateRecipe.feature)
   - Suggest recipe with name "Iced Cookie"
   - Cookie with  name "Iced Cookie" is accepted
+  - Suggest recipe with name "Iced Cookie"
+  - Cookie with  name "Iced Cookie" is declined
 
 #### [#6](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/6) Changer les heures d'ouvertures et de fermeture du magasi
 - En tant que Store manager, je veux changer les horaires du magasin
@@ -69,6 +71,9 @@ Chaque user story doit être décrite par
 - En tant que client non enregistré, je veux pouvoir me créer un compte
 - [Register.feature](src/test/resources/features/client/Register.feature)
   - Register 1 client
+  - registered client cannot register 
+  - client cannot register with the same email more than one time
+  
 #### [#10](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/10) Choisir un cookie 
 - En tant que client je veux choisir un cookie afin de pouvoir le commander s'il y a suffisament d'ingrédients
 - [ChooseCookie.feature](src/test/resources/features/cookie/ChooseCookie.feature)
@@ -80,10 +85,17 @@ Chaque user story doit être décrite par
 #### [#12](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/12) Modifier la quantité d'un cookie
 - En tant que client je veux modifier la quantité de cookie dans mon panier
 -  [ModifyQuantityInCart.feature](src/test/resources/features/client/ModifyQuantityInCart.feature)
+      - registred client can increase quantity
+      - unregistred client can increase quantity
+      - registred client can decrease quantity
+      - unregistred client can decrease quantity
+      - registred client can remove all items in cart
+      - unregistred client can remove all items in cart
 #####  [#13](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/13) Task Gestion des SMS
 - En tant que client je veux recevoir un SMS quand ma commande est prête 
-- [MakeOrder.feature](src/test/resources/features/order/MakeOrder.feature)
+- [NotifyClient.feature](src/test/resources/features/order/NotifyClient.feature)
   - Order status is changed to "READY"
+  - client in notified 
 ### Milestone 3
 #### [#15](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/15) Task Ajout du Time slot dans les Cook liée à US [#1](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/1)
 - [TimeSlotAttribution.feature](src/test/resources/features/store/TimeSlotAttribution.feature)
