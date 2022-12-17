@@ -191,6 +191,10 @@ Chaque user story doit être décrite par
   - Cancel order
 ####  [#90](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/90) Demander à être notifié des paniers Too Good To Go
 - En tant que Client, je veux être notifié afin de pouvoir savoir quand des paniers cookies sont disponibles
+- [TooGoodToGo.feature](src/test/resources/features/client/TooGoodToGo.feature)
+   - only client who wants to be notified is notifies
+   - notify client when order has staty Obselete
+
 #### Task [#95](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/95) Verify if service “Personalized Cookies for your Party (PCP)” is available
 
 
