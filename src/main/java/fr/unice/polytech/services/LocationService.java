@@ -1,28 +1,30 @@
 package fr.unice.polytech.services;
 
+import fr.unice.polytech.interfaces.ILocationService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LocationService {
+@Service
+public class LocationService implements ILocationService {
 
+    @Override
     public String getRequest(String url) throws IOException {
 
         final URL obj = new URL(url);
         final HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
         con.setRequestMethod("GET");
-
-        int a = con.getResponseCode();
 
         if (con.getResponseCode() != 200) {
             return null;
@@ -40,6 +42,7 @@ public class LocationService {
         return response.toString();
     }
 
+    @Override
     public String buildURL(String address) {
         StringBuffer query= new StringBuffer();
         String[] split = address.split(",");
@@ -59,6 +62,7 @@ public class LocationService {
         query.append("&format=json&addressdetails=1");
         return query.toString();
     }
+    @Override
     public Map<String, Double> getCoordinates(String address) throws IOException {
         Map<String, Double> res = new HashMap<String, Double>();
         String query = buildURL(address);
@@ -80,6 +84,7 @@ public class LocationService {
         return res;
     }
 
+    @Override
     public double distance(String address1, String address2) throws IOException {
         Map<String,Double> cord1 = getCoordinates(address1);
         Map<String,Double> cord2 = getCoordinates(address2);
@@ -87,31 +92,12 @@ public class LocationService {
 
     }
 
+    @Override
     public double distance(String address1, String address2, String unit) throws IOException {
         Map<String,Double> cord1 = getCoordinates(address1);
         Map<String,Double> cord2 = getCoordinates(address2);
         return distance(cord1.get("lat"),cord1.get("lon"),cord2.get("lat"),cord2.get("lon"),unit);
 
-    }
-
-    private double distance(double lat1, double lon1, double lat2, double lon2, String unit)
-    {
-        if ((lat1 == lat2) && (lon1 == lon2)) {
-            return 0;
-        }
-        else {
-            double theta = lon1 - lon2;
-            double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
-            dist = Math.acos(dist);
-            dist = Math.toDegrees(dist);
-            dist = dist * 60 * 1.1515;
-            if (unit.equals("km")) {
-                dist =  dist * 1.609344;
-            } else if (unit.equals("m")) {
-                dist =  dist * 1.609344 * 1000;
-            }
-            return (dist);
-        }
     }
 
 }

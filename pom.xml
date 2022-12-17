@@ -3,28 +3,25 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>fr.unice.polytech.cf</groupId> <!-- CHANGE ME -->
-    <artifactId>demo</artifactId> <!-- CHANGE ME -->
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>fr.unice.polytech</groupId> <!-- CHANGE ME -->
+    <artifactId>O</artifactId> <!-- CHANGE ME -->
     <version>1.0-SNAPSHOT</version> <!-- CHANGE ME -->
 
-    <repositories>
-        <repository>
-            <id>my-repo1</id>
-            <name>opennms</name>
-            <url>https://repo.opennms.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>my-repo2</id>
-            <name>httpClient</name>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-
-    </repositories>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <junit.jupiter.version>5.8.2</junit.jupiter.version>
-        <cucumber.version>7.6.0</cucumber.version>
+        <junit.jupiter.version>5.8.0</junit.jupiter.version>
+        <cucumber.version>7.9.0</cucumber.version>
+        <validator.version>1.7</validator.version>
+        <libphonenumber.version>8.13.0</libphonenumber.version>
     </properties>
 
     <dependencyManagement>
@@ -43,24 +40,34 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>{validator.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency> <!-- AOP (Aspect-Oriented Programming) support -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--        <dependency>
-                    <groupId>io.cucumber</groupId>
-                    <artifactId>cucumber-java</artifactId>
-                    <version>7.0.0</version>
-                    <scope>test</scope>
-                </dependency>-->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit-platform-engine</artifactId>
@@ -73,7 +80,11 @@
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
@@ -83,21 +94,21 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>4.8.1</version>
+            <artifactId>mockito-inline</artifactId>
+            <version>4.1.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
-            <scope>provided</scope>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>${validator.version}</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
@@ -105,21 +116,26 @@
             <version>1.1.1</version>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-core</artifactId>
-            <version>7.6.0</version>
+            <artifactId>cucumber-junit</artifactId>
+            <version>7.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>5.3.23</version>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -137,12 +153,15 @@
                 <configuration>
                     <properties>
                         <!-- Work around. Surefire does not include enough
-                             information to disambiguate between different
-                             examples and scenarios. -->
+                            information to disambiguate between different
+                            examples and scenarios. -->
                         <configurationParameters>
                             cucumber.junit-platform.naming-strategy=long
                         </configurationParameters>
                     </properties>
+                    <excludes>
+                        <exclude>**/SpringTest.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

@@ -2,9 +2,8 @@
 Feature: Cook suggest recipe
 
   Background:
-    Given a cook with id 1005
+    Given a cook
     And a cookie with name "Iced Cookie"
-    And a cod
 
     Scenario: Suggest recipe with name "Iced Cookie"
       When cook suggest recipe

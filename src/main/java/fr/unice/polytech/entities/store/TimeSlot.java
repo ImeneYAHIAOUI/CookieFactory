@@ -1,13 +1,9 @@
 package fr.unice.polytech.entities.store;
 
-import fr.unice.polytech.cod.COD;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 
 @Data
@@ -17,9 +13,8 @@ public class TimeSlot implements Comparable<TimeSlot> {
     private LocalDateTime end;
 
 
-
-    public TimeSlot(LocalTime begin, Duration duration) {
-        LocalDateTime beginDate = begin.atDate(LocalDate.now(COD.getCLOCK()));
+    public TimeSlot(LocalTime begin, Duration duration, Clock clock) {
+        LocalDateTime beginDate = begin.atDate(LocalDate.now(clock));
         this.begin = beginDate.truncatedTo(ChronoUnit.MINUTES);
         this.end = beginDate.plus(duration).truncatedTo(ChronoUnit.MINUTES);
     }

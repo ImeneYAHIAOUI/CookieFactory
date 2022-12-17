@@ -5,28 +5,28 @@ _Template for classroom SI4-COO_
 Contient le rapport final
 
 ## .github
-   1. Contient sous workflows/maven.yml, une version d'un fichier d'actions qui est déclenché dès que vous poussez du code. 
-Sur cette version initiale seule un test Junit5 est déclenché pour vérifier que tout fonctionne.
-       - Github Actions (See in .github/workflows) to simply make a maven+test compilation
-  2. Contient sous ISSUE_TEMPLATE, les modèles pour les issues user_story et bug. Vous pouvez le compléter à votre guise.
+1. Contient sous workflows/maven.yml, une version d'un fichier d'actions qui est déclenché dès que vous poussez du code.
+   Sur cette version initiale seule un test Junit5 est déclenché pour vérifier que tout fonctionne.
+  - Github Actions (See in .github/workflows) to simply make a maven+test compilation
+2. Contient sous ISSUE_TEMPLATE, les modèles pour les issues user_story et bug. Vous pouvez le compléter à votre guise.
 
 ## src
- - pom.xml : 
-       - Cucumber 7 et JUnit 5
-       - Maven compatible
-       - JDK 17
+- pom.xml :
+  - Cucumber 7 et JUnit 5
+  - Maven compatible
+  - JDK 17
 
 
-## User stories 
+## User stories
 La liste des fonctionnalités livrées par user story.
 
 ### Milestone X
 
-Chaque user story doit être décrite par 
-   - son identifiant en tant que issue github (#), 
-   - sa forme classique (As a… I want to… In order to…) (pour faciliter la lecture)
-   - Le nom du fichier feature Cucumber et le nom des scénarios qui servent de tests d’acceptation pour la story.
-   Les contenus détaillés sont dans l'issue elle-même.
+Chaque user story doit être décrite par
+- son identifiant en tant que issue github (#),
+- sa forme classique (As a… I want to… In order to…) (pour faciliter la lecture)
+- Le nom du fichier feature Cucumber et le nom des scénarios qui servent de tests d’acceptation pour la story.
+  Les contenus détaillés sont dans l'issue elle-même.
 
 ### Milestone 1  1 magasin, 1 cookie, les clients ne s'enregistrent pas
 
@@ -42,7 +42,7 @@ Chaque user story doit être décrite par
 #### [#3](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/3) Annuler une commande
 - En tant que client je veux annuler ma commande
 -  [OrderStatusChange.feature](src/test/resources/features/order/OrderStatusChange.feature)
-  - Client cancels order
+- Client cancels order
 #### [#5](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/5) Création des recettes
 
 - En tant que Cuisinier, je veux ajouter une recette
@@ -71,10 +71,10 @@ Chaque user story doit être décrite par
   - registered client cannot register 
   - client cannot register with the same email more than one time
   
-#### [#10](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/10) Choisir un cookie 
+#### [#10](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/10) Choisir un cookie
 - En tant que client je veux choisir un cookie afin de pouvoir le commander s'il y a suffisament d'ingrédients
 - [ChooseCookie.feature](src/test/resources/features/cookie/ChooseCookie.feature)
-  - choose an available cookies 
+  - choose an available cookies
   - choose an available number of cookies
   - choose an unavailable amount of cookie
   - choose same cookie twice
@@ -89,10 +89,10 @@ Chaque user story doit être décrite par
       - registred client can remove all items in cart
       - unregistred client can remove all items in cart
 #####  [#13](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/13) Task Gestion des SMS
-- En tant que client je veux recevoir un SMS quand ma commande est prête 
+- En tant que client je veux recevoir un SMS quand ma commande est prête
 - [NotifyClient.feature](src/test/resources/features/order/NotifyClient.feature)
   - Order status is changed to "READY"
-  - client in notified 
+  - client in notified
 ### Milestone 3 :1 magasin avec n chefs et n recettes, paiement !
 #### [#15](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/15) Task Ajout du Time slot dans les Cook liée à US [#1](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/1)
 - [TimeSlotAttribution.feature](src/test/resources/features/store/TimeSlotAttribution.feature)
@@ -121,7 +121,7 @@ Chaque user story doit être décrite par
 - Task associée : [#23](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/23)
 - En tant que Client enregistré je veux pouvoir accéder à mon historique de commandes
 - [RetrievePastOrders.feature](src/test/resources/features/client/RetrievePastOrders.feature)
-    - get past orders
+  - get past orders
 #### [#42](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/42) Ban user, task associée : [#41](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/41)
 - En tant que client, si j'annule 2 commandes en moins de 8 minutes, alors je suis banni pendant 10 minutes
 - [ChoosePartyCookie.feature](src/test/resources/features/cookie/ChoosePartyCookie.feature)

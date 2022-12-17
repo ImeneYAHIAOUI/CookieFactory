@@ -1,12 +1,9 @@
 package fr.unice.polytech.entities.client;
 
 import fr.unice.polytech.entities.order.Item;
-import fr.unice.polytech.exception.PickupTimeNotSetException;
-import fr.unice.polytech.entities.store.TimeSlot;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,80 +11,22 @@ import java.util.List;
 public class Cart {
     @Getter
     @Setter
-    private final List<Item> items;
+    private List<Item> items;
     @Getter
     @Setter
     private LocalDateTime pickupTime;
     @Getter
+    @Setter
     private Double subtotal;
     @Getter
     @Setter
     private Double tax;
     @Getter
+    @Setter
     private Double total;
     public Cart() {
         this.items = new ArrayList<>();
         pickupTime = null;
-        subtotal=0.0;
-        total=0.0;
-    }
-
-    /**
-     * add item to cart
-     * @param item
-     */
-    public void addItem(Item item) {
-        if (items.stream().anyMatch(item1 -> item1.getCookie() == item.getCookie())) {
-            Item existingItem = items.stream().filter(item1 -> item1.getCookie() == item.getCookie()).findFirst().orElse(null);
-            assert existingItem != null;
-            existingItem.increaseQuantity(item.getQuantity());
-
-        } else {
-            items.add(item);
-        }
-        calculateAccordingPrice(item);
-    }
-
-    /**
-     * update total
-     * @param item
-     */
-    private void calculateAccordingPrice(Item item) {
-        subtotal+= item.getCookie().getPrice()* item.getQuantity();
-        total =subtotal*(1+tax);
-    }
-
-    /**
-     * Returns the time slot that the order corresponding
-     * to this cart should occupy
-     *
-     * @return a time slot
-     * @throws PickupTimeNotSetException if the pickup time is not set on this cart
-     */
-    public TimeSlot getEstimatedTimeSlot() throws PickupTimeNotSetException {
-        if (pickupTime == null) {
-            throw new PickupTimeNotSetException();
-        }
-        return new TimeSlot(pickupTime.minus(totalCookingTime()), pickupTime);
-    }
-
-    /**
-     * Returns the amount of time needed to prepare the order
-     * This takes into account the fact that time is divided into 15 minutes slots
-     *
-     * @return the amount of time needed to prepare the order rounded up to the nearest 15 minutes
-     */
-    public Duration totalCookingTime() {
-        int total = 0;
-        for (Item i : items) {
-            total += i.getCookie().getCookingTime();
-        }
-        // An occupied time slot for a cook should be a multiple of 15 minutes.
-        total = 15 - (total % 15);
-        return Duration.ofMinutes(total);
-    }
-    public void emptyItems() {
-        items.clear();
         subtotal=0.0;
         total=0.0;
         tax=0.0;

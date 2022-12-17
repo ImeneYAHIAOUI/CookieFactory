@@ -1,10 +1,9 @@
 # Created by imene at 11/25/2022
 Feature: personalize party cookie from scratch
   # Enter feature description here
-
   Background:
     Given an inventory with the ingredients
-      | chocolate chips       | 8 |
+      | chocolate chips       | 8  |
       | chocolate dough       | 10 |
       | vanillaFlavour        | 30 |
       | strawberryFlavour     | 50 |

@@ -1,5 +1,6 @@
 package fr.unice.polytech.services;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 
@@ -18,8 +19,8 @@ public class LocationServerTest {
 
     @Test
     public void testBuildUrl() {
-        assertEquals("https://nominatim.openstreetmap.org/search?q=2400+route+des+dolines%2C+06560+valbonne&format=json&addressdetails=1", locationService.buildURL("2400 route des dolines, 06560 valbonne"));
-        assertEquals("https://nominatim.openstreetmap.org/search?q=avenue+saint-philippe%2C+sophia+antipolis&format=json&addressdetails=1", locationService.buildURL("avenue saint-philippe, sophia antipolis"));
+        Assertions.assertEquals("https://nominatim.openstreetmap.org/search?q=2400+route+des+dolines%2C+06560+valbonne&format=json&addressdetails=1", locationService.buildURL("2400 route des dolines, 06560 valbonne"));
+        Assertions.assertEquals("https://nominatim.openstreetmap.org/search?q=avenue+saint-philippe%2C+sophia+antipolis&format=json&addressdetails=1", locationService.buildURL("avenue saint-philippe, sophia antipolis"));
     }
 
     @Test
@@ -32,8 +33,8 @@ public class LocationServerTest {
         result1.put("lon", 7.050919660340314);
         result2.put("lat", 43.6171275);
         result2.put("lon", 7.0761307);
-        assertEquals(result1, locationService.getCoordinates("2400 route des dolines, 06560 valbonne"));
-        assertEquals(result2, locationService.getCoordinates("avenue saint-philippe, sophia antipolis"));
+        Assertions.assertEquals(result1, locationService.getCoordinates("2400 route des dolines, 06560 valbonne"));
+        Assertions.assertEquals(result2, locationService.getCoordinates("avenue saint-philippe, sophia antipolis"));
     }
 
     @Test
@@ -52,9 +53,9 @@ public class LocationServerTest {
         cords2.put("lon", 7.0761307);
         doReturn(cords1).when(locationService).getCoordinates("2400 route des dolines, 06560 valbonne");
         doReturn(cords2).when(locationService).getCoordinates("avenue saint-philippe, sophia antipolis");
-        assertEquals(2.17 ,locationService.distance("2400 route des dolines, 06560 valbonne", "avenue saint-philippe, sophia antipolis"), 0.1);
-        assertEquals(2.17, locationService.distance("2400 route des dolines, 06560 valbonne", "avenue saint-philippe, sophia antipolis","km"), 0.1);
-        assertEquals(2175, locationService.distance("2400 route des dolines, 06560 valbonne", "avenue saint-philippe, sophia antipolis","m"), 10);
+        Assertions.assertEquals(2.17, locationService.distance("2400 route des dolines, 06560 valbonne", "avenue saint-philippe, sophia antipolis"), 0.1);
+        Assertions.assertEquals(2.17, locationService.distance("2400 route des dolines, 06560 valbonne", "avenue saint-philippe, sophia antipolis","km"), 0.1);
+        Assertions.assertEquals(2175, locationService.distance("2400 route des dolines, 06560 valbonne", "avenue saint-philippe, sophia antipolis","m"), 10);
     }
 
 

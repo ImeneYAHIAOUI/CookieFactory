@@ -2,7 +2,7 @@
 Feature: Order Status Change
 
   Background:
-    Given an order with id "1234"
+    Given an order
 
   Scenario: order status is "in progress" and we want to cancel it
     When order status is "IN_PROGRESS"
@@ -42,6 +42,17 @@ Feature: Order Status Change
     When order status is "PAYED"
     Then the order can not be set to "PAYED"
 
+  Scenario: order status is "payed" and we want to pass it to "completed"
+    When order status is "PAYED"
+    Then the order can not be set to "COMPLETED"
+
+  Scenario: order status is "in progress" and we want to pass it to "completed"
+    When order status is "IN_PROGRESS"
+    Then the order can not be set to "COMPLETED"
+
+  Scenario: order status is "completed" and we want to pass it to "obsolete"
+    When order status is "COMPLETED"
+    Then the order can not be set to "OBSOLETE"
 
 # allowed set status changes
 
@@ -69,19 +80,6 @@ Feature: Order Status Change
     When order status is "PAYED"
     Then the order can be set to "READY"
 
-  Scenario: order status is "payed" and we want to pass it to "completed"
-    When order status is "PAYED"
-    Then the order can be set to "COMPLETED"
-
-  Scenario: order status is "in progress" and we want to pass it to "completed"
-    When order status is "IN_PROGRESS"
-    Then the order can be set to "COMPLETED"
-
-  Scenario: order status is "completed" and we want to pass it to "obsolete"
-    When order status is "COMPLETED"
-    Then the order can be set to "OBSOLETE"
-
-    #Cancel Order
   Scenario: order not found
-    When an order with id "1"
-    Then the order "1" can not be found and canceled
+    When an order
+    Then the order can not be found and canceled

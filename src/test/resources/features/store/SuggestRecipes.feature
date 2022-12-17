@@ -14,5 +14,5 @@ Feature: Suggest a recipe
     And add the ingredient with name "flavour", price 4.4 and type "FLAVOUR"
     And add the ingredient with name "topping", price 4.4 and type "TOPPING"
     Then suggest Recipe with Dough "topping", Flavour "flavour" and Topping "topping" with exception
-    And suggest Recipe with Dough "dough", Flavour "f" and Topping "topping" with exception
+    And suggest Recipe with Dough "dough", Flavour "dough" and Topping "topping" with exception
     And suggest Recipe with Dough "dough", Flavour "topping" and Topping "flavour" with exception

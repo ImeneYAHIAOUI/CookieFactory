@@ -1,10 +1,10 @@
 package fr.unice.polytech.services;
 
-import fr.unice.polytech.exception.PaymentException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PaymentService {
     private static PaymentService INSTANCE;
-
     public static PaymentService getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new PaymentService();

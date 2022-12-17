@@ -12,7 +12,6 @@ Background: I want to get nearby stores
     | 107 Av. de Nice, 06600 Antibes, France |
   And client located at "210 Av. Roumanille, 06410 Biot"
 
-  @same-cod
   Scenario: get nearby stores
 
     When The client wants to retrieve nearby stores
@@ -25,7 +24,6 @@ Background: I want to get nearby stores
       | 107 Av. de Nice, 06600 Antibes, France |
       | 231 Avenue Maurice Donat, 06700 Saint-Laurent-du-Var  |
 
-  @same-cod
   Scenario: get stores with a specific distance
 
     When The client wants to retrieve stores 10 "km" away
@@ -37,7 +35,6 @@ Background: I want to get nearby stores
       | 107 Av. de Nice, 06600 Antibes, France |
       | 231 Avenue Maurice Donat, 06700 Saint-Laurent-du-Var  |
 
-  @same-cod
   Scenario: get stores with a specific distance 2
 
     When The client wants to retrieve stores 760 "m" away

@@ -17,7 +17,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 2 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -41,7 +41,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -63,7 +63,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 4 |
       | white chocolate chips | 5 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -93,7 +93,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -109,20 +109,20 @@ Feature: choose a cookie and an amount
   Scenario: choose an unavailable cookie
     Given an inventory with the ingredients and amounts
       | chocolate chips       | 6 |
-      | chocolate dough       | 4 |
+      | chocolate dough       | 3 |
       | vanillaFlavour        | 2 |
       | strawberryFlavour     | 3 |
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
       | vanilla  | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
       | strawbary | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
 
-    When Client chooses cookies of type "triple chocolate"
+    When Client chooses cookies of type "chocolala"
     And amount 4
     Then this order cannot be purchased
 
@@ -135,7 +135,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -153,7 +153,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -172,7 +172,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -190,7 +190,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -210,7 +210,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     And the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
@@ -223,20 +223,20 @@ Feature: choose a cookie and an amount
   Scenario: choose an unavailable cookie from main
     Given an inventory with the ingredients and amounts
       | chocolate chips       | 6 |
-      | chocolate dough       | 4 |
+      | chocolate dough       | 0 |
       | vanillaFlavour        | 2 |
       | strawberryFlavour     | 3 |
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     When the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |
       | vanilla  | chocolate dough | vanillaFlavour   | white chocolate chips | chocolate chips |
       | strawbary | chocolate dough | strawberryFlavour | white chocolate chips | chocolate chips |
 
-    Then This order cannot be purchased with amount 4 and cookie "triple chocolate"
+    Then This order cannot be purchased with amount 4 and cookie "chocolala"
 
   Scenario: choose an unavailable cookie from main
     Given an inventory with the ingredients and amounts
@@ -247,7 +247,7 @@ Feature: choose a cookie and an amount
       | chocolateFlavour      | 8 |
       | white chocolate chips | 4 |
 
-    And a store with id 1
+    And A store
 
     When the store has cookies
       | chocolala | chocolate dough | chocolateFlavour | chocolate chips | white chocolate chips |

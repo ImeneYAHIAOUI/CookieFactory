@@ -1,6 +1,6 @@
 package fr.unice.polytech.entities.order;
 
-import fr.unice.polytech.entities.recipe.Cookie;
+import fr.unice.polytech.entities.recipe.cookies.Cookie;
 import lombok.Getter;
 
 public class Item {
@@ -23,5 +23,8 @@ public class Item {
 
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
+    }
+    public void decreaseQuantity(int quantity) {
+        this.quantity -= quantity;
     }
 }

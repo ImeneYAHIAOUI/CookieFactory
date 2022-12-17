@@ -3,9 +3,7 @@ Feature: notify client
   # Enter feature description here
 
   Background: # Enter background description here
-    Given a client with phone number "0606060606"
-    And the order is ready
-
+    Given a client with an order ready for pickup
 
   @notify-client
   Scenario: client picks up command
