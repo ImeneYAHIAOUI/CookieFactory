@@ -115,7 +115,7 @@ Chaque user story doit être décrite par
     - get past orders
 #### [#42](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/42) Ban user, task associée : [#41](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/41)
 - En tant que client, si j'annule 2 commandes en moins de 8 minutes, alors je suis banni pendant 10 minutes
-- ?
+- [ChoosePartyCookie.feature](src/test/resources/features/cookie/ChoosePartyCookie.feature)
 ### Milestone 4
 #### [#53](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/53) Choose store, task associée [#55]
 - En tant que client je veux trouver les magasins les plus proches de ma position
@@ -134,7 +134,7 @@ Chaque user story doit être décrite par
 ### Milestone 5
 #### Task [#51](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/51) Taxes magasins, associée à l'US [#50](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/50)
 - En tant que Manager, je veux que mes clients payent une taxe au magasin pour chaque commande afin de pouvoir gagner plus d'argent
-- PayTax.feature
+- [PayTax.feature](src/test/resources/features/order/PayTax.feature)
 ####  [56](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/56) Commander un Party Cookie avec une taille choisie, Task associée : [#52](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/52)
 - En tant que Client, je veux pouvoir commander un Party Cookie avec une certaine taille
 - [ChoosePartyCookie.feature](src/test/resources/features/cookie/ChoosePartyCookie.feature)
