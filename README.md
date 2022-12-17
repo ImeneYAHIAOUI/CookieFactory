@@ -44,7 +44,7 @@ Chaque user story doit être décrite par
   - order status is "in progress" and we want to pass it to "completed"
 #### [#3](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/3) Annuler une commande
 - En tant que client je veux annuler ma commande
-- [MakeOrder.feature](src/test/resources/features/order/MakeOrder.feature)
+-  [OrderStatusChange.feature](src/test/resources/features/order/OrderStatusChange.feature)
   - Client cancels order
 #### [#5](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/5) Création des recettes
 
