@@ -17,7 +17,6 @@ Sur cette version initiale seule un test Junit5 est déclenché pour vérifier q
        - JDK 17
 
 
-
 ## User stories 
 La liste des fonctionnalités livrées par user story.
 
@@ -29,10 +28,8 @@ Chaque user story doit être décrite par
    - Le nom du fichier feature Cucumber et le nom des scénarios qui servent de tests d’acceptation pour la story.
    Les contenus détaillés sont dans l'issue elle-même.
 
-### Milestone 1 
-#### [#1](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/1) Commander un seul cookie 
-- En tant que client je veux commander un cookie
-- ?
+### Milestone 1  1 magasin, 1 cookie, les clients ne s'enregistrent pas
+
 #### [#2](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/2) Récupération de la commande
 - En tant que cuisinier je veux changer le statut de la commande
 - [OrderStatusChange.feature](src/test/resources/features/order/OrderStatusChange.feature)
@@ -60,7 +57,7 @@ Chaque user story doit être décrite par
 - [ChangeOpeningHours.feature](src/test/resources/features/store/ChangeOpeningHours.feature)
   - Change Opening Hours to a New Opening Time and to a New Closing Time
 
-### Milestone 2
+### Milestone 2 : 1 seul magasin,1 cook, n recettes,pouvoir choisir la quantité, choisir le cookie🍪
 #### [#7](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/7) Modifier l’inventaire et les tâches associées #9 et #11
 - As a Manager, I want to modify the inventory so that the amount of the chosen ingredients will be modified
 - [ManageInventory.feature](src/test/resources/features/store/ManageInventory.feature)
@@ -96,7 +93,7 @@ Chaque user story doit être décrite par
 - [NotifyClient.feature](src/test/resources/features/order/NotifyClient.feature)
   - Order status is changed to "READY"
   - client in notified 
-### Milestone 3
+### Milestone 3 :1 magasin avec n chefs et n recettes, paiement !
 #### [#15](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/15) Task Ajout du Time slot dans les Cook liée à US [#1](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/1)
 - [TimeSlotAttribution.feature](src/test/resources/features/store/TimeSlotAttribution.feature)
   - Cook can do the order
@@ -128,7 +125,7 @@ Chaque user story doit être décrite par
 #### [#42](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/42) Ban user, task associée : [#41](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/41)
 - En tant que client, si j'annule 2 commandes en moins de 8 minutes, alors je suis banni pendant 10 minutes
 - [ChoosePartyCookie.feature](src/test/resources/features/cookie/ChoosePartyCookie.feature)
-### Milestone 4
+### Milestone 4 : n magasins, n chefs, n cookies, n clients, paiement !
 #### [#53](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/53) Choose store, task associée [#55]
 - En tant que client je veux trouver les magasins les plus proches de ma position
 - [getNearbyStores.feature](src/test/resources/features/store/getNearbyStores.feature)
@@ -143,7 +140,8 @@ Chaque user story doit être décrite par
 - [PayOrder.feature](src/test/resources/features/client/PayOrder.feature)
   - As a Client Pay an Order (no problems)
   - As a Client Pay an Order (already orders in the list)
-### Milestone 5
+### Milestone 5 : n magasins, n chefs, n cookies, n clients, paiement, taxe du magasin, SMS aux clients, Choix unique de thème et d'occasion pour le Party Cookie
+Refractoring de la gestion des Ingredients
 #### Task [#51](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/51) Taxes magasins, associée à l'US [#50](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/50)
 - En tant que Manager, je veux que mes clients payent une taxe au magasin pour chaque commande afin de pouvoir gagner plus d'argent
 - [PayTax.feature](src/test/resources/features/order/PayTax.feature)
@@ -171,7 +169,11 @@ Chaque user story doit être décrite par
   - client picks up command
   - client never picks up the order
 
-### Milestone 6
+### Milestone 6 : Les cooks peuvent avoir des compétences (les thèmes)
+                  Les magasins peuvent avoir des spécialités (les occasions)
+                  Les clients peuvent commander des Party Cookie avec des occasions et des thèmes
+                  Les clients peuvent commander pour des dates et des heures ultérieures
+                  Application Too Good To Go
 #### Task [#66](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/66) Le client peut choisir un thème/ une occasion ou pas, liée à l'US [#59](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/59)
 ####  [#67](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/67) Too good to go : créer panier à partir des commandes obsolètes
 - En tant que responsable du magasin, je veux créer des paniers avec les commandes obsolètes pour limiter le gaspillage et de gagner plus d'argent
@@ -194,9 +196,6 @@ Chaque user story doit être décrite par
 - [TooGoodToGo.feature](src/test/resources/features/client/TooGoodToGo.feature)
    - only client who wants to be notified is notifies
    - notify client when order has staty Obselete
-
-#### Task [#95](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/95) Verify if service “Personalized Cookies for your Party (PCP)” is available
-
 
    
    
