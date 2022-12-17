@@ -54,25 +54,18 @@ public class TooGoodToGoManager implements TooGoodToGoBagCreator, TooGoodToGoBag
     @Override
     public void initScheduler(Store store) {
         ScheduledFuture<?> bagTask = executor.scheduleAtFixedRate(
-                () -> performOrderRecycling(store),
+                () -> {
+                    if (LocalTime.now(clock).isAfter(store.getClosingTime())) {
+                        scheduledTasks.get(store).cancel(true);
+                        return;
+                    }
+                    performOrderRecycling(store);
+                },
                 0,
                 3,
                 java.util.concurrent.TimeUnit.HOURS
         );
         scheduledTasks.put(store, bagTask);
-    }
-
-    public void performOrderRecycling(Store store) {
-        if (LocalTime.now(clock).isAfter(store.getClosingTime())) {
-            if (scheduledTasks.containsKey(store)) {
-                scheduledTasks.get(store).cancel(true);
-                scheduledTasks.remove(store);
-            }
-            return;
-        }
-        Collection<Order> obsoleteOrders = checkForObsoleteOrders();
-        Collection<TooGoodToGoBag> bags = convertOrders(obsoleteOrders);
-        publishBags(bags);
     }
 
     @Override
@@ -85,8 +78,8 @@ public class TooGoodToGoManager implements TooGoodToGoBagCreator, TooGoodToGoBag
         if (orders == null)
             return null;
         Collection<TooGoodToGoBag> tooGoodToGoBagCollection = orders.stream()
-                     .map(TooGoodToGoBag::new)
-                     .toList();
+                                                                    .map(TooGoodToGoBag::new)
+                                                                    .toList();
         orders.forEach(order -> {
             try {
                 order.setState(OrderStatus.CONVERTED);
@@ -101,6 +94,12 @@ public class TooGoodToGoManager implements TooGoodToGoBagCreator, TooGoodToGoBag
     @Override
     public void publishBags(Collection<TooGoodToGoBag> bags) {
         bags.forEach(tooGoodToGoBag -> tooGoodToGoBagsRepository.save(tooGoodToGoBag, UUID.randomUUID()));
+    }
+
+    public void performOrderRecycling(Store store) {
+        Collection<Order> obsoleteOrders = checkForObsoleteOrders();
+        Collection<TooGoodToGoBag> bags = convertOrders(obsoleteOrders);
+        publishBags(bags);
     }
 
     @Override
