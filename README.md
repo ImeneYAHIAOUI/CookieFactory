@@ -79,7 +79,7 @@ Chaque user story doit être décrite par
   - choose an unavailable cookie
 #### [#12](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/12) Modifier la quantité d'un cookie
 - En tant que client je veux modifier la quantité de cookie dans mon panier
--  ?
+-  [ModifyQuantityInCart.feature](src/test/resources/features/client/ModifyQuantityInCart.feature)
 #####  [#13](https://github.com/PNS-Conception/cookiefactory-22-23-o/issues/13) Task Gestion des SMS
 - En tant que client je veux recevoir un SMS quand ma commande est prête 
 - [MakeOrder.feature](src/test/resources/features/order/MakeOrder.feature)
